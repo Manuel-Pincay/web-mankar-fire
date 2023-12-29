@@ -1,0 +1,69 @@
+
+
+<section class="text-gray-600 body-font">
+    <div class="container px-5 py-24 mx-auto">
+        <div class="flex flex-col text-center w-full mb-20">
+            <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900">
+                Mantenimientos realizados
+            </h1>
+            <p class="lg:w-2/3 mx-auto leading-relaxed text-base">
+                En este apartado podras ver todos los mantenimientos realizados a la
+                flota de transporte MANKAR C.A.
+            </p>
+        </div>
+        <div class="lg:w-2/3 w-full mx-auto overflow-auto">
+            <table class="table-auto w-full text-left whitespace-no-wrap">
+                <thead>
+                    <tr>
+                        <th
+                            class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">
+                            Placa
+                        </th>
+                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                            Kilómetraje Actual
+                        </th>
+                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                            Kilómetraje Próximo
+                        </th>
+                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                            Detalle
+                        </th>
+                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                            fecha
+                        </th>
+                        <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+                            acciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let mantenimiento of mantenimientos">
+                        <td>{{ mantenimiento.placa }}</td>
+                        <td>{{ mantenimiento.kilometraje }}</td>
+                        <td>{{ mantenimiento.proxcambio }}</td>
+                        <td>{{ mantenimiento.comentario }}</td>
+                        <td>{{ mantenimiento.fecha | date  }}</td>
+                        <td>
+                            <button (click)="confirmarEliminar(mantenimiento)">Eliminar</button>
+                    <button (click)="editarMantenimiento(mantenimiento)">Editar</button>
+               
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto">
+            <a class="text-blue-500 inline-flex items-center md:mb-2 lg:mb-0">Learn More
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+            </a>
+            <button
+                class="flex ml-auto text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded">
+                Button
+            </button>
+        </div>
+    </div>
+</section>
