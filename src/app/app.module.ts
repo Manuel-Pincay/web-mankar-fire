@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,6 +19,8 @@ import { ViewmantenimientosComponent } from './Modules/Mantenimientos/viewmanten
 
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { ViewrepostajeComponent } from './Modules/Repostaje/viewrepostaje/viewrepostaje.component';
+import { ViewunidadesComponent } from './Modules/Flotas/viewunidades/viewunidades.component';
 
 @NgModule({
   declarations: [
@@ -28,10 +30,13 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
     RegistroComponent,
     MantenimientosComponent,
     ViewmantenimientosComponent,
+    ViewrepostajeComponent,
+    ViewunidadesComponent,
   ],
   imports: [
     BrowserModule,
     NgbModule,
+    NgbModalModule,
     AppRoutingModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),

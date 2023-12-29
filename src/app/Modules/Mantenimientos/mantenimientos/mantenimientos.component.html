@@ -6,32 +6,31 @@
 <!-- app.component.html -->
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <label for="kilometraje">Kilometraje:</label>
-    <input type="number" id="kilometraje" formControlName="kilometraje" />
+    <input type="number" id="kilometraje" formControlName="kilometraje"  />
   
     <label for="proxcambio">Próximo Cambio:</label>
-    <input type="number" id="proxcambio" formControlName="proxcambio" />
+    <input type="number" id="proxcambio" formControlName="proxcambio"  />
   
     <label for="placa">Placa:</label>
-    <input type="text" id="placa" formControlName="placa" />
+    <input type="text" id="placa" formControlName="placa"  />
   
     <label for="comentario">Comentario:</label>
-    <textarea id="comentario" formControlName="comentario"></textarea>
+    <textarea id="comentario" formControlName="comentario" ></textarea>
 
-    
-    <label for="descripcion">descripcion:</label>
-    <textarea id="descripcion" formControlName="descripcion"></textarea>
+    <label for="descripcion">Descripción:</label>
+    <textarea id="descripcion" formControlName="descripcion" ></textarea>
   
     <label for="fecha">Fecha:</label>
-    <input type="datetime-local" id="fecha" formControlName="fecha" />
+    <input type="datetime-local" id="fecha" formControlName="fecha"  />
   
     <label for="imagen">Imagen:</label>
     <input type="text" id="imagen" formControlName="imagen" />
   
     <label for="imagen2">Imagen 2:</label>
     <input type="text" id="imagen2" formControlName="imagen2" />
-  
+  <!-- 
     <label for="estado">Estado:</label>
-    <input type="checkbox" id="estado" formControlName="estado" />
+    <input type="checkbox" id="estado" formControlName="estado" /> -->
   
-    <button type="submit">Enviar Mantenimiento</button>
+    <button type="submit" >Enviar Mantenimiento</button>
 </form>

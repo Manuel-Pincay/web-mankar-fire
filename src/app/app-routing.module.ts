@@ -6,6 +6,8 @@ import { LoginComponent } from './Modules/login/login.component';
 import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { MantenimientosComponent } from './Modules/Mantenimientos/mantenimientos/mantenimientos.component';
 import { ViewmantenimientosComponent } from './Modules/Mantenimientos/viewmantenimientos/viewmantenimientos.component';
+import { ViewrepostajeComponent } from './Modules/Repostaje/viewrepostaje/viewrepostaje.component';
+import { ViewunidadesComponent } from './Modules/Flotas/viewunidades/viewunidades.component';
 
 
 const routes: Routes = [
@@ -20,6 +22,9 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'mantenimientos', component: MantenimientosComponent },
   { path: 'listmts', component: ViewmantenimientosComponent },
+  { path: 'listreps', component: ViewrepostajeComponent },
+  { path: 'listunis', component: ViewunidadesComponent },
+
 ];
 
 @NgModule({

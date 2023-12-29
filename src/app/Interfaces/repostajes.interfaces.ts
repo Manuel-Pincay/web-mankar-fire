@@ -1,10 +1,10 @@
 import { Timestamp } from "firebase/firestore";
 
-export default interface Repostaje {
+export default interface Repostajes {
     key: string;
     cantidad: number;
     kilometraje: number;
-    fecha: Timestamp;
+    fecha: Date;
     estado: boolean;
     imagen: string;
     ruta: string;

@@ -21,6 +21,7 @@ export class MantenimientosService {
     } */
   addMantenimiento(mantenimiento: Mantenimientos) {
     const mantenimientosRef = collection(this.firestore, 'mantenimientos');
+    mantenimiento.estado = true; // Establece el estado como true por defecto
 
     const docRef = addDoc(mantenimientosRef, mantenimiento);
 

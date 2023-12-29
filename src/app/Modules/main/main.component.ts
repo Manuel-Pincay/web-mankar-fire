@@ -26,7 +26,7 @@ export class MainComponent implements OnInit  {
   }
 
   redireccionarMantenimientos() {
-    this.router.navigate(['/mantenimientos']);
+    this.router.navigate(['/listmts']);
   }
   
   redireccionarUsuarios() {
@@ -34,10 +34,10 @@ export class MainComponent implements OnInit  {
   }
   
   redireccionarUnidades() {
-    this.router.navigate(['/verunidades']);
+    this.router.navigate(['/listunis']);
   }
   redireccionarRepoostaje() {
-    this.router.navigate(['/verrepostajes']);
+    this.router.navigate(['/listreps']);
   }
   
 
