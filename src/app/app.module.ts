@@ -21,6 +21,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { ViewrepostajeComponent } from './Modules/Repostaje/viewrepostaje/viewrepostaje.component';
 import { ViewunidadesComponent } from './Modules/Flotas/viewunidades/viewunidades.component';
+import { getStorage, provideStorage } from '@angular/fire/storage';
 
 @NgModule({
   declarations: [
@@ -40,21 +41,12 @@ import { ViewunidadesComponent } from './Modules/Flotas/viewunidades/viewunidade
     AppRoutingModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule, // for firestore
-   /*  provideFirebaseApp(() =>
-      initializeApp({
-        projectId: 'appmovil-mankar',
-        appId: '1:1016405250924:web:0cb59f76e0496d15aa9949',
-        storageBucket: 'appmovil-mankar.appspot.com',
-        apiKey: 'AIzaSyBdmcRBcRsKhYEFBcX1OBLoPfdkDOxx0pA',
-        authDomain: 'appmovil-mankar.firebaseapp.com',
-        messagingSenderId: '1016405250924',
-      })
-    ), */
+    AngularFirestoreModule, 
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideDatabase(() => getDatabase()),
+    provideStorage(() => getStorage()),
   ],
   providers: [],
   bootstrap: [AppComponent],

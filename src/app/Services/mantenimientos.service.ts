@@ -1,7 +1,7 @@
 
 // mantenimientos.service.ts
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, setDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import Mantenimientos from '../Interfaces/mantenimientos.interfaces';
 import { v4 as uuidv4 } from 'uuid';
@@ -58,6 +58,7 @@ export class MantenimientosService {
 
   deleteMantenimiento(mantenimiento: Mantenimientos) {
     const mantenimientoDocRef = doc(this.firestore, `mantenimientos/${mantenimiento.key}`);
-    return deleteDoc(mantenimientoDocRef);
+    // Utiliza updateDoc para cambiar el estado a true
+    return updateDoc(mantenimientoDocRef, { estado: false });
   }
 }
