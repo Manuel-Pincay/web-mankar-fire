@@ -80,73 +80,88 @@
     </div>
 
 
-    <div class="lg:w-2/3 w-full mx-auto overflow-auto">
+    <!--     <div class="lg:w-2/3 w-full mx-auto overflow-auto"> -->
+    <div class="container mt-4">
+      <div class="card">
+        <div class="card-body">
+          <span class="h2">Lista de Mantenimientos</span>
+          <button class="btn btn-success btn-lg float-right" data-bs-toggle="modal"
+            data-bs-target="#agregarNuevoMantenimiento">
+            <i class="fas fa-plus"></i> Agregar mantenimiento
+          </button>
+          <table class="table table-striped  content-table mt-4">
+            <!--     <table class="mt-5 table-auto content-table twhitespace-no-wrap"> -->
+            <!-- class="table table-striped mt-5" -->
+            <thead>
+              <tr>
+                <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl">Placa</th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium">Kilómetraje Actual</th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium">Kilómetraje Próximo</th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium">Tipo mantenimiento</th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium">Fecha</th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium">Opciones</th>
+              </tr>
+            </thead>
 
-      <div class="container ">
-        <div class="flex  ">
-          <div class="col-md-6">
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarNuevoMantenimiento">
-              <i class="fas fa-plus"></i> Agregar nuevo mantenimiento
-            </button>
-          </div>
+            <tbody>
+              <tr *ngFor="let mantenimiento of mantenimientos">
+                <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
+                  data-bs-target="#detalleMantenimientoModal">{{ mantenimiento.placa }}</td>
+                <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
+                  data-bs-target="#detalleMantenimientoModal">{{ mantenimiento.kilometraje }}</td>
+                <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
+                  data-bs-target="#detalleMantenimientoModal">{{ mantenimiento.proxcambio }}</td>
+                <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
+                  data-bs-target="#detalleMantenimientoModal">{{ mantenimiento.descripcion }}</td>
+                <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
+                  data-bs-target="#detalleMantenimientoModal">{{ mantenimiento.fecha | date }}</td>
+                <td>
+
+                  <button (click)="confirmarEliminar(mantenimiento)">
+                    <i class="fas fa-trash-alt fa-lg text-danger"></i>
+                  </button>
+
+                  <button (click)="editarMantenimiento(mantenimiento)" data-bs-toggle="modal"
+                    data-bs-target="#editarMantenimientoModal">
+                    <i class="fas fa-edit fa-lg text-info mr-4"></i>
+                  </button>
+
+                  <!-- <button class="btn btn-sm btn-primary" (click)="editarMantenimiento(mantenimiento)"(click)="openEditModal(editModal, mantenimiento)">
+                  Editar
+                  <i class="fa-solid fa-pencil"></i>
+                </button> -->
+                  <!-- <button class="btn btn-primary" id="detalleMantenimientoModal2" data-bs-toggle="modal" 
+                data-bs-target="#detalleMantenimientoModal2" (click)="editarMantenimiento(mantenimiento)">
+                  <i class="fas fa-plus"></i> Editar
+                </button> -->
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-      <table class="table-auto content-table w-full text-left whitespace-no-wrap">
-        <thead>
-          <tr>
-            <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl">Placa</th>
-            <th class="px-4 py-3 title-font tracking-wider font-medium">Kilómetraje Actual</th>
-            <th class="px-4 py-3 title-font tracking-wider font-medium">Kilómetraje Próximo</th>
-            <th class="px-4 py-3 title-font tracking-wider font-medium">Tipo mantenimiento</th>
-            <th class="px-4 py-3 title-font tracking-wider font-medium">Fecha</th>
-            <th class="px-4 py-3 title-font tracking-wider font-medium">Opciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let mantenimiento of mantenimientos" (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
-            data-bs-target="#detalleMantenimientoModal">
-            <td>{{ mantenimiento.placa }}</td>
-            <td>{{ mantenimiento.kilometraje }}</td>
-            <td>{{ mantenimiento.proxcambio }}</td>
-            <td>{{ mantenimiento.comentario }}</td>
-            <td>{{ mantenimiento.fecha | date }}</td>
-            <td>
-              <button class="btn btn-sm btn-danger" (click)="confirmarEliminar(mantenimiento)"><!-- -->
-                <i class="fa-solid fa-trash-can"></i>
-              </button>
 
-              <button class="btn btn-sm btn-primary">
-                <!-- (click)="editarMantenimiento(mantenimiento)"(click)="openEditModal(editModal, mantenimiento)" -->
-                <i class="fa-solid fa-pencil"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+      </div>
+
     </div>
   </div>
 
 
   <!-- Modal para ver detalles -->
-  <!-- <div class="modal fade" id="detalleMantenimientoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <!--   <div class="modal fade" id="detalleMantenimientoModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles del Mantenimiento</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel2">Detalles del Mantenimiento</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="form2" (ngSubmit)="onSubmit()">
+        <form [formGroup]="form3" (ngSubmit)="onSubmit()">
         
           <div class="form-group">
             <label for="kilometraje">Kilometraje:</label>
-            <input type="number" id="kilometraje" class="form-control" formControlName="kilometraje" [value]="detalleMantenimiento?.kilometraje">
+            <input type="number" id="kilometraje" class="form-control" formControlName="kilometraje" [value]="editarMantenimiento?.kilometraje">
           </div>
-  
-          <div class="form-group">
-            <img [src]="detalleMantenimiento?.imagenUrl" alt="Imagen del mantenimiento">
-          </div>
-
           <div class="form-group text-center">
 
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -157,7 +172,7 @@
   </div>
 </div> -->
   <!-- Modal para ver detalles -->
-  <!--  <div class="modal fade" id="detalleMantenimientoModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  <!--   <div class="modal fade" id="detalleMantenimientoModal2" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -180,8 +195,8 @@
         </div>
       </div>
     </div>
-  </div>
- -->
+  </div> -->
+
   <!--  <div class="modal fade" id="detalleMantenimientoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
@@ -224,6 +239,11 @@
     </div>
   </div>
 </div> -->
+
+  <!-- ----------------------------------------------------------------------- -->
+  <!-- --------------------------MODAL DE VER DETALLES------------------------ -->
+  <!-- ----------------------------------------------------------------------- -->
+
 
   <div class="modal fade" id="detalleMantenimientoModal" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -273,4 +293,97 @@
       </div>
     </div>
   </div>
+
+  <!-- ----------------------------------------------------------------------- -->
+
+
+  <!-- ----------------------------------------------------------------------- -->
+  <!-- ----------------------MODAL DE EDITAR MANTENIMIENTOS------------------- -->
+  <!-- ----------------------------------------------------------------------- -->
+
+  <div class="modal fade" id="editarMantenimientoModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-light">
+          <h5 class="modal-title" id="exampleModalLabel">Editar Mantenimiento</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario de edición -->
+          <form [formGroup]="formularioEdicion" (ngSubmit)="guardarEdicion()">
+            <!-- Placa -->
+            <div class="mb-3">
+              <label for="placa" class="form-label">Placa:</label>
+              <input type="text" id="placa" class="form-control" formControlName="placa"
+                [value]="editarMantenimiento2?.placa || ''"
+                [placeholder]="editarMantenimiento2?.placa ? editarMantenimiento2.placa : 'Ingrese la placa'" readonly>
+            </div>
+
+            <!-- Tipo de mantenimiento -->
+            <div class="mb-3">
+              <label for="descripcion">Tipo de Mantenimiento:</label>
+              <select id="descripcion" class="form-control" formControlName="descripcion">
+                <option value="" disabled selected>Selecciona un tipo de mantenimiento</option>
+                <option *ngFor="let tipoM of tiposM$ | async" [value]="tipoM.nombre">{{ tipoM.nombre }}</option>
+              </select>
+            </div>
+
+            <!-- Kilometraje -->
+            <div class="mb-3">
+              <label for="kilometraje" class="form-label">Kilometraje:</label>
+              <input type="number" id="kilometraje" class="form-control" formControlName="kilometraje">
+            </div>
+
+            <!-- Próximo Cambio -->
+            <div class="mb-3">
+              <label for="proxcambio" class="form-label">Próximo Cambio:</label>
+              <input type="number" id="proxcambio" class="form-control" formControlName="proxcambio">
+            </div>
+
+            <!-- Fecha -->
+            <div class="mb-3">
+              <label for="fecha" class="form-label">Fecha:</label>
+              <input type="datetime-local" id="fecha" class="form-control" formControlName="fecha">
+          </div>
+
+            <!-- Comentario -->
+            <div class="mb-3">
+              <label for="comentario" class="form-label">Comentario:</label>
+              <textarea id="comentario" class="form-control" formControlName="comentario"></textarea>
+            </div>
+
+            <!-- Imagen -->
+            <div class="mb-3">
+              <label for="imagen" class="form-label">Imagen:</label>
+              <img src="{{ editarMantenimiento2?.imagen }}" alt="Imagen del mantenimiento" style="max-height: 90%;">
+              <input type="file" id="imagen" class="form-control" (change)="onFileSelected($event)" accept="image/jpeg">
+            </div>
+
+
+            <!-- Imagen 2 -->
+            <div class="mb-3">
+              <label for="imagen" class="form-label">Imagen2:</label>
+              <img *ngIf="editarMantenimiento2?.imagen2" src="{{ editarMantenimiento2?.imagen2 }}"
+                alt="Imagen 2 del mantenimiento" style="max-width: 90%;">
+              <!-- Si detalleMantenimiento?.imagen2 es nula, puedes mostrar un mensaje o dejarlo en blanco según tus necesidades -->
+              <span *ngIf="!editarMantenimiento2?.imagen2">(No hay imagen 2)</span>
+              <input type="file" id="imagen2" class="form-control" (change)="onFileSelected2($event)"
+                accept="image/jpeg">
+            </div>
+
+            <!-- Botones para "Guardar" y "Cerrar" -->
+            <div class="modal-footer d-flex justify-content-between">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #cerrarModalBtn>Cerrar</button>
+              <button type="submit" (click)="guardarEdicion()" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
 </section>

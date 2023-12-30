@@ -20,11 +20,13 @@ import { Storage, ref, uploadBytes, listAll, getDownloadURL } from '@angular/fir
 export class ViewmantenimientosComponent implements OnInit {
   
   form2: FormGroup;
+  formularioEdicion: FormGroup;
   nuevoMantenimiento: any = {};
   mantenimientos: Mantenimientos[] = [];
   unidades$: Observable<Unidades[]> = of([]);
   tiposM$: Observable<ListatiposM[]> = of([]);
   @ViewChild('fileInput') fileInput: ElementRef | undefined;
+  @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
   detalleMantenimiento: any; 
  
  
@@ -48,16 +50,77 @@ export class ViewmantenimientosComponent implements OnInit {
       imagen2: [''],
       estado: [true, Validators.required],
     });
-  }
-
-  ngOnInit(): void {
-    this.unidades$ = this.unidadesService.getUnidades();
-    this.tiposM$ = this.tiposMService.getTiposM();
-    this.mantenimientosService.getMantenimientos().subscribe((data) => {
-      this.mantenimientos = data;
+    this.formularioEdicion = this.fb.group({
+      // Define aquí los campos del formulario de edición y sus validaciones
+      placa: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      kilometraje: [null, Validators.required],
+      proxcambio: [null, Validators.required],
+      fecha: [new Date(), Validators.required],
+      comentario: ['', Validators.required],
+      imagen: [''],
+      imagen2: [''],
+      estado: [true, Validators.required],
     });
   }
 
+  ngOnInit(): void {
+    
+    this.unidades$ = this.unidadesService.getUnidades();
+    this.tiposM$ = this.tiposMService.getTiposM();
+    this.mantenimientosService.getMantenimientos().subscribe((data) => {
+    this.mantenimientos = data;
+    this.establecerValoresPreseleccionados();
+    });
+  }
+  establecerValoresPreseleccionados(): void {
+    const tipoMPreseleccionado = 'Mantenimiento 2';
+  
+    // Suscribirse al observable para obtener los datos
+    this.tiposM$.subscribe((tiposM: ListatiposM[]) => {
+      // Encuentra el objeto correspondiente en tiposM por su nombre
+      const tipoMSeleccionado = tiposM.find(tipoM => tipoM.nombre === tipoMPreseleccionado);
+  
+      // Si se encuentra, establece el valor preseleccionado en el formulario
+      if (tipoMSeleccionado) {
+        this.formularioEdicion.patchValue({
+          descripcion: tipoMSeleccionado.nombre,
+          // Otros campos...
+        });
+      }
+    });
+  }
+  editarMantenimiento2: any; 
+  editarMantenimiento(mantenimiento:any){
+    console.log('tocaste edit', mantenimiento);
+    this.editarMantenimiento2 = mantenimiento;
+    this.formularioEdicion.patchValue({
+      placa: mantenimiento?.placa || '',
+      descripcion: mantenimiento?.descripcion || '',
+      kilometraje: mantenimiento?.kilometraje || '',
+      proxcambio: mantenimiento?.proxcambio || '',
+      fecha: this.formatDate(mantenimiento?.fecha) || '',
+      comentario: mantenimiento?.comentario || '',
+      // Asegúrate de tener las propiedades correctas para imagen e imagen2
+      imagen: mantenimiento?.imagen || '',
+      imagen2: mantenimiento?.imagen2 || '',
+      // Otros campos según sea necesario
+    });
+  }
+
+  formatDate(date: Date): string {
+    if (date) {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+  
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+  
+    return '';
+  }
 
   verDetalles(mantenimiento: any) {
  
@@ -188,7 +251,45 @@ export class ViewmantenimientosComponent implements OnInit {
     });
   }
 
-
+  guardarEdicion() {
+    if (this.formularioEdicion.valid) {
+      const mantenimientoedData = this.formularioEdicion.value;
+      // Obtén la fecha del formulario y conviértela a un objeto Date
+      const fechaFormulario = mantenimientoedData.fecha;
+      const fechaFormularioDate =
+        fechaFormulario instanceof Date
+          ? fechaFormulario
+          : new Date(fechaFormulario);
+      // Convierte la fecha del formulario a un objeto Timestamp
+      const fecha = Timestamp.fromDate(fechaFormularioDate);
+      // Asigna la URL de la primera imagen solo si se ha subido, de lo contrario, mantiene la original
+      const imagen = this.downloadURL ? this.downloadURL : this.editarMantenimiento2.imagen;
+      // Asigna la URL de la segunda imagen solo si se ha subido, de lo contrario, mantiene la original
+      const imagen2 = this.downloadURL2 ? this.downloadURL2 : this.editarMantenimiento2.imagen2;
+       const mantenimientoed: Mantenimientos = {
+        ...mantenimientoedData,
+        fecha: fecha,
+        imagen: imagen,
+        imagen2: imagen2,
+        key: this.editarMantenimiento2.key
+      };
+  
+      // Llama al servicio para actualizar los datos
+      this.mantenimientosService
+        .updateMantenimiento(mantenimientoed)
+        .then(() => {
+          this.handleSuccess('Edición exitosa', 'success', mantenimientoed);
+          this.cerrarModal(); // Cierra el modal después de una edición exitosa
+        }).catch((error) => this.handleError('Error al editar mantenimiento', 'error'));
+    } else {
+      // Muestra una alerta si el formulario no es válido
+      this.showIncompleteDataAlert();
+    }
+  }
+  cerrarModal() {
+    // Cierra el modal usando el botón "Cerrar"
+    this.cerrarModalBtn.nativeElement.click();
+  }
 
 
 }
