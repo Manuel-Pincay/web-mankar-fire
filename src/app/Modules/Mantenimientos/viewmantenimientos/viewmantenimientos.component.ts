@@ -117,8 +117,7 @@ export class ViewmantenimientosComponent implements OnInit {
   onFileSelected($event: any) {
     const file = $event.target.files[0];
     const filePath = `mantenimientosfiles/${Date.now()}`;
-    /* const fileRef = this.storage.ref(filePath); */
-    /* this.fileRef = filePath; */
+ 
     const fileRef = ref(this.storage,  filePath );
     const storageRef = ref(this.storage, filePath);
     uploadBytes(fileRef, file)
@@ -139,8 +138,7 @@ export class ViewmantenimientosComponent implements OnInit {
   onFileSelected2($event: any) {
     const file2 = $event.target.files[0];
     const filePath = `mantenimientosfiles/${Date.now()}`;
-    /* const fileRef = this.storage.ref(filePath); */
-    /* this.fileRef = filePath; */
+
     const fileRef2 = ref(this.storage,  filePath );
     const storageRef = ref(this.storage, filePath);
     uploadBytes(fileRef2, file2)

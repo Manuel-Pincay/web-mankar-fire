@@ -188,30 +188,16 @@
           <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles del Mantenimiento</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-
         <div class="modal-body">
           <div class="form-group">
             <label for="kilometraje">Kilometraje:</label>
-            <span>{{ detalleMantenimiento?.kilometraje }}</span>
+            <span>{{ detalleMantenimiento.kilometraje }}</span>
           </div>
-
-          <!-- Otros campos del mantenimiento -->
           <div class="form-group">
             <label for="proxcambio">Próximo Cambio:</label>
-            <span>{{ detalleMantenimiento?.proxcambio }}</span>
+            <span>{{ detalleMantenimiento.proxcambio }}</span>
           </div>
-
-          <!-- Puedes mostrar otros detalles del mantenimiento aquí -->
-
-          <!-- Imagen -->
-          <div class="form-group">
-            <img [src]="detalleMantenimiento?.imagenUrl" alt="Imagen del mantenimiento">
-          </div>
-
-          <!-- ... otros campos del formulario ... -->
-
           <div class="form-group text-center">
-            <!-- Puedes añadir un botón de cerrar modal si es necesario -->
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
           </div>
         </div>
