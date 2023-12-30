@@ -38,3 +38,44 @@
     font-weight: bold;
     color: #2c7bfe;
 }
+
+/* General modal styling */
+.modal-content {
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-header {
+    padding: 1rem 1.5rem;
+    border-bottom: none;
+  }
+  
+  .modal-title {
+    font-weight: 600;
+  }
+  
+  .modal-body {
+    padding: 1.5rem;
+  }
+  
+  .modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: none;
+  }
+  
+  /* Specific styling for this modal */
+  #detalleMantenimientoModal .modal-body {
+    font-size: 16px;
+  }
+  
+  #detalleMantenimientoModal .row {
+    margin-bottom: 15px;
+  }
+  
+  #detalleMantenimientoModal label {
+    font-weight: 500;
+  }
+  
+  #detalleMantenimientoModal .fs-4 {
+    font-size: 1.25rem;
+  }

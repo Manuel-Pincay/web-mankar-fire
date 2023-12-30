@@ -1,7 +1,7 @@
 
 // mantenimientos.service.ts
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, setDoc, updateDoc, query, orderBy } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import Mantenimientos from '../Interfaces/mantenimientos.interfaces';
 import { v4 as uuidv4 } from 'uuid';
@@ -38,9 +38,11 @@ export class MantenimientosService {
    */
   getMantenimientos(): Observable<Mantenimientos[]> {
     const mantenimientosRef = collection(this.firestore, 'mantenimientos');
-    return collectionData(mantenimientosRef, { idField: 'key' }).pipe(
-      map((data: any[]) => {
-        return data.map(mantenimiento => {
+    const orderedQuery = query(mantenimientosRef, orderBy('fecha', 'desc'));
+
+    return collectionData(orderedQuery, { idField: 'key' }).pipe(
+        map((data: any[]) => {
+        return data .filter(mantenimiento => mantenimiento.estado === true).map(mantenimiento => {
           return {
             ...mantenimiento,
             fecha: mantenimiento.fecha ? mantenimiento.fecha.toDate() : null,
