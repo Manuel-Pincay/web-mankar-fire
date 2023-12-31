@@ -27,6 +27,7 @@ export class ViewmantenimientosComponent implements OnInit {
   tiposM$: Observable<ListatiposM[]> = of([]);
   @ViewChild('fileInput') fileInput: ElementRef | undefined;
   @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
+  @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
   detalleMantenimiento: any; 
  
  
@@ -72,6 +73,29 @@ export class ViewmantenimientosComponent implements OnInit {
     this.mantenimientos = data;
     this.establecerValoresPreseleccionados();
     });
+    const sidebarDropdownMenus = document.querySelectorAll('.sidebar-dropdown-menu');
+  sidebarDropdownMenus.forEach(menu => (menu as HTMLElement).style.display = 'none');
+
+  const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item.has-dropdown > a, .sidebar-dropdown-menu-item.has-dropdown > a');
+  sidebarMenuItems.forEach(item => item.addEventListener('click', (event) => this.sidebarItemClick(event)));
+
+    const sidebarToggle = document.querySelector('.sidebar-toggle');
+    if (sidebarToggle) {
+      sidebarToggle.addEventListener('click', this.sidebarToggleClick.bind(this));
+    }
+
+    const sidebarOverlay = document.querySelector('.sidebar-overlay');
+    if (sidebarOverlay) {
+      sidebarOverlay.addEventListener('click', this.sidebarOverlayClick.bind(this));
+    }
+
+    if (window.innerWidth < 768) {
+      const sidebar = document.querySelector('.sidebar');
+      if (sidebar) {
+        sidebar.classList.add('collapsed');
+      }
+    }
+    // end: Sidebar
   }
   establecerValoresPreseleccionados(): void {
     const tipoMPreseleccionado = 'Mantenimiento 2';
@@ -236,11 +260,20 @@ export class ViewmantenimientosComponent implements OnInit {
       console.log('Mantenimiento a enviar:', mantenimiento);
       this.mantenimientosService
         .addMantenimiento(mantenimiento)
-        .then(() => this.handleSuccess('Eliminado correctamente', 'success', mantenimiento))
+        .then(() => {
+          this.handleSuccess('Eliminado correctamente', 'success', mantenimiento);
+          this.cerrarModal2(); // Llama a la función para cerrar el modal
+          this.form2.reset();
+        })
         .catch(error => this.handleError('Error al eliminar mantenimiento', 'error' ));
     } else {
       this.showIncompleteDataAlert();
     }
+  }
+  
+  cerrarModal2() {
+    // Cierra el modal usando el botón "Cerrar"
+    this.cerrarModalBtn2.nativeElement.click();
   }
   
   private showIncompleteDataAlert() {
@@ -291,5 +324,70 @@ export class ViewmantenimientosComponent implements OnInit {
     this.cerrarModalBtn.nativeElement.click();
   }
 
+  // ========================================================================================== // 
+    // ========================================================================================== // 
+      // ========================================================================================== // 
+
+
+
+  sidebarItemClick(event: Event) {
+    event.preventDefault();
+
+    const target = event.target as HTMLElement;
+    const parent = target.parentElement;
+
+    if (parent && !parent.classList.contains('focused')) {
+      this.hideOtherMenus(parent.parentElement);
+    }
+
+    const next = target.nextElementSibling as HTMLElement;
+    if (next) {
+      next.style.display = (next.style.display === 'none') ? 'block' : 'none';
+    }
+
+    if (parent) {
+      parent.classList.toggle('focused');
+    }
+  }
+
+  sidebarToggleClick() {
+    const sidebar = document.querySelector('.sidebar') as HTMLElement;
+    if (sidebar) {
+      sidebar.classList.toggle('collapsed');
+      sidebar.addEventListener('mouseleave', this.sidebarMouseLeave.bind(this));
+    }
+  }
+
+  sidebarOverlayClick() {
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) {
+      sidebar.classList.add('collapsed');
+    }
+
+    this.hideAllMenus();
+  }
+
+  sidebarMouseLeave() {
+    this.hideAllMenus();
+  }
+
+  hideOtherMenus(element: Element | null) {
+    if (element) {
+      const menus = element.querySelectorAll('.sidebar-dropdown-menu');
+      const hasDropdowns = element.querySelectorAll('.has-dropdown.focused');
+  
+      menus.forEach(menu => (menu as HTMLElement).style.display = 'none');
+      hasDropdowns.forEach(item => item.classList.remove('focused'));
+    }
+  }
+
+  
+hideAllMenus() {
+  const menus = document.querySelectorAll('.sidebar-dropdown-menu');
+  const hasDropdowns = document.querySelectorAll('.has-dropdown.focused');
+
+  menus.forEach(menu => (menu as HTMLElement).style.display = 'none');
+  hasDropdowns.forEach(item => item.classList.remove('focused'));
+}
 
 }
