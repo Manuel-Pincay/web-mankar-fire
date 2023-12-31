@@ -18,7 +18,7 @@ import { Storage, ref, uploadBytes, listAll, getDownloadURL } from '@angular/fir
   styleUrls: ['./viewmantenimientos.component.css'],
 })
 export class ViewmantenimientosComponent implements OnInit {
-  
+
   form2: FormGroup;
   formularioEdicion: FormGroup;
   nuevoMantenimiento: any = {};
@@ -28,9 +28,9 @@ export class ViewmantenimientosComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef | undefined;
   @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
   @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
-  detalleMantenimiento: any; 
- 
- 
+  detalleMantenimiento: any;
+
+
 
 
   constructor(
@@ -38,7 +38,7 @@ export class ViewmantenimientosComponent implements OnInit {
     private storage: Storage,
     private mantenimientosService: MantenimientosService,
     private unidadesService: UnidadesService,
-    private tiposMService: TiposMService, 
+    private tiposMService: TiposMService,
   ) {
     this.form2 = this.fb.group({
       kilometraje: [null, Validators.required],
@@ -46,7 +46,7 @@ export class ViewmantenimientosComponent implements OnInit {
       placa: ['', Validators.required],
       comentario: ['', Validators.required],
       descripcion: ['', Validators.required],
-      fecha: [new Date(), Validators.required], 
+      fecha: [new Date(), Validators.required],
       imagen: [''],
       imagen2: [''],
       estado: [true, Validators.required],
@@ -66,18 +66,20 @@ export class ViewmantenimientosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
     this.unidades$ = this.unidadesService.getUnidades();
     this.tiposM$ = this.tiposMService.getTiposM();
     this.mantenimientosService.getMantenimientos().subscribe((data) => {
-    this.mantenimientos = data;
-    this.establecerValoresPreseleccionados();
+      this.mantenimientos = data;
+      this.establecerValoresPreseleccionados();
     });
-    const sidebarDropdownMenus = document.querySelectorAll('.sidebar-dropdown-menu');
-  sidebarDropdownMenus.forEach(menu => (menu as HTMLElement).style.display = 'none');
 
-  const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item.has-dropdown > a, .sidebar-dropdown-menu-item.has-dropdown > a');
-  sidebarMenuItems.forEach(item => item.addEventListener('click', (event) => this.sidebarItemClick(event)));
+
+    const sidebarDropdownMenus = document.querySelectorAll('.sidebar-dropdown-menu');
+    sidebarDropdownMenus.forEach(menu => (menu as HTMLElement).style.display = 'none');
+
+    const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item.has-dropdown > a, .sidebar-dropdown-menu-item.has-dropdown > a');
+    sidebarMenuItems.forEach(item => item.addEventListener('click', (event) => this.sidebarItemClick(event)));
 
     const sidebarToggle = document.querySelector('.sidebar-toggle');
     if (sidebarToggle) {
@@ -89,22 +91,26 @@ export class ViewmantenimientosComponent implements OnInit {
       sidebarOverlay.addEventListener('click', this.sidebarOverlayClick.bind(this));
     }
 
-    if (window.innerWidth < 768) {
-      const sidebar = document.querySelector('.sidebar');
-      if (sidebar) {
-        sidebar.classList.add('collapsed');
-      }
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) {
+      sidebar.classList.add('collapsed');
     }
+
+    // Handle initial state for small screens
+    if (window.innerWidth < 768) {
+      // You might want to show the sidebar for small screens if needed
+    }
+ 
     // end: Sidebar
   }
   establecerValoresPreseleccionados(): void {
     const tipoMPreseleccionado = 'Mantenimiento 2';
-  
+
     // Suscribirse al observable para obtener los datos
     this.tiposM$.subscribe((tiposM: ListatiposM[]) => {
       // Encuentra el objeto correspondiente en tiposM por su nombre
       const tipoMSeleccionado = tiposM.find(tipoM => tipoM.nombre === tipoMPreseleccionado);
-  
+
       // Si se encuentra, establece el valor preseleccionado en el formulario
       if (tipoMSeleccionado) {
         this.formularioEdicion.patchValue({
@@ -114,8 +120,8 @@ export class ViewmantenimientosComponent implements OnInit {
       }
     });
   }
-  editarMantenimiento2: any; 
-  editarMantenimiento(mantenimiento:any){
+  editarMantenimiento2: any;
+  editarMantenimiento(mantenimiento: any) {
     console.log('tocaste edit', mantenimiento);
     this.editarMantenimiento2 = mantenimiento;
     this.formularioEdicion.patchValue({
@@ -139,18 +145,18 @@ export class ViewmantenimientosComponent implements OnInit {
       const day = date.getDate().toString().padStart(2, '0');
       const hours = date.getHours().toString().padStart(2, '0');
       const minutes = date.getMinutes().toString().padStart(2, '0');
-  
+
       return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
-  
+
     return '';
   }
 
   verDetalles(mantenimiento: any) {
- 
+
     console.log('tocaste', mantenimiento);
     this.detalleMantenimiento = mantenimiento;
-   // ('#detalleModal').modal('show'); // Abre el modal
+    // ('#detalleModal').modal('show'); // Abre el modal
   }
 
 
@@ -161,25 +167,25 @@ export class ViewmantenimientosComponent implements OnInit {
       this.cambiarEstadoMantenimiento(mantenimiento);
     }
   }
-  
+
   cambiarEstadoMantenimiento(mantenimiento: any): void {
     mantenimiento.estado = false;
-  
+
     this.mantenimientosService.updateMantenimiento(mantenimiento)
       .then(() => this.handleSuccess('Eliminado correctamente', 'success', mantenimiento))
-      .catch(error => this.handleError('Error al eliminar mantenimiento', 'error' ));
+      .catch(error => this.handleError('Error al eliminar mantenimiento', 'error'));
   }
-  
-  private handleSuccess(title: string, icon: SweetAlertIcon,mantenimiento: any): void {
+
+  private handleSuccess(title: string, icon: SweetAlertIcon, mantenimiento: any): void {
     console.log('Estado del mantenimiento cambiado:', mantenimiento);
-    this.showToast(title,icon);
+    this.showToast(title, icon);
   }
-  
+
   private handleError(title: string, icon: SweetAlertIcon): void {
     console.error('Error al cambiar el estado del mantenimiento:');
-    this.showToast(title,icon);
+    this.showToast(title, icon);
   }
-  
+
   private showToast(title: string, icon: SweetAlertIcon): void {
     const Toast = Swal.mixin({
       toast: true,
@@ -192,52 +198,52 @@ export class ViewmantenimientosComponent implements OnInit {
         toast.onmouseleave = Swal.resumeTimer;
       }
     });
-  
+
     Toast.fire({ icon, title });
   }
-  
+
   // ========================================================================================== //    
-  
-  fileRef: string ="";
-  downloadURL="";
-  
+
+  fileRef: string = "";
+  downloadURL = "";
+
   onFileSelected($event: any) {
     const file = $event.target.files[0];
     const filePath = `mantenimientosfiles/${Date.now()}`;
- 
-    const fileRef = ref(this.storage,  filePath );
+
+    const fileRef = ref(this.storage, filePath);
     const storageRef = ref(this.storage, filePath);
     uploadBytes(fileRef, file)
-    .then(response => {
-      console.log(`Subido: ${response}`);
-      getDownloadURL(storageRef).then((url) => {
-      this.downloadURL = url;
-      console.log('URL de descarga:1111', this.downloadURL);
-    });
-      
-    })
-    .catch(error => console.log(error));
+      .then(response => {
+        console.log(`Subido: ${response}`);
+        getDownloadURL(storageRef).then((url) => {
+          this.downloadURL = url;
+          console.log('URL de descarga:1111', this.downloadURL);
+        });
+
+      })
+      .catch(error => console.log(error));
   }
 
-  fileRef2: string ="";
-  downloadURL2="";
-  
+  fileRef2: string = "";
+  downloadURL2 = "";
+
   onFileSelected2($event: any) {
     const file2 = $event.target.files[0];
     const filePath = `mantenimientosfiles/${Date.now()}`;
 
-    const fileRef2 = ref(this.storage,  filePath );
+    const fileRef2 = ref(this.storage, filePath);
     const storageRef = ref(this.storage, filePath);
     uploadBytes(fileRef2, file2)
-    .then(response => {
-      console.log(`Subido: ${response}`);
-      getDownloadURL(storageRef).then((url) => {
-      this.downloadURL2 = url;
-      console.log('URL de descarga:2222', this.downloadURL2);
-    });
-      
-    })
-    .catch(error => console.log(error));
+      .then(response => {
+        console.log(`Subido: ${response}`);
+        getDownloadURL(storageRef).then((url) => {
+          this.downloadURL2 = url;
+          console.log('URL de descarga:2222', this.downloadURL2);
+        });
+
+      })
+      .catch(error => console.log(error));
   }
 
   onSubmit() {
@@ -265,17 +271,17 @@ export class ViewmantenimientosComponent implements OnInit {
           this.cerrarModal2(); // Llama a la función para cerrar el modal
           this.form2.reset();
         })
-        .catch(error => this.handleError('Error al eliminar mantenimiento', 'error' ));
+        .catch(error => this.handleError('Error al eliminar mantenimiento', 'error'));
     } else {
       this.showIncompleteDataAlert();
     }
   }
-  
+
   cerrarModal2() {
     // Cierra el modal usando el botón "Cerrar"
     this.cerrarModalBtn2.nativeElement.click();
   }
-  
+
   private showIncompleteDataAlert() {
     Swal.fire({
       icon: 'error',
@@ -299,14 +305,14 @@ export class ViewmantenimientosComponent implements OnInit {
       const imagen = this.downloadURL ? this.downloadURL : this.editarMantenimiento2.imagen;
       // Asigna la URL de la segunda imagen solo si se ha subido, de lo contrario, mantiene la original
       const imagen2 = this.downloadURL2 ? this.downloadURL2 : this.editarMantenimiento2.imagen2;
-       const mantenimientoed: Mantenimientos = {
+      const mantenimientoed: Mantenimientos = {
         ...mantenimientoedData,
         fecha: fecha,
         imagen: imagen,
         imagen2: imagen2,
         key: this.editarMantenimiento2.key
       };
-  
+
       // Llama al servicio para actualizar los datos
       this.mantenimientosService
         .updateMantenimiento(mantenimientoed)
@@ -325,8 +331,8 @@ export class ViewmantenimientosComponent implements OnInit {
   }
 
   // ========================================================================================== // 
-    // ========================================================================================== // 
-      // ========================================================================================== // 
+  // ========================================================================================== // 
+  // ========================================================================================== // 
 
 
 
@@ -375,19 +381,19 @@ export class ViewmantenimientosComponent implements OnInit {
     if (element) {
       const menus = element.querySelectorAll('.sidebar-dropdown-menu');
       const hasDropdowns = element.querySelectorAll('.has-dropdown.focused');
-  
+
       menus.forEach(menu => (menu as HTMLElement).style.display = 'none');
       hasDropdowns.forEach(item => item.classList.remove('focused'));
     }
   }
 
-  
-hideAllMenus() {
-  const menus = document.querySelectorAll('.sidebar-dropdown-menu');
-  const hasDropdowns = document.querySelectorAll('.has-dropdown.focused');
 
-  menus.forEach(menu => (menu as HTMLElement).style.display = 'none');
-  hasDropdowns.forEach(item => item.classList.remove('focused'));
-}
+  hideAllMenus() {
+    const menus = document.querySelectorAll('.sidebar-dropdown-menu');
+    const hasDropdowns = document.querySelectorAll('.has-dropdown.focused');
+
+    menus.forEach(menu => (menu as HTMLElement).style.display = 'none');
+    hasDropdowns.forEach(item => item.classList.remove('focused'));
+  }
 
 }
