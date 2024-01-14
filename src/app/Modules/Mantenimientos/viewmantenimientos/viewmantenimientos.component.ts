@@ -10,7 +10,8 @@ import { TiposMService } from 'src/app/Services/tiposM.service';
 import { Timestamp } from 'firebase/firestore';
 import Unidades from 'src/app/Interfaces/unidades.interfaces';
 import { Observable, finalize, of } from 'rxjs';
-import { Storage, ref, uploadBytes, listAll, getDownloadURL } from '@angular/fire/storage';
+import { Storage, ref, uploadBytes, listAll, getDownloadURL } from '@angular/fire/storage'; 
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-viewmantenimientos',
@@ -22,6 +23,7 @@ export class ViewmantenimientosComponent implements OnInit {
   form2: FormGroup;
   formularioEdicion: FormGroup;
   nuevoMantenimiento: any = {};
+  nombreChofer: string ="";
   mantenimientos: Mantenimientos[] = [];
   unidades$: Observable<Unidades[]> = of([]);
   tiposM$: Observable<ListatiposM[]> = of([]);
@@ -39,6 +41,7 @@ export class ViewmantenimientosComponent implements OnInit {
     private mantenimientosService: MantenimientosService,
     private unidadesService: UnidadesService,
     private tiposMService: TiposMService,
+    private router: Router
   ) {
     this.form2 = this.fb.group({
       kilometraje: [null, Validators.required],
@@ -63,12 +66,39 @@ export class ViewmantenimientosComponent implements OnInit {
       imagen2: [''],
       estado: [true, Validators.required],
     });
+    
   }
+
+  redireccionarMantenimientos() {
+    this.router.navigate(['/listmts']);
+  }
+  
+  redireccionarUsuarios() {
+    this.router.navigate(['/listusers']);
+  }
+  
+  redireccionarUnidades() {
+    this.router.navigate(['/listunis']);
+  }
+  redireccionarRepostaje() {
+    this.router.navigate(['/listreps']);
+  }
+  redireccionarTiposM() {
+    this.router.navigate(['/listtiposmant']);
+  }
+  redireccionarRutas() {
+    this.router.navigate(['/listrutas']);
+  }
+  
+  
+
+   
 
   ngOnInit(): void {
 
     this.unidades$ = this.unidadesService.getUnidades();
     this.tiposM$ = this.tiposMService.getTiposM();
+    
     this.mantenimientosService.getMantenimientos().subscribe((data) => {
       this.mantenimientos = data;
       this.establecerValoresPreseleccionados();

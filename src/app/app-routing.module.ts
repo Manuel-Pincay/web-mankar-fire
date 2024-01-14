@@ -8,6 +8,9 @@ import { MantenimientosComponent } from './Modules/Mantenimientos/mantenimientos
 import { ViewmantenimientosComponent } from './Modules/Mantenimientos/viewmantenimientos/viewmantenimientos.component';
 import { ViewrepostajeComponent } from './Modules/Repostaje/viewrepostaje/viewrepostaje.component';
 import { ViewunidadesComponent } from './Modules/Flotas/viewunidades/viewunidades.component';
+import { ViewrutasComponent } from './Modules/Rutas/viewrutas/viewrutas.component';
+import { ViewusuariosComponent } from './Modules/Usuarios/viewusuarios/viewusuarios.component';
+import { ViewtiposmantenimientosComponent } from './Modules/TiposM/viewtiposmantenimientos/viewtiposmantenimientos.component';
 
 
 const routes: Routes = [
@@ -24,6 +27,10 @@ const routes: Routes = [
   { path: 'listmts', component: ViewmantenimientosComponent },
   { path: 'listreps', component: ViewrepostajeComponent },
   { path: 'listunis', component: ViewunidadesComponent },
+  { path: 'listrutas', component: ViewrutasComponent},
+  { path: 'listusers', component: ViewusuariosComponent},
+  { path: 'listtiposmant', component: ViewtiposmantenimientosComponent},
+
 
 ];
 

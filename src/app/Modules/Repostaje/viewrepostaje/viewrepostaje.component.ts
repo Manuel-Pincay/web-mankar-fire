@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import Repostajes from 'src/app/Interfaces/repostajes.interfaces';
 import { RepostajesService } from 'src/app/Services/repostajes.service';
 
@@ -12,9 +13,33 @@ export class ViewrepostajeComponent {
 
 
   constructor(
- 
+    private router: Router,
     private repostajesService: RepostajesService
   ) {}
+
+  redireccionarMantenimientos() {
+    this.router.navigate(['/listmts']);
+  }
+  
+  redireccionarUsuarios() {
+    this.router.navigate(['/listusers']);
+  }
+  
+  redireccionarUnidades() {
+    this.router.navigate(['/listunis']);
+  }
+  redireccionarRepostaje() {
+    this.router.navigate(['/listreps']);
+  }
+  redireccionarTiposM() {
+    this.router.navigate(['/listtiposmant']);
+  }
+  redireccionarRutas() {
+    this.router.navigate(['/listrutas']);
+  }
+  
+  
+  
 
   ngOnInit(): void {
  

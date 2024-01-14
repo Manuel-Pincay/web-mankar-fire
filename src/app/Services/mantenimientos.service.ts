@@ -12,13 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class MantenimientosService {
 
   constructor(private firestore: Firestore) { }
-  /* 
-    addMantenimiento(mantenimiento: Mantenimientos) {
-      mantenimiento.key = uuidv4(); 
-  
-      const mantenimientosRef = collection(this.firestore, 'mantenimientos');
-      return addDoc(mantenimientosRef, mantenimiento);
-    } */
+
   addMantenimiento(mantenimiento: Mantenimientos) {
     const mantenimientosRef = collection(this.firestore, 'mantenimientos');
     mantenimiento.estado = true; // Establece el estado como true por defecto
@@ -31,11 +25,7 @@ export class MantenimientosService {
     });
   }
 
-  /*   getMantenimientos(): Observable<Mantenimientos[]> {
-      const mantenimientosRef = collection(this.firestore, 'mantenimientos');
-      return collectionData(mantenimientosRef, { idField: 'key' }) as Observable<Mantenimientos[]>;
-    }
-   */
+
   getMantenimientos(): Observable<Mantenimientos[]> {
     const mantenimientosRef = collection(this.firestore, 'mantenimientos');
     const orderedQuery = query(mantenimientosRef, orderBy('fecha', 'desc'));

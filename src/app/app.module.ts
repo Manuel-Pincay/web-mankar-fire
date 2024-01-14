@@ -22,6 +22,9 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { ViewrepostajeComponent } from './Modules/Repostaje/viewrepostaje/viewrepostaje.component';
 import { ViewunidadesComponent } from './Modules/Flotas/viewunidades/viewunidades.component';
 import { getStorage, provideStorage } from '@angular/fire/storage';
+import { ViewrutasComponent } from './Modules/Rutas/viewrutas/viewrutas.component';
+import { ViewusuariosComponent } from './Modules/Usuarios/viewusuarios/viewusuarios.component';
+import { ViewtiposmantenimientosComponent } from './Modules/TiposM/viewtiposmantenimientos/viewtiposmantenimientos.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +36,9 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
     ViewmantenimientosComponent,
     ViewrepostajeComponent,
     ViewunidadesComponent,
+    ViewrutasComponent,
+    ViewusuariosComponent,
+    ViewtiposmantenimientosComponent,
   ],
   imports: [
     BrowserModule,

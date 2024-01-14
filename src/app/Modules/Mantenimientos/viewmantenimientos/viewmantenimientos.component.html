@@ -38,8 +38,7 @@
   <div class="d-flex align-items-center p-3">
     <a
       href="#"
-      class="sidebar-logo text-uppercase fw-bold text-decoration-none text-indigo fs-4"
-      >MANKAR C.A.
+      class="sidebar-logo text-uppercase fw-bold text-decoration-none text-indigo fs-4"> MANKAR 
     </a>
     <i
       class="sidebar-toggle ri-arrow-left-circle-line ms-auto fs-5 d-none d-md-block"
@@ -57,37 +56,37 @@
       Panel Administrativo
     </li>
     <li class="sidebar-menu-item">
-      <a href="#">
+      <a (click)="redireccionarMantenimientos()">
         <i class="ri-settings-line sidebar-menu-item-icon"></i>
         Mantenimientos
       </a>
     </li>
     <li class="sidebar-menu-item">
-      <a href="#">
+      <a (click)="redireccionarRepostaje()">
         <i class="ri-gas-station-line sidebar-menu-item-icon"></i>
         Repostajes
       </a>
     </li>
     <li class="sidebar-menu-item">
-      <a href="#">
+      <a (click)="redireccionarUnidades()">
         <i class="ri-truck-line sidebar-menu-item-icon"></i>
         Unidades
       </a>
     </li>
     <li class="sidebar-menu-item">
-      <a href="#">
+      <a (click)="redireccionarTiposM()">
         <i class="ri-list-settings-line sidebar-menu-item-icon"></i>Tipos de
         mantenimientos
       </a>
     </li>
     <li class="sidebar-menu-item">
-      <a href="#">
+      <a (click)="redireccionarRutas()">
         <i class="ri-road-map-line sidebar-menu-item-icon"></i>
         Rutas
       </a>
     </li>
     <li class="sidebar-menu-item">
-      <a href="#">
+      <a (click)="redireccionarUsuarios()">
         <i class="ri-user-3-line sidebar-menu-item-icon"></i>
         Usuarios
       </a>
@@ -113,6 +112,8 @@
 
 <div class="sidebar-overlay"></div>
 <!-- end: Sidebar -->
+
+
 
 <section class="text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto">

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import Unidades from 'src/app/Interfaces/unidades.interfaces';
 import { UnidadesService } from '../../../Services/unidades.service';
 import { Chart } from 'chart.js';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-viewunidades',
@@ -12,8 +13,34 @@ export class ViewunidadesComponent {
   unidades: Unidades[] = [];
 
   constructor(
-    private unidadesService: UnidadesService
+    private unidadesService: UnidadesService,
+    private router: Router
   ){}
+
+  redireccionarMantenimientos() {
+    this.router.navigate(['/listmts']);
+  }
+  
+  redireccionarUsuarios() {
+    this.router.navigate(['/listusers']);
+  }
+  
+  redireccionarUnidades() {
+    this.router.navigate(['/listunis']);
+  }
+  redireccionarRepostaje() {
+    this.router.navigate(['/listreps']);
+  }
+  redireccionarTiposM() {
+    this.router.navigate(['/listtiposmant']);
+  }
+  redireccionarRutas() {
+    this.router.navigate(['/listrutas']);
+  }
+  
+  
+
+  
 
   ngOnInit(): void {
     this.unidadesService.getUnidades().subscribe((data) => {
