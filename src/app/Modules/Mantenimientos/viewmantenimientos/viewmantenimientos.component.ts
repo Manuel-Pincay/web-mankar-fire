@@ -107,31 +107,23 @@ export class ViewmantenimientosComponent implements OnInit {
 
     const sidebarDropdownMenus = document.querySelectorAll('.sidebar-dropdown-menu');
     sidebarDropdownMenus.forEach(menu => (menu as HTMLElement).style.display = 'none');
-
     const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item.has-dropdown > a, .sidebar-dropdown-menu-item.has-dropdown > a');
     sidebarMenuItems.forEach(item => item.addEventListener('click', (event) => this.sidebarItemClick(event)));
-
     const sidebarToggle = document.querySelector('.sidebar-toggle');
     if (sidebarToggle) {
       sidebarToggle.addEventListener('click', this.sidebarToggleClick.bind(this));
     }
-
     const sidebarOverlay = document.querySelector('.sidebar-overlay');
     if (sidebarOverlay) {
       sidebarOverlay.addEventListener('click', this.sidebarOverlayClick.bind(this));
     }
-
     const sidebar = document.querySelector('.sidebar');
     if (sidebar) {
       sidebar.classList.add('collapsed');
     }
-
-    // Handle initial state for small screens
     if (window.innerWidth < 768) {
-      // You might want to show the sidebar for small screens if needed
     }
- 
-    // end: Sidebar
+
   }
   establecerValoresPreseleccionados(): void {
     const tipoMPreseleccionado = 'Mantenimiento 2';
@@ -279,20 +271,22 @@ export class ViewmantenimientosComponent implements OnInit {
   onSubmit() {
     if (this.form2.valid) {
       const mantenimientoData = this.form2.value;
-
-      const fecha =
-        mantenimientoData.fecha instanceof Date
-          ? mantenimientoData.fecha
-          : new Date();
-      const fechaTimestamp = Timestamp.fromDate(fecha);
-
+  
+      // Obtén la fecha del formulario y conviértela a un objeto Date
+      const fechaFormulario = mantenimientoData.fecha;
+      const fechaFormularioDate =
+        fechaFormulario instanceof Date ? fechaFormulario : new Date(fechaFormulario);
+  
+      // Convierte la fecha del formulario a un objeto Timestamp
+      const fechaTimestamp = Timestamp.fromDate(fechaFormularioDate);
+  
       const mantenimiento: Mantenimientos = {
         ...mantenimientoData,
         fecha: fechaTimestamp,
         imagen: this.downloadURL,
         imagen2: this.downloadURL2,
       };
-
+  
       console.log('Mantenimiento a enviar:', mantenimiento);
       this.mantenimientosService
         .addMantenimiento(mantenimiento)
@@ -301,11 +295,12 @@ export class ViewmantenimientosComponent implements OnInit {
           this.cerrarModal2(); // Llama a la función para cerrar el modal
           this.form2.reset();
         })
-        .catch(error => this.handleError('Error al eliminar mantenimiento', 'error'));
+        .catch((error) => this.handleError('Error al eliminar mantenimiento', 'error'));
     } else {
       this.showIncompleteDataAlert();
     }
   }
+  
 
   cerrarModal2() {
     // Cierra el modal usando el botón "Cerrar"

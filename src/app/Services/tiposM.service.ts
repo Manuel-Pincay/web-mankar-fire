@@ -14,18 +14,18 @@ export class TiposMService {
 
   addTipoM(tipoM: ListatiposM) {
     const tiposMRef = collection(this.firestore, 'listatiposM');
-    tipoM.estado = true; // Establece el estado como true por defecto
-
+    tipoM.estado = true;
     const docRef = addDoc(tiposMRef, tipoM);
 
     return docRef.then((doc) => {
       tipoM.nombre = doc.id;
-      return setDoc(doc, tipoM); // Actualiza el documento con la 'prox' establecida
+      return setDoc(doc, tipoM); 
     });
   }
 
   getTiposM(): Observable<ListatiposM[]> {
     const tiposMRef = collection(this.firestore, 'listatiposM');
+
     return collectionData(tiposMRef, { idField: 'nombre' }).pipe(
       map((data: any[]) => {
         return data.map(tipoM => {
@@ -39,13 +39,13 @@ export class TiposMService {
 
   updateTipoM(tipoM: ListatiposM) {
     const tipoMDocRef = doc(this.firestore, `listatiposM/${tipoM.nombre}`);
-    // Utiliza setDoc para actualizar el documento
+ 
     return setDoc(tipoMDocRef, tipoM);
   }
 
   deleteTipoM(tipoM: ListatiposM) {
     const tipoMDocRef = doc(this.firestore, `listatiposM/${tipoM.nombre}`);
-    // Utiliza updateDoc para cambiar el estado a false
+ 
     return updateDoc(tipoMDocRef, { estado: false });
   }
 }

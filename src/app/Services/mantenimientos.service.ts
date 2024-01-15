@@ -15,13 +15,13 @@ export class MantenimientosService {
 
   addMantenimiento(mantenimiento: Mantenimientos) {
     const mantenimientosRef = collection(this.firestore, 'mantenimientos');
-    mantenimiento.estado = true; // Establece el estado como true por defecto
+    mantenimiento.estado = true; 
 
     const docRef = addDoc(mantenimientosRef, mantenimiento);
 
     return docRef.then((doc) => {
       mantenimiento.key = doc.id;
-      return setDoc(doc, mantenimiento); // Actualiza el documento con la 'key' establecida
+      return setDoc(doc, mantenimiento); 
     });
   }
 
