@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import Rutas from 'src/app/Interfaces/rutas.interfaces';
+import { RutasService } from '../../../Services/rutas.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-viewrutas',
@@ -7,12 +11,29 @@ import { Router } from '@angular/router';
   styleUrl: './viewrutas.component.css'
 })
 export class ViewrutasComponent implements OnInit{
-
-
+  rutas: Rutas[] = [];
+  detalleruta: any;
+  form: FormGroup;
+  //formularioEdicion: FormGroup; 
+  @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
+  @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
 
   constructor(
-    private router: Router){}
+    private fb: FormBuilder,
+    private router: Router,
+    private RutasService: RutasService,
+     ){
+      this.form = this.fb.group({
+        id: [null, Validators.required],
+        nombre: ['', Validators.required],
+        salida: ['', Validators.required],
+        llegada: ['', Validators.required],
+        npeajes: [null, Validators.required],
+        estado: [true, Validators.required],
+      });
+     }
 
+  
 
 
   redireccionarMantenimientos() {
@@ -39,6 +60,9 @@ export class ViewrutasComponent implements OnInit{
   
  
   ngOnInit(): void {
+    // ========================================================================================== // 
+    // BARRA LATERAL================================================= // 
+    // ========================================================================================== // 
     const sidebarDropdownMenus = document.querySelectorAll('.sidebar-dropdown-menu');
     sidebarDropdownMenus.forEach(menu => (menu as HTMLElement).style.display = 'none');
     const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item.has-dropdown > a, .sidebar-dropdown-menu-item.has-dropdown > a');
@@ -55,12 +79,60 @@ export class ViewrutasComponent implements OnInit{
     if (sidebar) {
       sidebar.classList.add('collapsed');
     }
-    if (window.innerWidth < 768) {
-    }
-
+    if (window.innerWidth < 768) { }
+    // ========================================================================================== // 
+    // ========================================================================================== // 
+    
+    this.RutasService.getRutas().subscribe((data) => {
+      this.rutas = data;
+    })
   }
 
-sidebarItemClick(event: Event) {
+  verDetalles(verruta: any) {
+    console.log('tocaste', verruta);
+    this.detalleruta = verruta;
+  }
+
+  
+
+
+  onSubmit() {
+    if (this.form.valid) {
+      const rutaData = this.form.value;
+
+      // Llama al servicio para agregar la ruta
+      this.RutasService
+      .guardarRuta(rutaData.salida, rutaData.llegada, rutaData.npeajes)
+        .then(() => {
+          // Acciones después de agregar la ruta (puede ser mostrar un mensaje, cerrar el modal, etc.)
+          this.cerrarModal(); // Llama a la función para cerrar el modal
+          this.form.reset();
+        })
+        .catch((error) => {
+          // Manejar el error si es necesario
+          console.error('Error al agregar ruta:', error);
+        });
+    } else {
+      // Muestra una alerta si el formulario no es válido
+      // Puedes usar tu lógica específica para mostrar mensajes de validación
+    }
+  }
+
+  cerrarModal() {
+    // Cierra el modal usando el botón "Cerrar"
+    this.cerrarModalBtn2.nativeElement.click();
+  }
+
+
+
+
+
+
+
+  // ========================================================================================== // 
+  // ========================================================================================== // 
+  // ========================================================================================== // 
+  sidebarItemClick(event: Event) {
     event.preventDefault();
     const target = event.target as HTMLElement;
     const parent = target.parentElement;
@@ -108,5 +180,8 @@ sidebarItemClick(event: Event) {
     menus.forEach(menu => (menu as HTMLElement).style.display = 'none');
     hasDropdowns.forEach(item => item.classList.remove('focused'));
   }
+  // ========================================================================================== // 
+  // ========================================================================================== // 
+  // ========================================================================================== // 
 
 }

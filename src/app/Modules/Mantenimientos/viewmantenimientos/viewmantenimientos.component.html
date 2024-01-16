@@ -101,6 +101,7 @@
 
 <section class="text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto">
+    
     <!-- Modal ADD-->
     <div class="modal fade" id="agregarNuevoMantenimiento" tabindex="-1" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
@@ -112,8 +113,8 @@
             </h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <form [formGroup]="form2" (ngSubmit)="onSubmit()">
+          <div class="modal-body">          
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
               <!-- Placa -->
               <label for="placa">Placa:</label>
               <select id="placa" formControlName="placa" class="form-control">

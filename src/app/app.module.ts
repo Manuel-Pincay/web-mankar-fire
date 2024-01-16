@@ -13,7 +13,6 @@ import { MainComponent } from './Modules/main/main.component';
 import { LoginComponent } from './Modules/login/login.component';
 import { RegistroComponent } from './Modules/registro/registro.component';
 import { environment } from './Environments/environment.prod';
-import { MantenimientosComponent } from './Modules/Mantenimientos/mantenimientos/mantenimientos.component';
 import { ViewmantenimientosComponent } from './Modules/Mantenimientos/viewmantenimientos/viewmantenimientos.component';
 
 
@@ -32,7 +31,6 @@ import { ViewtiposmantenimientosComponent } from './Modules/TiposM/viewtiposmant
     MainComponent,
     LoginComponent,
     RegistroComponent,
-    MantenimientosComponent,
     ViewmantenimientosComponent,
     ViewrepostajeComponent,
     ViewunidadesComponent,

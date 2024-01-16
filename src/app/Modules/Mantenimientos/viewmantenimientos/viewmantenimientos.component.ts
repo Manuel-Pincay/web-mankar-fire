@@ -10,7 +10,7 @@ import { TiposMService } from 'src/app/Services/tiposM.service';
 import { Timestamp } from 'firebase/firestore';
 import Unidades from 'src/app/Interfaces/unidades.interfaces';
 import { Observable, finalize, of } from 'rxjs';
-import { Storage, ref, uploadBytes, listAll, getDownloadURL } from '@angular/fire/storage'; 
+import { Storage, ref, uploadBytes, listAll, getDownloadURL } from '@angular/fire/storage';
 import { Router } from '@angular/router';
 
 @Component({
@@ -20,10 +20,10 @@ import { Router } from '@angular/router';
 })
 export class ViewmantenimientosComponent implements OnInit {
 
-  form2: FormGroup;
+  form: FormGroup;
   formularioEdicion: FormGroup;
   nuevoMantenimiento: any = {};
-  nombreChofer: string ="";
+  nombreChofer: string = "";
   mantenimientos: Mantenimientos[] = [];
   unidades$: Observable<Unidades[]> = of([]);
   tiposM$: Observable<ListatiposM[]> = of([]);
@@ -43,7 +43,7 @@ export class ViewmantenimientosComponent implements OnInit {
     private tiposMService: TiposMService,
     private router: Router
   ) {
-    this.form2 = this.fb.group({
+    this.form = this.fb.group({
       kilometraje: [null, Validators.required],
       proxcambio: [null, Validators.required],
       placa: ['', Validators.required],
@@ -66,17 +66,17 @@ export class ViewmantenimientosComponent implements OnInit {
       imagen2: [''],
       estado: [true, Validators.required],
     });
-    
+
   }
 
   redireccionarMantenimientos() {
     this.router.navigate(['/listmts']);
   }
-  
+
   redireccionarUsuarios() {
     this.router.navigate(['/listusers']);
   }
-  
+
   redireccionarUnidades() {
     this.router.navigate(['/listunis']);
   }
@@ -89,22 +89,15 @@ export class ViewmantenimientosComponent implements OnInit {
   redireccionarRutas() {
     this.router.navigate(['/listrutas']);
   }
-  
-  
 
-   
+
+
+
 
   ngOnInit(): void {
-
-    this.unidades$ = this.unidadesService.getUnidades();
-    this.tiposM$ = this.tiposMService.getTiposM();
-    
-    this.mantenimientosService.getMantenimientos().subscribe((data) => {
-      this.mantenimientos = data;
-      this.establecerValoresPreseleccionados();
-    });
-
-
+    // ========================================================================================== // 
+    // BARRA LATERAL================================================= // 
+    // ========================================================================================== // 
     const sidebarDropdownMenus = document.querySelectorAll('.sidebar-dropdown-menu');
     sidebarDropdownMenus.forEach(menu => (menu as HTMLElement).style.display = 'none');
     const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item.has-dropdown > a, .sidebar-dropdown-menu-item.has-dropdown > a');
@@ -121,8 +114,18 @@ export class ViewmantenimientosComponent implements OnInit {
     if (sidebar) {
       sidebar.classList.add('collapsed');
     }
-    if (window.innerWidth < 768) {
-    }
+    if (window.innerWidth < 768) { }
+    // ========================================================================================== // 
+    // ========================================================================================== // 
+
+    this.unidades$ = this.unidadesService.getUnidades();
+    this.tiposM$ = this.tiposMService.getTiposM();
+
+    this.mantenimientosService.getMantenimientos().subscribe((data) => {
+      this.mantenimientos = data;
+      this.establecerValoresPreseleccionados();
+    });
+
 
   }
   establecerValoresPreseleccionados(): void {
@@ -269,38 +272,38 @@ export class ViewmantenimientosComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.form2.valid) {
-      const mantenimientoData = this.form2.value;
-  
+    if (this.form.valid) {
+      const mantenimientoData = this.form.value;
+
       // Obtén la fecha del formulario y conviértela a un objeto Date
       const fechaFormulario = mantenimientoData.fecha;
       const fechaFormularioDate =
         fechaFormulario instanceof Date ? fechaFormulario : new Date(fechaFormulario);
-  
+
       // Convierte la fecha del formulario a un objeto Timestamp
       const fechaTimestamp = Timestamp.fromDate(fechaFormularioDate);
-  
+
       const mantenimiento: Mantenimientos = {
         ...mantenimientoData,
         fecha: fechaTimestamp,
         imagen: this.downloadURL,
         imagen2: this.downloadURL2,
       };
-  
+
       console.log('Mantenimiento a enviar:', mantenimiento);
       this.mantenimientosService
         .addMantenimiento(mantenimiento)
         .then(() => {
           this.handleSuccess('Eliminado correctamente', 'success', mantenimiento);
           this.cerrarModal2(); // Llama a la función para cerrar el modal
-          this.form2.reset();
+          this.form.reset();
         })
         .catch((error) => this.handleError('Error al eliminar mantenimiento', 'error'));
     } else {
       this.showIncompleteDataAlert();
     }
   }
-  
+
 
   cerrarModal2() {
     // Cierra el modal usando el botón "Cerrar"
@@ -361,26 +364,25 @@ export class ViewmantenimientosComponent implements OnInit {
 
 
 
+
+  // ========================================================================================== // 
+  // ========================================================================================== // 
+  // ========================================================================================== // 
   sidebarItemClick(event: Event) {
     event.preventDefault();
-
     const target = event.target as HTMLElement;
     const parent = target.parentElement;
-
     if (parent && !parent.classList.contains('focused')) {
       this.hideOtherMenus(parent.parentElement);
     }
-
     const next = target.nextElementSibling as HTMLElement;
     if (next) {
       next.style.display = (next.style.display === 'none') ? 'block' : 'none';
     }
-
     if (parent) {
       parent.classList.toggle('focused');
     }
   }
-
   sidebarToggleClick() {
     const sidebar = document.querySelector('.sidebar') as HTMLElement;
     if (sidebar) {
@@ -388,7 +390,6 @@ export class ViewmantenimientosComponent implements OnInit {
       sidebar.addEventListener('mouseleave', this.sidebarMouseLeave.bind(this));
     }
   }
-
   sidebarOverlayClick() {
     const sidebar = document.querySelector('.sidebar');
     if (sidebar) {
@@ -397,11 +398,9 @@ export class ViewmantenimientosComponent implements OnInit {
 
     this.hideAllMenus();
   }
-
   sidebarMouseLeave() {
     this.hideAllMenus();
   }
-
   hideOtherMenus(element: Element | null) {
     if (element) {
       const menus = element.querySelectorAll('.sidebar-dropdown-menu');
@@ -411,14 +410,17 @@ export class ViewmantenimientosComponent implements OnInit {
       hasDropdowns.forEach(item => item.classList.remove('focused'));
     }
   }
-
-
   hideAllMenus() {
     const menus = document.querySelectorAll('.sidebar-dropdown-menu');
     const hasDropdowns = document.querySelectorAll('.has-dropdown.focused');
-
     menus.forEach(menu => (menu as HTMLElement).style.display = 'none');
     hasDropdowns.forEach(item => item.classList.remove('focused'));
   }
+  // ========================================================================================== // 
+  // ========================================================================================== // 
+  // ========================================================================================== // 
+
+
+
 
 }

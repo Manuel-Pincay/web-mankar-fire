@@ -1,5 +1,5 @@
 export default interface Rutas {
-    autoincrement: any;
+    
     id: number;
     llegada: string;
     estado: boolean;

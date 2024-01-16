@@ -8,6 +8,9 @@ import {
     doc,
     deleteDoc,
     setDoc,
+    updateDoc,
+    orderBy,
+    query,
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
@@ -27,8 +30,9 @@ export class UnidadesService {
     }
 
     getUnidades(): Observable<Unidades[]> {
-        const unidadesRef = collection(this.firestore, 'flota'); // Cambia 'mantenimientos' por 'flota'
-        return collectionData(unidadesRef, { idField: 'placa' }).pipe(
+        const unidadesRef = collection(this.firestore, 'flota');
+        const orderedQuery = query(unidadesRef, orderBy('unidad', 'asc'));
+        return collectionData(orderedQuery, { idField: 'placa' }).pipe(
             map((data: any[]) => {
                 return data.map((unidad) => {
                     return {
@@ -47,6 +51,6 @@ export class UnidadesService {
 
     deleteUnidad(unidad: Unidades) {
         const unidadDocRef = doc(this.firestore, `flota/${unidad.placa}`); // Cambia 'mantenimientos' por 'flota'
-        return deleteDoc(unidadDocRef);
+        return updateDoc(unidadDocRef, { estado: false });
     }
 }

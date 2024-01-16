@@ -126,7 +126,6 @@ export class ViewtiposmantenimientosComponent implements OnInit {
   }
 
   cerrarModal2() {
-    // Cierra el modal usando el botón "Cerrar"
     this.cerrarModalBtn2.nativeElement.click();
   }
   private showIncompleteDataAlert() {

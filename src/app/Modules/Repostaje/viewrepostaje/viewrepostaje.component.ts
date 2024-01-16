@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import Repostajes from 'src/app/Interfaces/repostajes.interfaces';
 import { RepostajesService } from 'src/app/Services/repostajes.service';
@@ -10,21 +11,27 @@ import { RepostajesService } from 'src/app/Services/repostajes.service';
 })
 export class ViewrepostajeComponent {
   repostajes: Repostajes[] = [];
+  detallerepostaje: any;
+  //form: FormGroup;
+  //formularioEdicion: FormGroup; 
+  @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
+  @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
+
 
 
   constructor(
     private router: Router,
     private repostajesService: RepostajesService
-  ) {}
+  ) { }
 
   redireccionarMantenimientos() {
     this.router.navigate(['/listmts']);
   }
-  
+
   redireccionarUsuarios() {
     this.router.navigate(['/listusers']);
   }
-  
+
   redireccionarUnidades() {
     this.router.navigate(['/listunis']);
   }
@@ -37,10 +44,10 @@ export class ViewrepostajeComponent {
   redireccionarRutas() {
     this.router.navigate(['/listrutas']);
   }
-  
-  
-  
- 
+
+
+
+
 
   confirmarEliminar(repostaje: any): void {
     const confirmacion = window.confirm(
@@ -60,16 +67,11 @@ export class ViewrepostajeComponent {
 
 
 
-  
+
   ngOnInit(): void {
-
-    this.repostajesService.getRepostajes().subscribe((data) => {
-      this.repostajes = data;
-      
-    });
-
-
-
+    // ========================================================================================== // 
+    // BARRA LATERAL================================================= // 
+    // ========================================================================================== // 
     const sidebarDropdownMenus = document.querySelectorAll('.sidebar-dropdown-menu');
     sidebarDropdownMenus.forEach(menu => (menu as HTMLElement).style.display = 'none');
     const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item.has-dropdown > a, .sidebar-dropdown-menu-item.has-dropdown > a');
@@ -87,10 +89,32 @@ export class ViewrepostajeComponent {
       sidebar.classList.add('collapsed');
     }
     if (window.innerWidth < 768) { }
+    // ========================================================================================== // 
+    // ========================================================================================== // 
+
+    this.repostajesService.getRepostajes().subscribe((data) => {
+      this.repostajes = data;
+    });
 
   }
+  
+  verDetalles(verrepostaje: any) {
+    console.log('tocaste', verrepostaje);
+    this.detallerepostaje = verrepostaje;
+  }
+  cerrarModal() {
+    // Cierra el modal usando el botón "Cerrar"
+    this.cerrarModalBtn2.nativeElement.click();
+  }
 
-sidebarItemClick(event: Event) {
+
+
+
+
+  // ========================================================================================== // 
+  // ========================================================================================== // 
+  // ========================================================================================== // 
+  sidebarItemClick(event: Event) {
     event.preventDefault();
     const target = event.target as HTMLElement;
     const parent = target.parentElement;
@@ -138,6 +162,9 @@ sidebarItemClick(event: Event) {
     menus.forEach(menu => (menu as HTMLElement).style.display = 'none');
     hasDropdowns.forEach(item => item.classList.remove('focused'));
   }
+  // ========================================================================================== // 
+  // ========================================================================================== // 
+  // ========================================================================================== // 
 
 
 }
