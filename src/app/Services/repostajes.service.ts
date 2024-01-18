@@ -1,6 +1,6 @@
 // repostajes.service.ts
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, setDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import Repostaje from '../Interfaces/repostajes.interfaces';
@@ -28,7 +28,7 @@ export class RepostajesService {
     const repostajesRef = collection(this.firestore, 'DBcombustible');
     return collectionData(repostajesRef, { idField: 'key' }).pipe(
       map((data: any[]) => {
-        return data.map(repostaje => {
+        return data .filter(repostaje => repostaje.estado === true).map(repostaje => {
           return {
             ...repostaje,
             fecha: repostaje.fecha ? repostaje.fecha.toDate() : null,
@@ -46,6 +46,6 @@ export class RepostajesService {
 
   deleteRepostaje(repostaje: Repostaje) {
     const repostajeDocRef = doc(this.firestore, `DBcombustible/${repostaje.key}`);
-    return deleteDoc(repostajeDocRef);
+    return updateDoc(repostajeDocRef, { estado: false });
   }
 }

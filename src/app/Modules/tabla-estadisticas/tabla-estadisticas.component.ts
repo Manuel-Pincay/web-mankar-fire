@@ -1,20 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from 'src/app/Services/user.service';
-import Usuarios from 'src/app/Interfaces/users.interfaces';
+import { CollectionReference, DocumentData, Firestore, collection  } from '@angular/fire/firestore';
+import { Chart, registerables } from 'chart.js';
+import { catchError, take } from 'rxjs';
+import ListatiposM from 'src/app/Interfaces/tiposmant.interfaces';
+import { TiposMService } from 'src/app/Services/tiposM.service';
 @Component({
-  selector: 'app-viewusuarios',
-  templateUrl: './viewusuarios.component.html',
-  styleUrl: './viewusuarios.component.css'
+  selector: 'app-tabla-estadisticas',
+  templateUrl: './tabla-estadisticas.component.html',
+  styleUrl: './tabla-estadisticas.component.css'
 })
-export class ViewusuariosComponent implements OnInit{
-
-  usuarios: Usuarios[] = [];
-
-  constructor(
-    private usuariosService: UserService,
-    private router: Router){}
+export class TablaEstadisticasComponent implements OnInit{
+  // Variables para almacenar datos
+  tiposMantenimientos: any[] = []; // Supongamos que tienes un array con los tipos de mantenimientos
+  tiposMante: ListatiposM[] = [];
+  // Variables para el gráfico
+  chart: any;
+  
+  constructor(private firestore: Firestore,
     
+    private tiposmanteService: TiposMService,
+    private router: Router,
+    
+    ){}
+
 
 
   redireccionarMantenimientos() {
@@ -39,9 +48,12 @@ export class ViewusuariosComponent implements OnInit{
   }
   
   
-  
  
   ngOnInit(): void {
+    
+    // ========================================================================================== // 
+    // BARRA LATERAL================================================= // 
+    // ========================================================================================== // 
     const sidebarDropdownMenus = document.querySelectorAll('.sidebar-dropdown-menu');
     sidebarDropdownMenus.forEach(menu => (menu as HTMLElement).style.display = 'none');
     const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item.has-dropdown > a, .sidebar-dropdown-menu-item.has-dropdown > a');
@@ -58,13 +70,60 @@ export class ViewusuariosComponent implements OnInit{
     if (sidebar) {
       sidebar.classList.add('collapsed');
     }
-    if (window.innerWidth < 768) {
-    }
+    if (window.innerWidth < 768) { }
+    // ========================================================================================== // 
+    // ========================================================================================== // 
 
-    this.usuariosService.getUsuario().subscribe((data) => {
-      this.usuarios = data;
-    })
+    this.cargarDatosFirebase();
   }
+  
+  cargarDatosFirebase() {
+    // Obtenemos los datos de la colección "listatiposM" utilizando el método 'getTiposM':
+    const tiposMantenimientos = this.tiposmanteService.getTiposM();
+  
+    // Escuchamos los cambios en los datos y gestionamos errores:
+    tiposMantenimientos.subscribe((data: ListatiposM[]) => {
+      // Extraemos los nombres de los tipos de mantenimiento:
+      this.tiposMantenimientos = data.map((tipo: ListatiposM) => tipo.nombre);
+  
+      // Configuramos el gráfico:
+      this.configurarGrafico();
+    }, error => {
+      console.error('Error al cargar datos desde Firebase:', error);
+    });
+  }
+  
+  // Función para configurar el gráfico
+  configurarGrafico() {
+    // Configuración del gráfico
+    Chart.register(...registerables);
+    const ctx = document.getElementById('miGrafico') as HTMLCanvasElement;
+    this.chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: this.tiposMantenimientos,
+        datasets: [{
+          label: 'Cantidad de Mantenimientos',
+          data: this.generarDatosEjemplo(), // Puedes reemplazar esto con tus datos reales
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+  
+  // Esta es una función de ejemplo para generar datos de cantidad aleatorios
+  generarDatosEjemplo(): number[] {
+    return Array.from({ length: this.tiposMantenimientos.length }, () => Math.floor(Math.random() * 10) + 1);
+  }
+
 
 sidebarItemClick(event: Event) {
     event.preventDefault();
@@ -115,7 +174,8 @@ sidebarItemClick(event: Event) {
     hasDropdowns.forEach(item => item.classList.remove('focused'));
   }
 
-
-
-
 }
+function valueChanges(tiposMRef: CollectionReference<DocumentData, DocumentData>) {
+  throw new Error('Function not implemented.');
+}
+

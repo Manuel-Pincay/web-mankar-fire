@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Storage, ref, uploadBytes, listAll, getDownloadURL } from '@angular/fire/storage';
 import Swal, { SweetAlertIcon } from 'sweetalert2';
+import { Observable, of } from 'rxjs';
 
 
 @Component({
@@ -17,10 +18,12 @@ export class ViewunidadesComponent implements OnInit {
   unidades: Unidades[] = [];
   detalleunidad: any;
   form: FormGroup;
-  //formularioEdicion: FormGroup; 
+  formularioEdicion: FormGroup; 
+  unidades$: Observable<Unidades[]> = of([]);
   @ViewChild('fileInput') fileInput: ElementRef | undefined
   @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
   @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
+  editarunidadF: any;
 
   constructor(
     private fb: FormBuilder,
@@ -42,10 +45,21 @@ export class ViewunidadesComponent implements OnInit {
       imagen: [''],
       estado: [true, Validators.required],
     });
-
-
-
+    this.formularioEdicion = this.fb.group({
+      placa: ['', Validators.required],
+      unidad: ['', Validators.required],
+      year: ['', Validators.required],
+      chofer: ['', Validators.required],
+      color: ['', Validators.required],
+      kmac: [0, Validators.required],
+      marca: ['', Validators.required],
+      matricula: ['', Validators.required],
+      imagen: [''],
+      modelo: ['', Validators.required],
+    });
   }
+
+  
 
   redireccionarMantenimientos() {
     this.router.navigate(['/listmts']);
@@ -212,11 +226,77 @@ export class ViewunidadesComponent implements OnInit {
   // ========================================================================================== // 
   // ========================================================================================== // 
 
+  
+  establecerValoresPreseleccionados(): void {
+    const UnidadPreseleccionado = 'repostaje 2';
+    this.unidades$.subscribe((unidades: Unidades[]) => {
+      const unidadseleccionado = unidades.find(
+        (unidades) => unidades.nombre === UnidadPreseleccionado
+      );
+      if (unidadseleccionado) {
+        this.formularioEdicion.patchValue({
+          unidades: unidadseleccionado.nombre,
+        });
+      }
+    });
+  }
+  
+  editarUnidad(unidad: any) {
+    console.log('tocaste edit', unidad);
+    this.editarunidadF = unidad;
+    this.formularioEdicion.patchValue({
+      placa: unidad?.placa || null,
+      unidad: unidad?.unidad || null,
+      year: unidad?.year || null,
+      chofer: unidad?.chofer || '',
+      color: unidad?.color || '',
+      kmac: unidad?.kmac || 0,
+      marca: unidad?.marca || '',
+      matricula: unidad?.matricula || '',
+      modelo: unidad?.modelo || '',
+      imagen: unidad?.imagen || '',
+      // Añade más campos según sea necesario
+    });
+    
+    console.log("ASKDAJS213123123DJASDK", this.formularioEdicion);
+  }
+  
+  guardarEdicionUnidad() {
+    if (this.formularioEdicion.valid) {
+      const unidadEditadaData = this.formularioEdicion.value;
+      const imagen = this.downloadURL
+      ? this.downloadURL
+      : this.editarunidadF.imagen;
+      const unidadEditado: Unidades = {
+        ...unidadEditadaData,
+        imagen: imagen, 
+        key: this.editarunidadF.key,
+      };
+      this.unidadesService
+        .updateUnidad(unidadEditadaData)
+        .then(() => {
+          this.handleSuccess('Edición exitosa', 'success', unidadEditadaData);
+          this.cerrarModal(); 
+        })
+        .catch((error) =>
+          this.handleError('Error al editar unidad', 'error')
+        );
+    } else {
+      this.showIncompleteDataAlert();
+    }
+  }
+  
 
-
-
-
-
+  cerrarModal () {
+    this.cerrarModalBtn2.nativeElement.click();
+  }
+  private showIncompleteDataAlertUnidad() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Por favor, complete todos los campos requeridos.',
+    });
+  }
 
   // ========================================================================================== // 
   // ========================================================================================== // 

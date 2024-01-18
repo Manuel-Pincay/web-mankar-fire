@@ -10,6 +10,7 @@ import { ViewunidadesComponent } from './Modules/Flotas/viewunidades/viewunidade
 import { ViewrutasComponent } from './Modules/Rutas/viewrutas/viewrutas.component';
 import { ViewusuariosComponent } from './Modules/Usuarios/viewusuarios/viewusuarios.component';
 import { ViewtiposmantenimientosComponent } from './Modules/TiposM/viewtiposmantenimientos/viewtiposmantenimientos.component';
+import { TablaEstadisticasComponent } from './Modules/tabla-estadisticas/tabla-estadisticas.component';
 
 
 const routes: Routes = [
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'listrutas', component: ViewrutasComponent},
   { path: 'listusers', component: ViewusuariosComponent},
   { path: 'listtiposmant', component: ViewtiposmantenimientosComponent},
+  { path: 'estadistica', component: TablaEstadisticasComponent},
 
 
 ];

@@ -239,8 +239,8 @@
                     <i class="fas fa-trash-alt fa-lg text-danger"></i>
                   </button>
 
-                  <!--   (click)="editarMantenimiento(mantenimiento)" -->
-                  <button data-bs-toggle="modal" data-bs-target="#editarMantenimientoModal" class="ml-4">
+
+                  <button data-bs-toggle="modal" data-bs-target="#editarUnidadModal" (click)="editarUnidad(unidad)"class="ml-4">
                     <i class="fas fa-edit fa-lg text-info mr-4"></i>
                   </button>
                 </td>
@@ -264,7 +264,7 @@
         </div>
         <div class="modal-body">
           <ul class="list-group list-group-flush">
-            
+
             <li class="list-group-item">
               <strong>Placa:</strong> {{ detalleunidad?.placa }}
             </li>
@@ -275,7 +275,7 @@
               <strong>Año:</strong> {{ detalleunidad?.year }}
             </li>
             <li class="list-group-item">
-            <strong>Chofer:</strong> {{ detalleunidad?.chofer }}
+              <strong>Chofer:</strong> {{ detalleunidad?.chofer }}
             </li>
             <li class="list-group-item">
               <strong>Color:</strong> {{ detalleunidad?.color }}
@@ -313,4 +313,145 @@
   <!-- ----------------------------------------------------------------------- -->
   <!-- --------------------------FIN DE VER DETALLES--------------------------------- -->
   <!-- ----------------------------------------------------------------------- -->
+ 
+
+<!-- ----------------------------------------------------------------------- -->
+<!-- ----------------------MODAL DE EDITAR UNIDADES---------------------------- -->
+<!-- ----------------------------------------------------------------------- -->
+
+<div class="modal fade" id="editarUnidadModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Editar Unidad
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Formulario de edición -->
+        <form [formGroup]="formularioEdicion" (ngSubmit)="guardarEdicionUnidad()">
+          <!-- Placa -->
+          <div class="mb-3">
+            <label for="placa" class="form-label">Placa:</label>
+            <input type="text" id="placa" class="form-control" formControlName="placa"
+              [value]="detalleunidad?.placa || ''" [placeholder]="
+                detalleunidad?.placa
+                  ? detalleunidad.placa
+                  : 'Ingrese la placa'
+              " readonly />
+          </div>
+
+          <!-- Número de Unidad -->
+          <div class="mb-3">
+            <label for="unidad" class="form-label">Número de Unidad:</label>
+            <input type="text" id="unidad" class="form-control" formControlName="unidad"
+              [value]="detalleunidad?.unidad || ''" [placeholder]="
+                detalleunidad?.unidad
+                  ? detalleunidad.unidad
+                  : 'Ingrese el número de unidad'
+              " />
+          </div>
+
+          <!-- Año -->
+          <div class="mb-3">
+            <label for="year" class="form-label">Año:</label>
+            <input type="text" id="year" class="form-control" formControlName="year"
+              [value]="detalleunidad?.year || ''" [placeholder]="
+                detalleunidad?.year
+                  ? detalleunidad.year
+                  : 'Ingrese el año'
+              " />
+          </div>
+
+          <!-- Chofer -->
+          <div class="mb-3">
+            <label for="chofer" class="form-label">Chofer:</label>
+            <input type="text" id="chofer" class="form-control" formControlName="chofer"
+              [value]="detalleunidad?.chofer || ''" [placeholder]="
+                detalleunidad?.chofer
+                  ? detalleunidad.chofer
+                  : 'Ingrese el nombre del chofer'
+              " />
+          </div>
+
+          <!-- Color -->
+          <div class="mb-3">
+            <label for="color" class="form-label">Color:</label>
+            <input type="text" id="color" class="form-control" formControlName="color"
+              [value]="detalleunidad?.color || ''" [placeholder]="
+                detalleunidad?.color
+                  ? detalleunidad.color
+                  : 'Ingrese el color'
+              " />
+          </div>
+
+          <!-- Kilometraje -->
+          <div class="mb-3">
+            <label for="kmac" class="form-label">Kilometraje:</label>
+            <input type="number" id="kmac" class="form-control" formControlName="kmac"
+              [value]="detalleunidad?.kmac || 0" />
+          </div>
+
+          <!-- Marca -->
+          <div class="mb-3">
+            <label for="marca" class="form-label">Marca:</label>
+            <input type="text" id="marca" class="form-control" formControlName="marca"
+              [value]="detalleunidad?.marca || ''" [placeholder]="
+                detalleunidad?.marca
+                  ? detalleunidad.marca
+                  : 'Ingrese la marca'
+              " />
+          </div>
+
+          <!-- Matrícula -->
+          <div class="mb-3">
+            <label for="matricula" class="form-label">Matrícula:</label>
+            <input type="text" id="matricula" class="form-control" formControlName="matricula"
+              [value]="detalleunidad?.matricula || ''" [placeholder]="
+                detalleunidad?.matricula
+                  ? detalleunidad.matricula
+                  : 'Ingrese la matrícula'
+              " />
+          </div>
+
+          <!-- Modelo -->
+          <div class="mb-3">
+            <label for="modelo" class="form-label">Modelo:</label>
+            <input type="text" id="modelo" class="form-control" formControlName="modelo"
+              [value]="detalleunidad?.modelo || ''" [placeholder]="
+                detalleunidad?.modelo
+                  ? detalleunidad.modelo
+                  : 'Ingrese el modelo'
+              " />
+          </div>
+
+          <!-- Imagen -->
+          <div class="mb-3">
+            <label for="imagen" class="form-label">Imagen:</label>
+            <img src="{{ detalleunidad?.imagen }}" alt="Imagen de unidad" style="max-height: 90%" />
+            <input type="file" id="imagen" class="form-control" (change)="onFileSelected($event)" accept="image/jpeg" />
+          </div>
+
+          <!-- Botones para "Guardar" y "Cerrar" -->
+          <div class="modal-footer d-flex justify-content-between">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #cerrarModalBtn>
+              Cerrar
+            </button>
+            <button type="submit" (click)="guardarEdicionUnidad()" class="btn btn-primary">
+              Guardar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ----------------------------------------------------------------------- -->
+<!-- --------------------------FIN DE EDITAR UNIDADES--------------------------------- -->
+<!-- ----------------------------------------------------------------------- -->
+
+
+
 </section>

@@ -1,48 +1,32 @@
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
-<link
-  href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
-  rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
 
-<script
-  src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-  integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-  crossorigin="anonymous">
-</script>
-<script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-  integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-  crossorigin="anonymous">
-</script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-  rel="stylesheet"
-  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-  crossorigin="anonymous"/>
-<script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-  crossorigin="anonymous">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+  integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
+  </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+  integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous">
+  </script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+  </script>
 
 <nav class="nav">
   <i class="uil uil-bars navOpenBtn"></i>
   <a href="#" class="logo">APPWEB MANKAR</a>
   <ul class="nav-links">
-   
+
   </ul>
 </nav>
 
 <!-- start: Sidebar -->
 <div class="sidebar position-fixed top-0 bottom-0 bg-white border-end">
   <div class="d-flex align-items-center p-3">
-    <a
-      href="#"
-      class="sidebar-logo text-uppercase fw-bold text-decoration-none text-indigo fs-4"> MANKAR 
+    <a href="#" class="sidebar-logo text-uppercase fw-bold text-decoration-none text-indigo fs-4"> MANKAR
     </a>
-    <i
-      class="sidebar-toggle ri-arrow-left-circle-line ms-auto fs-5 d-none d-md-block"
-    ></i>
+    <i class="sidebar-toggle ri-arrow-left-circle-line ms-auto fs-5 d-none d-md-block"></i>
   </div>
   <ul class="sidebar-menu p-3 m-0 mb-0">
     <li class="sidebar-menu-item active">
@@ -51,7 +35,7 @@
         Home
       </a>
     </li>
-    
+
     <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">
       Panel Administrativo
     </li>
@@ -93,7 +77,7 @@
     </li>
 
     <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">Apps</li>
-     
+
     <li class="sidebar-menu-item">
       <a href="#">
         <i class="ri-mail-line sidebar-menu-item-icon"></i>
@@ -106,7 +90,7 @@
         Desconectarse
       </a>
     </li>
- 
+
   </ul>
 </div>
 
@@ -119,11 +103,79 @@
 <section class="text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto">
 
+    <!-- ----------------------------------------------------------------------- -->
+    <!-- -------------------------- NUEVO REPOSTAJE ---------------------------- -->
+    <!-- ----------------------------------------------------------------------- -->
+    <div class="modal fade" id="agregarNuevoRepostaje" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Nuevo Repostaje
+            </h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              
+              <!-- Placa -->
+              <label for="placa">Placa:</label>
+              <select id="placa" formControlName="placa" class="form-control">
+                <option value="" disabled selected>Selecciona una placa</option>
+                <option *ngFor="let unidad of unidades$ | async" [value]="unidad.placa">
+                  {{ unidad.placa }}
+                </option>
+              </select>
+              <!-- Cantidad -->
+              <div class="form-group">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" id="cantidad" class="form-control" formControlName="cantidad" />
+              </div>
+
+              <!-- Kilometraje -->
+              <div class="form-group">
+                <label for="kilometraje">Kilometraje:</label>
+                <input type="number" id="kilometraje" class="form-control" formControlName="kilometraje" />
+              </div>
+
+              <!-- Ruta -->
+              <label for="ruta">Ruta:</label>
+              <select id="ruta" formControlName="ruta" class="form-control">
+                <option value="" disabled selected>Selecciona una ruta</option>
+                <option *ngFor="let ruta of rutas$ | async" [value]="ruta.nombre">
+                  {{ ruta.nombre }}
+                </option>
+              </select>
+              <!-- Fecha -->
+              <div class="form-group">
+                <label for="fecha">Fecha:</label>
+                <input type="datetime-local" id="fecha" class="form-control" formControlName="fecha" />
+              </div>
+
+              <!-- Imagen -->
+              <div class="form-group">
+                <label for="imagen">Imagen:</label>
+                <input type="file" id="imagen" class="form-control" (change)="onFileSelected($event)"
+                  accept="image/jpeg" />
+              </div>
+
+              <div class="form-group text-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #cerrarModalBtn2>
+                  Cerrar
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  Enviar Repostaje
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
-
-
-
+ 
     <!-- ----------------------------------------------------------------------- -->
     <!-- --------------------------Tabla LISTA Repostajes--------------------------------- -->
     <!-- ----------------------------------------------------------------------- -->
@@ -132,10 +184,10 @@
       <div class="card">
         <div class="card-body">
           <span class="h2">Lista de Repostajes</span>
-         <!--  <button style="background-color :#2c7bfe;" class="btn btn-success btn-lg float-right" data-bs-toggle="modal"
-            data-bs-target="#agregarNuevoTipoMantenimiento">
-            <i class="fas fa-plus"></i> Agregar mantenimiento
-          </button> -->
+           <button style="background-color :#2c7bfe;" class="btn btn-success btn-lg float-right" data-bs-toggle="modal"
+            data-bs-target="#agregarNuevoRepostaje">
+            <i class="fas fa-plus"></i> Agregar repostaje
+          </button>
           <table class="table table-striped mt-4">
 
             <thead>
@@ -171,20 +223,20 @@
                   {{ repostaje.ruta }}
                 </td>
 
-                <!--  <td>
-                  <button (click)="confirmarEliminar(mantenimiento)">
+                 <td>
+                  <button (click)="confirmarEliminar(repostaje)">
                     <i class="fas fa-trash-alt fa-lg text-danger"></i>
                   </button>
                 
                   <button
-                    (click)="editarMantenimiento(mantenimiento)"
+                    (click)="editarRepostaje(repostaje)"
                     data-bs-toggle="modal"
-                    data-bs-target="#editarMantenimientoModal"
+                    data-bs-target="#editarRepostajeModal"
                     class="ml-4"  
                   >
                     <i class="fas fa-edit fa-lg text-info mr-4"></i>
                   </button>
-                </td> -->
+                </td>
               </tr>
             </tbody>
           </table>
@@ -193,11 +245,12 @@
     </div>
   </div>
 
-  
+
   <!-- ----------------------------------------------------------------------- -->
   <!-- --------------------------MODAL DE VER DETALLES--------------------------------- -->
   <!-- ----------------------------------------------------------------------- -->
-  <div class="modal fade" id="detallerepostajeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="detallerepostajeModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
         <div class="modal-header bg-light">
@@ -224,7 +277,7 @@
               <strong>Imagen:</strong>
               <img src="{{ detallerepostaje?.imagen }}" alt="Imagen del mantenimiento" style="max-width: 70%" />
             </li>
-             
+
           </ul>
         </div>
         <div class="modal-footer d-flex justify-content-between">
@@ -240,9 +293,64 @@
   <!-- --------------------------FIN DE VER DETALLES--------------------------------- -->
   <!-- ----------------------------------------------------------------------- -->
 
+    <!-- ----------------------------------------------------------------------- -->
+  <!-- ----------------------MODAL DE EDITAR MANTENIMIENTOS---------------------------- -->
+  <!-- ----------------------------------------------------------------------- -->
 
+  <div class="modal fade" id="editarRepostajeModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-light">
+          <h5 class="modal-title" id="exampleModalLabel">
+            Editar Reposaje
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario de edición -->
+          <form [formGroup]="formularioEdicion" (ngSubmit)="guardarEdicion()">
+
+            <!-- Placa -->
+          <!--   <div class="mb-3">
+              <label for="placa" class="form-label">Placa:</label>
+              <input type="text" id="placa" class="form-control" formControlName="placa"
+                [value]="editarMantenimiento2?.placa || ''" [placeholder]="
+                  editarMantenimiento2?.placa
+                    ? editarMantenimiento2.placa
+                    : 'Ingrese la placa'
+                " readonly />
+            </div> -->
+
+            <!-- Cantidad -->
+          <div class="mb-3">
+            <label for="cantidad" class="form-label">Cantidad:</label>
+            <input type="number" id="cantidad" class="form-control" formControlName="cantidad" />
+          </div>
+
+          <!-- Kilometraje -->
+          <div class="mb-3">
+            <label for="kilometraje" class="form-label">Kilometraje:</label>
+            <input type="number" id="kilometraje" class="form-control" formControlName="kilometraje" />
+          </div>
+
+
+            <!-- Botones para "Guardar" y "Cerrar" -->
+            <div class="modal-footer d-flex justify-content-between">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #cerrarModalBtn>
+                Cerrar
+              </button>
+              <button type="submit" (click)="guardarEdicion()" class="btn btn-primary">
+                Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ----------------------------------------------------------------------- -->
+  <!-- --------------------------FIN DE EDITAR DETALLES--------------------------------- -->
+  <!-- ----------------------------------------------------------------------- -->  
 
 </section>
- 
-
-

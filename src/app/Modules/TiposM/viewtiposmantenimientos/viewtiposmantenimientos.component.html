@@ -75,6 +75,12 @@
         Usuarios
       </a>
     </li>
+    <li class="sidebar-menu-item">
+      <a (click)="redireccionarEstadistica()">
+        <i class="ri-user-3-line sidebar-menu-item-icon"></i>
+        Estadistica
+      </a>
+    </li>
 
     <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">Apps</li>
 
@@ -117,7 +123,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form [formGroup]="form2" (ngSubmit)="onSubmit()">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
 
 
               <div class="form-group">
@@ -155,7 +161,7 @@
           <span class="h2">Lista de Tipos Mantenimientos</span>
           <button style="background-color :#2c7bfe;" class="btn btn-success btn-lg float-right" data-bs-toggle="modal"
             data-bs-target="#agregarNuevoTipoMantenimiento">
-            <i class="fas fa-plus"></i> Agregar mantenimiento
+            <i class="fas fa-plus"></i> Agregar tipo de mantenimiento
           </button>
           <table class="table table-striped mt-4">
 
@@ -166,6 +172,9 @@
                 </th>
                 <th class="px-4 py-3 title-font tracking-wider font-medium">
                   Kilómetraje cambio
+                </th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium">
+                  Opciones
                 </th>
 
               </tr>
@@ -180,20 +189,20 @@
                   {{ tiposMante.prox }}
                 </td>
 
-                <!--  <td>
-                  <button (click)="confirmarEliminar(mantenimiento)">
+                 <td>
+                  <button (click)="confirmarEliminar(tiposMante)">
                     <i class="fas fa-trash-alt fa-lg text-danger"></i>
                   </button>
                 
                   <button
-                    (click)="editarMantenimiento(mantenimiento)"
+                    (click)="editarTiposM(tiposMante)"
                     data-bs-toggle="modal"
-                    data-bs-target="#editarMantenimientoModal"
+                    data-bs-target="#editarTiposMModal"
                     class="ml-4"  
                   >
                     <i class="fas fa-edit fa-lg text-info mr-4"></i>
                   </button>
-                </td> -->
+                </td>
               </tr>
             </tbody>
           </table>
@@ -238,158 +247,51 @@
   <!-- ----------------------------------------------------------------------- -->
 
   <!-- ----------------------------------------------------------------------- -->
-  <!-- ----------------------MODAL DE EDITAR MANTENIMIENTOS---------------------------- -->
+  <!-- ----------------------MODAL DE EDITAR Tipos MANTENIMIENTOS---------------------------- -->
   <!-- ----------------------------------------------------------------------- -->
 
-  <!-- <div
-    class="modal fade"
-    id="editarMantenimientoModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header bg-light">
-          <h5 class="modal-title" id="exampleModalLabel">
-            Editar Mantenimiento
-          </h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body"> 
-          <form [formGroup]="formularioEdicion" (ngSubmit)="guardarEdicion()">
-             
-            <div class="mb-3">
-              <label for="placa" class="form-label">Placa:</label>
-              <input
-                type="text"
-                id="placa"
-                class="form-control"
-                formControlName="placa"
-                [value]="editarMantenimiento2?.placa || ''"
-                [placeholder]="
-                  editarMantenimiento2?.placa
-                    ? editarMantenimiento2.placa
-                    : 'Ingrese la placa'
-                "
-                readonly
-              />
-            </div>
- 
-            <div class="mb-3">
-              <label for="descripcion">Tipo de Mantenimiento:</label>
-              <select
-                id="descripcion"
-                class="form-control"
-                formControlName="descripcion"
-              >
-                <option value="" disabled selected>
-                  Selecciona un tipo de mantenimiento
-                </option>
-                <option
-                  *ngFor="let tipoM of tiposM$ | async"
-                  [value]="tipoM.nombre"
-                >
-                  {{ tipoM.nombre }}
-                </option>
-              </select>
-            </div> 
-            <div class="mb-3">
-              <label for="kilometraje" class="form-label">Kilometraje:</label>
-              <input
-                type="number"
-                id="kilometraje"
-                class="form-control"
-                formControlName="kilometraje"
-              />
-            </div> 
-            <div class="mb-3">
-              <label for="proxcambio" class="form-label">Próximo Cambio:</label>
-              <input
-                type="number"
-                id="proxcambio"
-                class="form-control"
-                formControlName="proxcambio"
-              />
-            </div> 
-            <div class="mb-3">
-              <label for="fecha" class="form-label">Fecha:</label>
-              <input
-                type="datetime-local"
-                id="fecha"
-                class="form-control"
-                formControlName="fecha"
-              />
-            </div> 
-            <div class="mb-3">
-              <label for="comentario" class="form-label">Comentario:</label>
-              <textarea
-                id="comentario"
-                class="form-control"
-                formControlName="comentario"
-              ></textarea>
-            </div> 
-            <div class="mb-3">
-              <label for="imagen" class="form-label">Imagen:</label>
-              <img
-                src="{{ editarMantenimiento2?.imagen }}"
-                alt="Imagen del mantenimiento"
-                style="max-height: 90%"
-              />
-              <input
-                type="file"
-                id="imagen"
-                class="form-control"
-                (change)="onFileSelected($event)"
-                accept="image/jpeg"
-              />
-            </div> 
-            <div class="mb-3">
-              <label for="imagen" class="form-label">Imagen2:</label>
-              <img
-                *ngIf="editarMantenimiento2?.imagen2"
-                src="{{ editarMantenimiento2?.imagen2 }}"
-                alt="Imagen 2 del mantenimiento"
-                style="max-width: 90%"
-              />
-              <span *ngIf="!editarMantenimiento2?.imagen2"
-                >(No hay imagen 2)</span
-              >
-              <input
-                type="file"
-                id="imagen2"
-                class="form-control"
-                (change)="onFileSelected2($event)"
-                accept="image/jpeg"
-              />
-            </div>
-
-             <div class="modal-footer d-flex justify-content-between">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-                #cerrarModalBtn
-              >
-                Cerrar
-              </button>
-              <button
-                type="submit"
-                (click)="guardarEdicion()"
-                class="btn btn-primary"
-              >
-                Guardar
-              </button>
-            </div>
-          </form>
-        </div>
+<!-- Modal de Editar Tipos de Mantenimientos -->
+<div class="modal fade" id="editarTiposMModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title" id="exampleModalLabel">Editar Tipo de Mantenimiento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-    </div> -->
+      <div class="modal-body">
+        <!-- Formulario de edición -->
+        <form [formGroup]="formularioEdicion" (ngSubmit)="guardarEdicionTiposM()">
+          <!-- Nombre del Mantenimiento -->
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre del Mantenimiento:</label>
+            <input type="text" id="nombre" class="form-control" formControlName="nombre"
+              [value]="detalletiposM?.nombre || ''" [placeholder]="
+              detalletiposM?.nombre
+                  ? detalletiposM.nombre
+                  : 'Ingrese el nombre del mantenimiento'
+              " />
+          </div>
+
+          <!-- Kilometraje -->
+          <div class="mb-3">
+            <label for="prox" class="form-label">Kilometraje:</label>
+            <input type="number" id="prox" class="form-control" formControlName="prox"
+              [value]="detalletiposM?.prox || 0" />
+          </div>
+
+          <!-- Botones para "Guardar" y "Cerrar" -->
+          <div class="modal-footer d-flex justify-content-between">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #cerrarModalBtnMantenimiento>
+              Cerrar
+            </button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
   <!-- ----------------------------------------------------------------------- -->
   <!-- --------------------------FIN DE EDITAR DETALLES--------------------------------- -->

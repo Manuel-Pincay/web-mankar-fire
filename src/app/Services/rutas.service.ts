@@ -19,30 +19,30 @@ export class RutasService {
     return setDoc(docRef, ruta); 
   }  */
 
-  async guardarRuta(salida: string, llegada: string, npeajes: number): Promise<void> {
+  async guardarRuta(ruta: Rutas): Promise<void> {
     const rutasCollection = collection(this.firestore, 'rutas');
     const querySnapshot = await getDocs(query(rutasCollection, orderBy('id', 'desc'), limit(1)));
-
+  
     let nuevoId = 1;
     if (!querySnapshot.empty) {
       const lastDocument = querySnapshot.docs[0];
       nuevoId = lastDocument.data()['id'] + 1;
     }
-
-    const nombre = `${salida} - ${llegada}`;
+  
+    const nombre = `${ruta.salida} - ${ruta.llegada}`;
     const nuevaRuta: Rutas = {
       id: nuevoId,
-      salida,
-      llegada,
-      npeajes,
+      salida: ruta.salida,
+      llegada: ruta.llegada,
+      npeajes: ruta.npeajes,
       nombre,
-      estado: true,
-  
+      estado: true, // Puedes ajustar esto según tus necesidades o lógica específica
     };
-
+  
     const docRef = doc(rutasCollection, nuevoId.toString());
     return setDoc(docRef, nuevaRuta);
   }
+  
 
  
 
@@ -50,7 +50,7 @@ export class RutasService {
     const rutasRef = collection(this.firestore, 'rutas');
     return collectionData(rutasRef, { idField: 'id' }).pipe(
       map((data: any[]) => {
-        return data.map(ruta => {
+        return data .filter(ruta => ruta.estado === true).map(ruta => {
           return {
             ...ruta,
           };
@@ -61,8 +61,12 @@ export class RutasService {
 
   updateRuta(ruta: Rutas) {
     const rutaDocRef = doc(this.firestore, `rutas/${ruta.id}`);
-    // Utiliza setDoc para actualizar el documento
-    return setDoc(rutaDocRef, ruta);
+    const nombre = `${ruta.salida} - ${ruta.llegada}`;
+    const rutaActualizada: Rutas = {
+      ...ruta,
+      nombre: nombre,
+    };
+    return setDoc(rutaDocRef, rutaActualizada);
   }
 
   deleteRuta(ruta: Rutas) {

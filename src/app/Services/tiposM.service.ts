@@ -15,12 +15,8 @@ export class TiposMService {
   addTipoM(tipoM: ListatiposM) {
     const tiposMRef = collection(this.firestore, 'listatiposM');
     tipoM.estado = true;
-    const docRef = addDoc(tiposMRef, tipoM);
-
-    return docRef.then((doc) => {
-      tipoM.nombre = doc.id;
-      return setDoc(doc, tipoM); 
-    });
+  
+    return addDoc(tiposMRef, tipoM);
   }
 
   getTiposM(): Observable<ListatiposM[]> {

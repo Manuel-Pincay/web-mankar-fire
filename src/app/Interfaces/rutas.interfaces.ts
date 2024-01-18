@@ -1,5 +1,4 @@
 export default interface Rutas {
-    
     id: number;
     llegada: string;
     estado: boolean;

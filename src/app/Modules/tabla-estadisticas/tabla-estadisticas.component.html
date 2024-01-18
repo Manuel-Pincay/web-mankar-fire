@@ -1,0 +1,112 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+  integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
+  </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+  integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous">
+  </script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+  </script>
+
+<nav class="nav">
+  <i class="uil uil-bars navOpenBtn"></i>
+  <a href="#" class="logo">APPWEB MANKAR</a>
+  <ul class="nav-links">
+
+  </ul>
+</nav>
+
+<!-- start: Sidebar -->
+<div class="sidebar position-fixed top-0 bottom-0 bg-white border-end">
+  <div class="d-flex align-items-center p-3">
+    <a href="#" class="sidebar-logo text-uppercase fw-bold text-decoration-none text-indigo fs-4"> MANKAR
+    </a>
+    <i class="sidebar-toggle ri-arrow-left-circle-line ms-auto fs-5 d-none d-md-block"></i>
+  </div>
+  <ul class="sidebar-menu p-3 m-0 mb-0">
+    <li class="sidebar-menu-item active">
+      <a href="#">
+        <i class="ri-dashboard-line sidebar-menu-item-icon"></i>
+        Home
+      </a>
+    </li>
+
+    <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">
+      Panel Administrativo
+    </li>
+    <li class="sidebar-menu-item">
+      <a (click)="redireccionarMantenimientos()">
+        <i class="ri-settings-line sidebar-menu-item-icon"></i>
+        Mantenimientos
+      </a>
+    </li>
+    <li class="sidebar-menu-item">
+      <a (click)="redireccionarRepostaje()">
+        <i class="ri-gas-station-line sidebar-menu-item-icon"></i>
+        Repostajes
+      </a>
+    </li>
+    <li class="sidebar-menu-item">
+      <a (click)="redireccionarUnidades()">
+        <i class="ri-truck-line sidebar-menu-item-icon"></i>
+        Unidades
+      </a>
+    </li>
+    <li class="sidebar-menu-item">
+      <a (click)="redireccionarTiposM()">
+        <i class="ri-list-settings-line sidebar-menu-item-icon"></i>Tipos de
+        mantenimientos
+      </a>
+    </li>
+    <li class="sidebar-menu-item">
+      <a (click)="redireccionarRutas()">
+        <i class="ri-road-map-line sidebar-menu-item-icon"></i>
+        Rutas
+      </a>
+    </li>
+    <li class="sidebar-menu-item">
+      <a (click)="redireccionarUsuarios()">
+        <i class="ri-user-3-line sidebar-menu-item-icon"></i>
+        Usuarios
+      </a>
+    </li>
+
+    <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">Apps</li>
+
+    <li class="sidebar-menu-item">
+      <a href="#">
+        <i class="ri-mail-line sidebar-menu-item-icon"></i>
+        Email
+      </a>
+    </li>
+    <li class="sidebar-menu-item   ">
+      <a href="#">
+        <i class="ri-logout-box-line sidebar-menu-item-icon"></i>
+        Desconectarse
+      </a>
+    </li>
+
+  </ul>
+</div>
+
+<div class="sidebar-overlay"></div>
+<!-- end: Sidebar -->
+
+
+
+
+<section class="text-gray-600 body-font">
+  <div class="container px-5 py-24 mx-auto">
+
+
+
+    <canvas id="miGrafico"></canvas>
+  </div>
+
+
+</section>

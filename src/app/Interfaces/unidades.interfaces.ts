@@ -1,4 +1,5 @@
 export default interface Unidades {
+    nombre: string;
     chofer: string;
     color: string;
     estado: boolean;

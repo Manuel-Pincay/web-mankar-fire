@@ -24,6 +24,7 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { ViewrutasComponent } from './Modules/Rutas/viewrutas/viewrutas.component';
 import { ViewusuariosComponent } from './Modules/Usuarios/viewusuarios/viewusuarios.component';
 import { ViewtiposmantenimientosComponent } from './Modules/TiposM/viewtiposmantenimientos/viewtiposmantenimientos.component';
+import { TablaEstadisticasComponent } from './Modules/tabla-estadisticas/tabla-estadisticas.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { ViewtiposmantenimientosComponent } from './Modules/TiposM/viewtiposmant
     ViewrutasComponent,
     ViewusuariosComponent,
     ViewtiposmantenimientosComponent,
+    TablaEstadisticasComponent,
   ],
   imports: [
     BrowserModule,

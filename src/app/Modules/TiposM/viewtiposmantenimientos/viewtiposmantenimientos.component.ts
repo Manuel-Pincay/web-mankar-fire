@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import ListatiposM from 'src/app/Interfaces/tiposmant.interfaces';
 import { TiposMService } from 'src/app/Services/tiposM.service';
 import Swal, { SweetAlertIcon } from 'sweetalert2';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-viewtiposmantenimientos',
@@ -14,11 +15,12 @@ export class ViewtiposmantenimientosComponent implements OnInit {
 
   tiposMante: ListatiposM[] = [];
   detalletiposM: any;
-  form2: FormGroup;
-  formularioEdicion: FormGroup;
+  form: FormGroup;
+  formularioEdicion: FormGroup; 
+  listatiposM$: Observable<ListatiposM[]> = of([]);
   @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
   @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
-
+  editarlistatiposMF: any;
 
 
 
@@ -26,7 +28,7 @@ export class ViewtiposmantenimientosComponent implements OnInit {
     private fb: FormBuilder,
     private tiposmanteService: TiposMService,
     private router: Router) {
-    this.form2 = this.fb.group({
+    this.form = this.fb.group({
       nombre: ['', Validators.required],
       prox: [null, Validators.required],
       estado: [true, Validators.required],
@@ -63,7 +65,9 @@ export class ViewtiposmantenimientosComponent implements OnInit {
   redireccionarRutas() {
     this.router.navigate(['/listrutas']);
   }
-
+  redireccionarEstadistica() {
+    this.router.navigate(['/estadistica']);
+  }
 
 
   ngOnInit(): void {
@@ -105,19 +109,25 @@ export class ViewtiposmantenimientosComponent implements OnInit {
     this.detalletiposM = tiposM;
   }
 
+
+  
   // ========================================================================================== //
   // Función para GUARDAR TIPOS MANTENIMIENTO
   // ========================================================================================== // 
   onSubmit() {
-    if (this.form2.valid) {
-      const tiposmantenimientoData = this.form2.value;
-  
+    if (this.form.valid) {
+      const tiposmantenimientoData = this.form.value;
+      console.log('tipomant a enviar:', tiposmantenimientoData);
+      const newretiposm: ListatiposM = {
+        ...tiposmantenimientoData,
+      };
+      console.log('newtipom a enviar:', newretiposm);
       this.tiposmanteService
-        .addTipoM(tiposmantenimientoData)
+        .addTipoM(newretiposm)
         .then(() => {
-          this.handleSuccess('Eliminado correctamente', 'success', tiposmantenimientoData);
+          this.handleSuccess('Eliminado correctamente', 'success', newretiposm);
           this.cerrarModal2(); // Llama a la función para cerrar el modal
-          this.form2.reset();
+          this.form.reset();
         })
         .catch((error) => this.handleError('Error al eliminar mantenimiento', 'error'));
     } else {
@@ -147,7 +157,7 @@ export class ViewtiposmantenimientosComponent implements OnInit {
   // ========================================================================================== // 
 
   confirmarEliminar(tiposM: any): void {
-    if (window.confirm('¿Seguro que deseas eliminar este mantenimiento?')) {
+    if (window.confirm('¿Seguro que deseas eliminar este tipo de mantenimiento?')) {
       this.cambiarEstadoTiposM(tiposM);
     }
   }
@@ -156,7 +166,7 @@ export class ViewtiposmantenimientosComponent implements OnInit {
 
     this.tiposmanteService.updateTipoM(tiposM)
       .then(() => this.handleSuccess('Eliminado correctamente', 'success', tiposM))
-      .catch(error => this.handleError('Error al eliminar mantenimiento', 'error'));
+      .catch(error => this.handleError('Error al eliminar el tipo de mantenimiento', 'error'));
   }
 
   private handleSuccess(title: string, icon: SweetAlertIcon, tiposM: any): void {
@@ -183,7 +193,79 @@ export class ViewtiposmantenimientosComponent implements OnInit {
     });
 
     Toast.fire({ icon, title });
+  
   }
+  // ========================================================================================== // 
+  // ========================================================================================== // 
+  // ========================================================================================== // 
+  
+
+  establecerValoresPreseleccionados(): void {
+    const ListatiposMPreseleccionado = 'repostaje 2';
+    this.listatiposM$.subscribe((tiposM: ListatiposM[]) => {
+      const listatiposMseleccionado = tiposM.find(
+        (tiposM) => tiposM.nombre === ListatiposMPreseleccionado
+      );
+      if (listatiposMseleccionado) {
+        this.formularioEdicion.patchValue({
+          tiposM: listatiposMseleccionado.nombre,
+        });
+      }
+    });
+  }
+  
+  editarTiposM(tiposM: any) {
+    console.log('tocaste edit', tiposM);
+    this.editarlistatiposMF = tiposM;
+    this.formularioEdicion.patchValue({
+      nombre: tiposM?.nombre || '',
+      prox: tiposM?.prox || 0,
+
+    });
+    
+    console.log("ASKDAJS213123123DJASDK", this.formularioEdicion);
+  }
+  
+  guardarEdicionTiposM() {
+    if (this.formularioEdicion.valid) {
+      const tipoMEditadaData = this.formularioEdicion.value;
+      
+      const tipoMEditado: ListatiposM = {
+        ...tipoMEditadaData,
+        key: this.editarlistatiposMF.key,
+      };
+      this.tiposmanteService
+        .updateTipoM(tipoMEditadaData)
+        .then(() => {
+          this.handleSuccess('Edición exitosa', 'success', tipoMEditadaData);
+          this.cerrarModal(); 
+        })
+        .catch((error) =>
+          this.handleError('Error al editar unidad', 'error')
+        );
+    } else {
+      this.showIncompleteDataAlert();
+    }
+  }
+  
+
+  cerrarModal () {
+    this.cerrarModalBtn2.nativeElement.click();
+  }
+  private showIncompleteDataAlertUnidad() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Por favor, complete todos los campos requeridos.',
+    });
+  }
+
+
+
+
+
+
+
   // ========================================================================================== // 
   // ========================================================================================== // 
   // ========================================================================================== // 

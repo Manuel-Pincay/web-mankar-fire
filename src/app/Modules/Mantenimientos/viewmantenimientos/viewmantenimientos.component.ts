@@ -2,7 +2,12 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import Mantenimientos from '../../../Interfaces/mantenimientos.interfaces';
 import { MantenimientosService } from '../../../Services/mantenimientos.service';
 import Swal, { SweetAlertIcon } from 'sweetalert2';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 import { UnidadesService } from 'src/app/Services/unidades.service';
 import ListatiposM from 'src/app/Interfaces/tiposmant.interfaces';
@@ -10,7 +15,13 @@ import { TiposMService } from 'src/app/Services/tiposM.service';
 import { Timestamp } from 'firebase/firestore';
 import Unidades from 'src/app/Interfaces/unidades.interfaces';
 import { Observable, finalize, of } from 'rxjs';
-import { Storage, ref, uploadBytes, listAll, getDownloadURL } from '@angular/fire/storage';
+import {
+  Storage,
+  ref,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+} from '@angular/fire/storage';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,11 +30,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./viewmantenimientos.component.css'],
 })
 export class ViewmantenimientosComponent implements OnInit {
-
   form: FormGroup;
   formularioEdicion: FormGroup;
   nuevoMantenimiento: any = {};
-  nombreChofer: string = "";
+  nombreChofer: string = '';
   mantenimientos: Mantenimientos[] = [];
   unidades$: Observable<Unidades[]> = of([]);
   tiposM$: Observable<ListatiposM[]> = of([]);
@@ -31,9 +41,6 @@ export class ViewmantenimientosComponent implements OnInit {
   @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
   @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
   detalleMantenimiento: any;
-
-
-
 
   constructor(
     private fb: FormBuilder,
@@ -66,7 +73,6 @@ export class ViewmantenimientosComponent implements OnInit {
       imagen2: [''],
       estado: [true, Validators.required],
     });
-
   }
 
   redireccionarMantenimientos() {
@@ -90,33 +96,44 @@ export class ViewmantenimientosComponent implements OnInit {
     this.router.navigate(['/listrutas']);
   }
 
-
-
-
-
   ngOnInit(): void {
-    // ========================================================================================== // 
-    // BARRA LATERAL================================================= // 
-    // ========================================================================================== // 
-    const sidebarDropdownMenus = document.querySelectorAll('.sidebar-dropdown-menu');
-    sidebarDropdownMenus.forEach(menu => (menu as HTMLElement).style.display = 'none');
-    const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item.has-dropdown > a, .sidebar-dropdown-menu-item.has-dropdown > a');
-    sidebarMenuItems.forEach(item => item.addEventListener('click', (event) => this.sidebarItemClick(event)));
+    // ========================================================================================== //
+    // BARRA LATERAL================================================= //
+    // ========================================================================================== //
+    const sidebarDropdownMenus = document.querySelectorAll(
+      '.sidebar-dropdown-menu'
+    );
+    sidebarDropdownMenus.forEach(
+      (menu) => ((menu as HTMLElement).style.display = 'none')
+    );
+    const sidebarMenuItems = document.querySelectorAll(
+      '.sidebar-menu-item.has-dropdown > a, .sidebar-dropdown-menu-item.has-dropdown > a'
+    );
+    sidebarMenuItems.forEach((item) =>
+      item.addEventListener('click', (event) => this.sidebarItemClick(event))
+    );
     const sidebarToggle = document.querySelector('.sidebar-toggle');
     if (sidebarToggle) {
-      sidebarToggle.addEventListener('click', this.sidebarToggleClick.bind(this));
+      sidebarToggle.addEventListener( 
+        'click',
+        this.sidebarToggleClick.bind(this)
+      );
     }
     const sidebarOverlay = document.querySelector('.sidebar-overlay');
     if (sidebarOverlay) {
-      sidebarOverlay.addEventListener('click', this.sidebarOverlayClick.bind(this));
+      sidebarOverlay.addEventListener(
+        'click',
+        this.sidebarOverlayClick.bind(this)
+      );
     }
     const sidebar = document.querySelector('.sidebar');
     if (sidebar) {
       sidebar.classList.add('collapsed');
     }
-    if (window.innerWidth < 768) { }
-    // ========================================================================================== // 
-    // ========================================================================================== // 
+    if (window.innerWidth < 768) {
+    }
+    // ========================================================================================== //
+    // ========================================================================================== //
 
     this.unidades$ = this.unidadesService.getUnidades();
     this.tiposM$ = this.tiposMService.getTiposM();
@@ -125,8 +142,6 @@ export class ViewmantenimientosComponent implements OnInit {
       this.mantenimientos = data;
       this.establecerValoresPreseleccionados();
     });
-
-
   }
   establecerValoresPreseleccionados(): void {
     const tipoMPreseleccionado = 'Mantenimiento 2';
@@ -134,7 +149,9 @@ export class ViewmantenimientosComponent implements OnInit {
     // Suscribirse al observable para obtener los datos
     this.tiposM$.subscribe((tiposM: ListatiposM[]) => {
       // Encuentra el objeto correspondiente en tiposM por su nombre
-      const tipoMSeleccionado = tiposM.find(tipoM => tipoM.nombre === tipoMPreseleccionado);
+      const tipoMSeleccionado = tiposM.find(
+        (tipoM) => tipoM.nombre === tipoMPreseleccionado
+      );
 
       // Si se encuentra, establece el valor preseleccionado en el formulario
       if (tipoMSeleccionado) {
@@ -178,12 +195,10 @@ export class ViewmantenimientosComponent implements OnInit {
   }
 
   verDetalles(mantenimiento: any) {
-
     console.log('tocaste', mantenimiento);
     this.detalleMantenimiento = mantenimiento;
     // ('#detalleModal').modal('show'); // Abre el modal
   }
-
 
   // ========================================================================================== //
   // Función para confirmar la eliminación de un mantenimiento
@@ -196,12 +211,21 @@ export class ViewmantenimientosComponent implements OnInit {
   cambiarEstadoMantenimiento(mantenimiento: any): void {
     mantenimiento.estado = false;
 
-    this.mantenimientosService.updateMantenimiento(mantenimiento)
-      .then(() => this.handleSuccess('Eliminado correctamente', 'success', mantenimiento))
-      .catch(error => this.handleError('Error al eliminar mantenimiento', 'error'));
+    this.mantenimientosService
+      .updateMantenimiento(mantenimiento)
+      .then(() =>
+        this.handleSuccess('Eliminado correctamente', 'success', mantenimiento)
+      )
+      .catch((error) =>
+        this.handleError('Error al eliminar mantenimiento', 'error')
+      );
   }
 
-  private handleSuccess(title: string, icon: SweetAlertIcon, mantenimiento: any): void {
+  private handleSuccess(
+    title: string,
+    icon: SweetAlertIcon,
+    mantenimiento: any
+  ): void {
     console.log('Estado del mantenimiento cambiado:', mantenimiento);
     this.showToast(title, icon);
   }
@@ -221,16 +245,16 @@ export class ViewmantenimientosComponent implements OnInit {
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
         toast.onmouseleave = Swal.resumeTimer;
-      }
+      },
     });
 
     Toast.fire({ icon, title });
   }
 
-  // ========================================================================================== //    
+  // ========================================================================================== //
 
-  fileRef: string = "";
-  downloadURL = "";
+  fileRef: string = '';
+  downloadURL = '';
 
   onFileSelected($event: any) {
     const file = $event.target.files[0];
@@ -239,19 +263,18 @@ export class ViewmantenimientosComponent implements OnInit {
     const fileRef = ref(this.storage, filePath);
     const storageRef = ref(this.storage, filePath);
     uploadBytes(fileRef, file)
-      .then(response => {
+      .then((response) => {
         console.log(`Subido: ${response}`);
         getDownloadURL(storageRef).then((url) => {
           this.downloadURL = url;
           console.log('URL de descarga:1111', this.downloadURL);
         });
-
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   }
 
-  fileRef2: string = "";
-  downloadURL2 = "";
+  fileRef2: string = '';
+  downloadURL2 = '';
 
   onFileSelected2($event: any) {
     const file2 = $event.target.files[0];
@@ -260,15 +283,14 @@ export class ViewmantenimientosComponent implements OnInit {
     const fileRef2 = ref(this.storage, filePath);
     const storageRef = ref(this.storage, filePath);
     uploadBytes(fileRef2, file2)
-      .then(response => {
+      .then((response) => {
         console.log(`Subido: ${response}`);
         getDownloadURL(storageRef).then((url) => {
           this.downloadURL2 = url;
           console.log('URL de descarga:2222', this.downloadURL2);
         });
-
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   }
 
   onSubmit() {
@@ -278,7 +300,9 @@ export class ViewmantenimientosComponent implements OnInit {
       // Obtén la fecha del formulario y conviértela a un objeto Date
       const fechaFormulario = mantenimientoData.fecha;
       const fechaFormularioDate =
-        fechaFormulario instanceof Date ? fechaFormulario : new Date(fechaFormulario);
+        fechaFormulario instanceof Date
+          ? fechaFormulario
+          : new Date(fechaFormulario);
 
       // Convierte la fecha del formulario a un objeto Timestamp
       const fechaTimestamp = Timestamp.fromDate(fechaFormularioDate);
@@ -294,16 +318,21 @@ export class ViewmantenimientosComponent implements OnInit {
       this.mantenimientosService
         .addMantenimiento(mantenimiento)
         .then(() => {
-          this.handleSuccess('Eliminado correctamente', 'success', mantenimiento);
+          this.handleSuccess(
+            'Eliminado correctamente',
+            'success',
+            mantenimiento
+          );
           this.cerrarModal2(); // Llama a la función para cerrar el modal
           this.form.reset();
         })
-        .catch((error) => this.handleError('Error al eliminar mantenimiento', 'error'));
+        .catch((error) =>
+          this.handleError('Error al eliminar mantenimiento', 'error')
+        );
     } else {
       this.showIncompleteDataAlert();
     }
   }
-
 
   cerrarModal2() {
     // Cierra el modal usando el botón "Cerrar"
@@ -330,15 +359,19 @@ export class ViewmantenimientosComponent implements OnInit {
       // Convierte la fecha del formulario a un objeto Timestamp
       const fecha = Timestamp.fromDate(fechaFormularioDate);
       // Asigna la URL de la primera imagen solo si se ha subido, de lo contrario, mantiene la original
-      const imagen = this.downloadURL ? this.downloadURL : this.editarMantenimiento2.imagen;
+      const imagen = this.downloadURL
+        ? this.downloadURL
+        : this.editarMantenimiento2.imagen;
       // Asigna la URL de la segunda imagen solo si se ha subido, de lo contrario, mantiene la original
-      const imagen2 = this.downloadURL2 ? this.downloadURL2 : this.editarMantenimiento2.imagen2;
+      const imagen2 = this.downloadURL2
+        ? this.downloadURL2
+        : this.editarMantenimiento2.imagen2;
       const mantenimientoed: Mantenimientos = {
         ...mantenimientoedData,
         fecha: fecha,
         imagen: imagen,
         imagen2: imagen2,
-        key: this.editarMantenimiento2.key
+        key: this.editarMantenimiento2.key,
       };
 
       // Llama al servicio para actualizar los datos
@@ -347,7 +380,10 @@ export class ViewmantenimientosComponent implements OnInit {
         .then(() => {
           this.handleSuccess('Edición exitosa', 'success', mantenimientoed);
           this.cerrarModal(); // Cierra el modal después de una edición exitosa
-        }).catch((error) => this.handleError('Error al editar mantenimiento', 'error'));
+        })
+        .catch((error) =>
+          this.handleError('Error al editar mantenimiento', 'error')
+        );
     } else {
       // Muestra una alerta si el formulario no es válido
       this.showIncompleteDataAlert();
@@ -358,16 +394,13 @@ export class ViewmantenimientosComponent implements OnInit {
     this.cerrarModalBtn.nativeElement.click();
   }
 
-  // ========================================================================================== // 
-  // ========================================================================================== // 
-  // ========================================================================================== // 
+  // ========================================================================================== //
+  // ========================================================================================== //
+  // ========================================================================================== //
 
-
-
-
-  // ========================================================================================== // 
-  // ========================================================================================== // 
-  // ========================================================================================== // 
+  // ========================================================================================== //
+  // ========================================================================================== //
+  // ========================================================================================== //
   sidebarItemClick(event: Event) {
     event.preventDefault();
     const target = event.target as HTMLElement;
@@ -377,7 +410,7 @@ export class ViewmantenimientosComponent implements OnInit {
     }
     const next = target.nextElementSibling as HTMLElement;
     if (next) {
-      next.style.display = (next.style.display === 'none') ? 'block' : 'none';
+      next.style.display = next.style.display === 'none' ? 'block' : 'none';
     }
     if (parent) {
       parent.classList.toggle('focused');
@@ -406,21 +439,17 @@ export class ViewmantenimientosComponent implements OnInit {
       const menus = element.querySelectorAll('.sidebar-dropdown-menu');
       const hasDropdowns = element.querySelectorAll('.has-dropdown.focused');
 
-      menus.forEach(menu => (menu as HTMLElement).style.display = 'none');
-      hasDropdowns.forEach(item => item.classList.remove('focused'));
+      menus.forEach((menu) => ((menu as HTMLElement).style.display = 'none'));
+      hasDropdowns.forEach((item) => item.classList.remove('focused'));
     }
   }
   hideAllMenus() {
     const menus = document.querySelectorAll('.sidebar-dropdown-menu');
     const hasDropdowns = document.querySelectorAll('.has-dropdown.focused');
-    menus.forEach(menu => (menu as HTMLElement).style.display = 'none');
-    hasDropdowns.forEach(item => item.classList.remove('focused'));
+    menus.forEach((menu) => ((menu as HTMLElement).style.display = 'none'));
+    hasDropdowns.forEach((item) => item.classList.remove('focused'));
   }
-  // ========================================================================================== // 
-  // ========================================================================================== // 
-  // ========================================================================================== // 
-
-
-
-
+  // ========================================================================================== //
+  // ========================================================================================== //
+  // ========================================================================================== //
 }

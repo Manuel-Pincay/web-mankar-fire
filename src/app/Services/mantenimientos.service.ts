@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core';
 import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, setDoc, updateDoc, query, orderBy } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import Mantenimientos from '../Interfaces/mantenimientos.interfaces';
-import { v4 as uuidv4 } from 'uuid';
+ 
 
-@Injectable({
+@Injectable({ 
   providedIn: 'root'
 })
 export class MantenimientosService {
