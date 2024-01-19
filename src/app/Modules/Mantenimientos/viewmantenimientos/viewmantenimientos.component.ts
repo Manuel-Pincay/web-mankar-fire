@@ -42,6 +42,8 @@ export class ViewmantenimientosComponent implements OnInit {
   @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
   detalleMantenimiento: any;
 
+
+  
   constructor(
     private fb: FormBuilder,
     private storage: Storage,
@@ -51,6 +53,7 @@ export class ViewmantenimientosComponent implements OnInit {
     private router: Router
   ) {
     this.form = this.fb.group({
+      chofer: ['',],
       kilometraje: [null, Validators.required],
       proxcambio: [null, Validators.required],
       placa: ['', Validators.required],
@@ -64,6 +67,7 @@ export class ViewmantenimientosComponent implements OnInit {
     this.formularioEdicion = this.fb.group({
       // Define aquí los campos del formulario de edición y sus validaciones
       placa: ['', Validators.required],
+      chofer: ['', Validators.required],
       descripcion: ['', Validators.required],
       kilometraje: [null, Validators.required],
       proxcambio: [null, Validators.required],
@@ -97,6 +101,9 @@ export class ViewmantenimientosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+
+    
     // ========================================================================================== //
     // BARRA LATERAL================================================= //
     // ========================================================================================== //
@@ -259,7 +266,6 @@ export class ViewmantenimientosComponent implements OnInit {
   onFileSelected($event: any) {
     const file = $event.target.files[0];
     const filePath = `mantenimientosfiles/${Date.now()}`;
-
     const fileRef = ref(this.storage, filePath);
     const storageRef = ref(this.storage, filePath);
     uploadBytes(fileRef, file)
@@ -267,7 +273,7 @@ export class ViewmantenimientosComponent implements OnInit {
         console.log(`Subido: ${response}`);
         getDownloadURL(storageRef).then((url) => {
           this.downloadURL = url;
-          console.log('URL de descarga:1111', this.downloadURL);
+          console.log('URL:', this.downloadURL);
         });
       })
       .catch((error) => console.log(error));
@@ -292,47 +298,69 @@ export class ViewmantenimientosComponent implements OnInit {
       })
       .catch((error) => console.log(error));
   }
-
+ 
   onSubmit() {
     if (this.form.valid) {
-      const mantenimientoData = this.form.value;
-
-      // Obtén la fecha del formulario y conviértela a un objeto Date
-      const fechaFormulario = mantenimientoData.fecha;
-      const fechaFormularioDate =
-        fechaFormulario instanceof Date
-          ? fechaFormulario
-          : new Date(fechaFormulario);
-
-      // Convierte la fecha del formulario a un objeto Timestamp
-      const fechaTimestamp = Timestamp.fromDate(fechaFormularioDate);
-
-      const mantenimiento: Mantenimientos = {
-        ...mantenimientoData,
-        fecha: fechaTimestamp,
-        imagen: this.downloadURL,
-        imagen2: this.downloadURL2,
-      };
-
-      console.log('Mantenimiento a enviar:', mantenimiento);
-      this.mantenimientosService
-        .addMantenimiento(mantenimiento)
-        .then(() => {
-          this.handleSuccess(
-            'Eliminado correctamente',
-            'success',
-            mantenimiento
-          );
-          this.cerrarModal2(); // Llama a la función para cerrar el modal
-          this.form.reset();
-        })
-        .catch((error) =>
-          this.handleError('Error al eliminar mantenimiento', 'error')
+      const placaControl = this.form.get('placa');
+  
+      if (placaControl && placaControl.value !== null && placaControl.value !== undefined) {
+        const placaValue = placaControl.value;
+      
+        this.unidadesService.getUnidad(placaValue).subscribe(
+          (unidad: { chofer: any; }) => {
+            if (unidad) {
+              const mantenimientoData = this.form.value;
+  
+              const fechaFormulario = mantenimientoData.fecha;
+              const fechaFormularioDate =
+                fechaFormulario instanceof Date
+                  ? fechaFormulario
+                  : new Date(fechaFormulario);
+  
+              const fechaTimestamp = Timestamp.fromDate(fechaFormularioDate);
+  
+              const mantenimiento: Mantenimientos = {
+                ...mantenimientoData,
+                fecha: fechaTimestamp,
+                imagen: this.downloadURL,
+                imagen2: this.downloadURL2,
+                chofer: unidad.chofer, // asignar el nombre del chofer
+              };
+  
+              console.log('Mantenimiento a enviar:', mantenimiento);
+              this.mantenimientosService
+                .addMantenimiento(mantenimiento)
+                .then(() => {
+                  this.handleSuccess(
+                    'Eliminado correctamente',
+                    'success',
+                    mantenimiento
+                  );
+                  this.cerrarModal2();
+                  this.form.reset();
+                })
+                .catch((error) =>
+                  this.handleError(
+                    'Error al eliminar mantenimiento',
+                    'error'
+                  )
+                );
+            } else {
+              // Manejar el caso cuando la unidad no existe
+            }
+          },
+          (error: any) => {
+            console.error('Error obteniendo unidad:', error);
+          }
         );
+      } else {
+        // Manejar el caso cuando 'placa' es nulo o indefinido
+      }
     } else {
       this.showIncompleteDataAlert();
     }
   }
+  
 
   cerrarModal2() {
     // Cierra el modal usando el botón "Cerrar"
@@ -346,6 +374,10 @@ export class ViewmantenimientosComponent implements OnInit {
       text: 'Por favor, complete todos los campos requeridos.',
     });
   }
+  
+  // ========================================================================================== //
+  // ========================================================================================== //
+  // ========================================================================================== //
 
   guardarEdicion() {
     if (this.formularioEdicion.valid) {

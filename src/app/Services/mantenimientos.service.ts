@@ -1,55 +1,71 @@
-
 // mantenimientos.service.ts
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, setDoc, updateDoc, query, orderBy } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  addDoc,
+  collectionData,
+  doc,
+  deleteDoc,
+  setDoc,
+  updateDoc,
+  query,
+  orderBy,
+} from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import Mantenimientos from '../Interfaces/mantenimientos.interfaces';
- 
 
-@Injectable({ 
-  providedIn: 'root'
+@Injectable({
+  providedIn: 'root',
 })
 export class MantenimientosService {
-
-  constructor(private firestore: Firestore) { }
+  constructor(private firestore: Firestore) {}
 
   addMantenimiento(mantenimiento: Mantenimientos) {
     const mantenimientosRef = collection(this.firestore, 'mantenimientos');
-    mantenimiento.estado = true; 
+    mantenimiento.estado = true;
 
     const docRef = addDoc(mantenimientosRef, mantenimiento);
 
     return docRef.then((doc) => {
       mantenimiento.key = doc.id;
-      return setDoc(doc, mantenimiento); 
+      return setDoc(doc, mantenimiento);
     });
   }
-
+ 
 
   getMantenimientos(): Observable<Mantenimientos[]> {
     const mantenimientosRef = collection(this.firestore, 'mantenimientos');
     const orderedQuery = query(mantenimientosRef, orderBy('fecha', 'desc'));
 
     return collectionData(orderedQuery, { idField: 'key' }).pipe(
-        map((data: any[]) => {
-        return data .filter(mantenimiento => mantenimiento.estado === true).map(mantenimiento => {
-          return {
-            ...mantenimiento,
-            fecha: mantenimiento.fecha ? mantenimiento.fecha.toDate() : null,
-          };
-        });
+      map((data: any[]) => {
+        return data
+          .filter((mantenimiento) => mantenimiento.estado === true)
+          .map((mantenimiento) => {
+            return {
+              ...mantenimiento,
+              fecha: mantenimiento.fecha ? mantenimiento.fecha.toDate() : null,
+            };
+          });
       })
     ) as Observable<Mantenimientos[]>;
   }
 
   updateMantenimiento(mantenimiento: Mantenimientos) {
-    const mantenimientoDocRef = doc(this.firestore, `mantenimientos/${mantenimiento.key}`);
+    const mantenimientoDocRef = doc(
+      this.firestore,
+      `mantenimientos/${mantenimiento.key}`
+    );
     // Utiliza setDoc para actualizar el documento
     return setDoc(mantenimientoDocRef, mantenimiento);
   }
 
   deleteMantenimiento(mantenimiento: Mantenimientos) {
-    const mantenimientoDocRef = doc(this.firestore, `mantenimientos/${mantenimiento.key}`);
+    const mantenimientoDocRef = doc(
+      this.firestore,
+      `mantenimientos/${mantenimiento.key}`
+    );
     // Utiliza updateDoc para cambiar el estado a true
     return updateDoc(mantenimientoDocRef, { estado: false });
   }

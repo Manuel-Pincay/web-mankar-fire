@@ -123,6 +123,7 @@
                   {{ unidad.placa }}
                 </option>
               </select>
+               
               <!-- Descripción -->
               <div class="form-group">
                 <label for="descripcion">Tipo de Mantenimiento:</label>
@@ -201,6 +202,9 @@
                   Placa
                 </th>
                 <th class="px-4 py-3 title-font tracking-wider font-medium">
+                  Chofer
+                </th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium">
                   Kilómetraje Actual
                 </th>
                 <th class="px-4 py-3 title-font tracking-wider font-medium">
@@ -223,6 +227,10 @@
                 <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
                   data-bs-target="#detalleMantenimientoModal">
                   {{ mantenimiento.placa }}
+                </td>
+                <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
+                  data-bs-target="#detalleMantenimientoModal">
+                  {{ mantenimiento.chofer }}
                 </td>
                 <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
                   data-bs-target="#detalleMantenimientoModal">

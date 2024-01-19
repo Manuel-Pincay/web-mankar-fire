@@ -47,7 +47,7 @@ export class ViewunidadesComponent implements OnInit {
     });
     this.formularioEdicion = this.fb.group({
       placa: ['', Validators.required],
-      unidad: ['', Validators.required],
+      unidad: [null, [Validators.required, Validators.min(1)]],
       year: ['', Validators.required],
       chofer: ['', Validators.required],
       color: ['', Validators.required],
@@ -56,6 +56,7 @@ export class ViewunidadesComponent implements OnInit {
       matricula: ['', Validators.required],
       imagen: [''],
       modelo: ['', Validators.required],
+      estado: [true, Validators.required],
     });
   }
 

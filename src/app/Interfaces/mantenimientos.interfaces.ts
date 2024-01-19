@@ -7,9 +7,9 @@ export default interface Mantenimientos {
   placa: string;
   comentario: string;
   descripcion: string;
-  fecha: Date;
-/*   fecha: Timestamp; */
+  fecha: Date; 
   imagen: string;
   imagen2?: string;
+  chofer: string;
   estado: boolean;
 }

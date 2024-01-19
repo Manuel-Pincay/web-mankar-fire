@@ -5,6 +5,8 @@ import { Chart, registerables } from 'chart.js';
 import { catchError, take } from 'rxjs';
 import ListatiposM from 'src/app/Interfaces/tiposmant.interfaces';
 import { TiposMService } from 'src/app/Services/tiposM.service';
+import Mantenimientos from 'src/app/Interfaces/mantenimientos.interfaces';
+import { MantenimientosService } from 'src/app/Services/mantenimientos.service';
 @Component({
   selector: 'app-tabla-estadisticas',
   templateUrl: './tabla-estadisticas.component.html',
@@ -22,6 +24,7 @@ export class TablaEstadisticasComponent implements OnInit{
     private tiposmanteService: TiposMService,
     private router: Router,
     
+    private mantenimientosService: MantenimientosService,
     ){}
 
 
@@ -78,46 +81,60 @@ export class TablaEstadisticasComponent implements OnInit{
   }
   
   cargarDatosFirebase() {
-    // Obtenemos los datos de la colección "listatiposM" utilizando el método 'getTiposM':
-    const tiposMantenimientos = this.tiposmanteService.getTiposM();
+    // Obtenemos los mantenimientos:
+    const mantenimientos = this.mantenimientosService.getMantenimientos();
   
     // Escuchamos los cambios en los datos y gestionamos errores:
-    tiposMantenimientos.subscribe((data: ListatiposM[]) => {
-      // Extraemos los nombres de los tipos de mantenimiento:
-      this.tiposMantenimientos = data.map((tipo: ListatiposM) => tipo.nombre);
+    mantenimientos.subscribe(
+      (data: Mantenimientos[]) => {
+        // Contamos la cantidad de mantenimientos por tipo:
+        const contadorTipos: { [tipo: string]: number } = {};
+        data.forEach(mantenimiento => {
+          const tipo = mantenimiento.descripcion || 'Sin Tipo';
+          contadorTipos[tipo] = (contadorTipos[tipo] || 0) + 1;
+        });
   
-      // Configuramos el gráfico:
-      this.configurarGrafico();
-    }, error => {
-      console.error('Error al cargar datos desde Firebase:', error);
-    });
+        // Extraemos los nombres de los tipos de mantenimiento y las cantidades:
+        const tiposMantenimientos = Object.keys(contadorTipos);
+        const cantidades = tiposMantenimientos.map(tipo => contadorTipos[tipo]);
+  
+        // Configuramos el gráfico:
+        this.configurarGrafico(tiposMantenimientos, cantidades);
+      },
+      error => {
+        console.error('Error al cargar datos desde Firebase:', error);
+      }
+    );
   }
   
   // Función para configurar el gráfico
-  configurarGrafico() {
+  configurarGrafico(tiposMantenimientos: string[], cantidades: number[]) {
     // Configuración del gráfico
     Chart.register(...registerables);
     const ctx = document.getElementById('miGrafico') as HTMLCanvasElement;
     this.chart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: this.tiposMantenimientos,
-        datasets: [{
-          label: 'Cantidad de Mantenimientos',
-          data: this.generarDatosEjemplo(), // Puedes reemplazar esto con tus datos reales
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1
-        }]
+        labels: tiposMantenimientos,
+        datasets: [
+          {
+            label: 'Cantidad de Mantenimientos',
+            data: cantidades,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+          },
+        ],
       },
       options: {
         scales: {
           y: {
             beginAtZero: true
-          }
-        }
-      }
+          },
+        },
+      },
     });
   }
+  
   
   // Esta es una función de ejemplo para generar datos de cantidad aleatorios
   generarDatosEjemplo(): number[] {

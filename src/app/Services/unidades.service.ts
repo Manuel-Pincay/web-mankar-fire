@@ -11,8 +11,10 @@ import {
     updateDoc,
     orderBy,
     query,
+    DocumentSnapshot,
+    getDoc,
 } from '@angular/fire/firestore';
-import { Observable, map } from 'rxjs';
+import { Observable, from, map } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import Unidades from '../Interfaces/unidades.interfaces';
 
@@ -42,7 +44,21 @@ export class UnidadesService {
             })
         ) as Observable<Unidades[]>;
     }
-
+    getUnidad(placa: string): Observable<Unidades> {
+        const unidadRef = doc(this.firestore, 'flota', placa);
+      
+        return from(getDoc(unidadRef)).pipe(
+          map((snapshot) => {
+            if (snapshot.exists()) {
+              return snapshot.data() as Unidades;
+            } else {
+              // Puedes manejar el caso cuando la unidad no existe, por ejemplo, lanzar un error o devolver un objeto predeterminado
+              throw new Error(`La unidad con placa ${placa} no existe.`);
+            }
+          })
+        );
+      }
+      
     updateUnidad(unidad: Unidades) {
         const unidadDocRef = doc(this.firestore, `flota/${unidad.placa}`); // Cambia 'mantenimientos' por 'flota'
         // Utiliza setDoc para actualizar el documento
@@ -53,4 +69,6 @@ export class UnidadesService {
         const unidadDocRef = doc(this.firestore, `flota/${unidad.placa}`); // Cambia 'mantenimientos' por 'flota'
         return updateDoc(unidadDocRef, { estado: false });
     }
+
+    
 }
