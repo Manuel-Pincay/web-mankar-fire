@@ -22,8 +22,6 @@ export class ViewtiposmantenimientosComponent implements OnInit {
   @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
   editarlistatiposMF: any;
 
-
-
   constructor(
     private fb: FormBuilder,
     private tiposmanteService: TiposMService,
@@ -39,34 +37,6 @@ export class ViewtiposmantenimientosComponent implements OnInit {
       prox: [null, Validators.required],
       estado: [true, Validators.required],
     });
-
-
-
-
-
-
-  }
-
-  redireccionarMantenimientos() {
-    this.router.navigate(['/listmts']);
-  }
-  redireccionarUsuarios() {
-    this.router.navigate(['/listusers']);
-  }
-  redireccionarUnidades() {
-    this.router.navigate(['/listunis']);
-  }
-  redireccionarRepostaje() {
-    this.router.navigate(['/listreps']);
-  }
-  redireccionarTiposM() {
-    this.router.navigate(['/listtiposmant']);
-  }
-  redireccionarRutas() {
-    this.router.navigate(['/listrutas']);
-  }
-  redireccionarEstadistica() {
-    this.router.navigate(['/estadistica']);
   }
 
 
@@ -117,11 +87,9 @@ export class ViewtiposmantenimientosComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       const tiposmantenimientoData = this.form.value;
-      console.log('tipomant a enviar:', tiposmantenimientoData);
       const newretiposm: ListatiposM = {
         ...tiposmantenimientoData,
       };
-      console.log('newtipom a enviar:', newretiposm);
       this.tiposmanteService
         .addTipoM(newretiposm)
         .then(() => {
@@ -150,7 +118,6 @@ export class ViewtiposmantenimientosComponent implements OnInit {
   // ========================================================================================== // 
   // ========================================================================================== // 
  
-
 
   // ========================================================================================== //
   // Función para confirmar la eliminación de un mantenimiento
@@ -215,15 +182,12 @@ export class ViewtiposmantenimientosComponent implements OnInit {
   }
   
   editarTiposM(tiposM: any) {
-    console.log('tocaste edit', tiposM);
     this.editarlistatiposMF = tiposM;
     this.formularioEdicion.patchValue({
       nombre: tiposM?.nombre || '',
       prox: tiposM?.prox || 0,
 
     });
-    
-    console.log("ASKDAJS213123123DJASDK", this.formularioEdicion);
   }
   
   guardarEdicionTiposM() {
@@ -259,11 +223,6 @@ export class ViewtiposmantenimientosComponent implements OnInit {
       text: 'Por favor, complete todos los campos requeridos.',
     });
   }
-
-
-
-
-
 
 
   // ========================================================================================== // 

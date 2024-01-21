@@ -13,10 +13,9 @@ import { MantenimientosService } from 'src/app/Services/mantenimientos.service';
   styleUrl: './tabla-estadisticas.component.css'
 })
 export class TablaEstadisticasComponent implements OnInit{
-  // Variables para almacenar datos
-  tiposMantenimientos: any[] = []; // Supongamos que tienes un array con los tipos de mantenimientos
+  
+  tiposMantenimientos: any[] = [];
   tiposMante: ListatiposM[] = [];
-  // Variables para el gráfico
   chart: any;
   
   constructor(private firestore: Firestore,
@@ -28,30 +27,6 @@ export class TablaEstadisticasComponent implements OnInit{
     ){}
 
 
-
-  redireccionarMantenimientos() {
-    this.router.navigate(['/listmts']);
-  }
-  
-  redireccionarUsuarios() {
-    this.router.navigate(['/listusers']);
-  }
-  
-  redireccionarUnidades() {
-    this.router.navigate(['/listunis']);
-  }
-  redireccionarRepostaje() {
-    this.router.navigate(['/listreps']);
-  }
-  redireccionarTiposM() {
-    this.router.navigate(['/listtiposmant']);
-  }
-  redireccionarRutas() {
-    this.router.navigate(['/listrutas']);
-  }
-  
-  
- 
   ngOnInit(): void {
     
     // ========================================================================================== // 
@@ -81,24 +56,17 @@ export class TablaEstadisticasComponent implements OnInit{
   }
   
   cargarDatosFirebase() {
-    // Obtenemos los mantenimientos:
     const mantenimientos = this.mantenimientosService.getMantenimientos();
   
-    // Escuchamos los cambios en los datos y gestionamos errores:
     mantenimientos.subscribe(
       (data: Mantenimientos[]) => {
-        // Contamos la cantidad de mantenimientos por tipo:
         const contadorTipos: { [tipo: string]: number } = {};
         data.forEach(mantenimiento => {
           const tipo = mantenimiento.descripcion || 'Sin Tipo';
           contadorTipos[tipo] = (contadorTipos[tipo] || 0) + 1;
         });
-  
-        // Extraemos los nombres de los tipos de mantenimiento y las cantidades:
         const tiposMantenimientos = Object.keys(contadorTipos);
         const cantidades = tiposMantenimientos.map(tipo => contadorTipos[tipo]);
-  
-        // Configuramos el gráfico:
         this.configurarGrafico(tiposMantenimientos, cantidades);
       },
       error => {
@@ -107,9 +75,7 @@ export class TablaEstadisticasComponent implements OnInit{
     );
   }
   
-  // Función para configurar el gráfico
   configurarGrafico(tiposMantenimientos: string[], cantidades: number[]) {
-    // Configuración del gráfico
     Chart.register(...registerables);
     const ctx = document.getElementById('miGrafico') as HTMLCanvasElement;
     this.chart = new Chart(ctx, {
@@ -136,7 +102,6 @@ export class TablaEstadisticasComponent implements OnInit{
   }
   
   
-  // Esta es una función de ejemplo para generar datos de cantidad aleatorios
   generarDatosEjemplo(): number[] {
     return Array.from({ length: this.tiposMantenimientos.length }, () => Math.floor(Math.random() * 10) + 1);
   }

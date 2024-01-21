@@ -61,32 +61,6 @@ export class ViewunidadesComponent implements OnInit {
   }
 
   
-
-  redireccionarMantenimientos() {
-    this.router.navigate(['/listmts']);
-  }
-
-  redireccionarUsuarios() {
-    this.router.navigate(['/listusers']);
-  }
-
-  redireccionarUnidades() {
-    this.router.navigate(['/listunis']);
-  }
-  redireccionarRepostaje() {
-    this.router.navigate(['/listreps']);
-  }
-  redireccionarTiposM() {
-    this.router.navigate(['/listtiposmant']);
-  }
-  redireccionarRutas() {
-    this.router.navigate(['/listrutas']);
-  }
-
-
-
-
-
   ngOnInit(): void {
     // ========================================================================================== // 
     // BARRA LATERAL================================================= // 
@@ -182,10 +156,8 @@ export class ViewunidadesComponent implements OnInit {
     const storageRef = ref(this.storage, filePath);
     uploadBytes(fileRef, file)
       .then(response => {
-        console.log(`Subido: ${response}`);
         getDownloadURL(storageRef).then((url) => {
           this.downloadURL = url;
-          console.log('URL de descarga:', this.downloadURL);
         });
       })
       .catch(error => console.log(error));
@@ -198,7 +170,6 @@ export class ViewunidadesComponent implements OnInit {
         ...unidadData,
         imagen: this.downloadURL,
       };
-      console.log('Mantenimiento a enviar:', newunidad);
       this.unidadesService
         .addUnidad(newunidad)
         .then(() => {
@@ -243,7 +214,6 @@ export class ViewunidadesComponent implements OnInit {
   }
   
   editarUnidad(unidad: any) {
-    console.log('tocaste edit', unidad);
     this.editarunidadF = unidad;
     this.formularioEdicion.patchValue({
       placa: unidad?.placa || null,
@@ -256,10 +226,7 @@ export class ViewunidadesComponent implements OnInit {
       matricula: unidad?.matricula || '',
       modelo: unidad?.modelo || '',
       imagen: unidad?.imagen || '',
-      // Añade más campos según sea necesario
     });
-    
-    console.log("ASKDAJS213123123DJASDK", this.formularioEdicion);
   }
   
   guardarEdicionUnidad() {

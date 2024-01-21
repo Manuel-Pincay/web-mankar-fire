@@ -1,4 +1,4 @@
-<div class="container mt-5">
+<!-- <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-6">
 
@@ -35,4 +35,56 @@
       </form>
     </div>
   </div>
+</div>
+ -->
+
+
+<div class="flex justify-between min-h-screen font-sans">
+  <div class="flex items-center justify-center min-h-screen font-sans">
+    <div class="w-1/2 hidden lg:block">
+      <div class="flex items-center justify-center h-full">
+        <img src="../../../assets/images/Mankar.png" alt="Logo" class="w-full h-full object-center object-cover" />
+      </div>
+    </div>
+
+    <div class="w-1/2 mx-auto max-w-2xl">
+      <div class="flex flex-col items-center justify-center px-8 pt-10 lg:px-14 xl:px-24">
+        <div class="pt-20 pb-6">
+          <h1 class="text-4xl font-bold tracking-wide leading-loose whitespace-nowrap">
+            Hola, bienvenido de nuevo!
+          </h1>
+          <span class=" text-2xl font-light text-gray-500">
+            Inicio de sesion para administradores.
+          </span>
+
+          <form [formGroup]="formLogin" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="email" class=" text-2xl form-label">Email</label>
+              <input type="text" id="email" class="form-control" formControlName="email" />
+            </div>
+            <div class="mb-3">
+              <label for="password" class="text-2xl form-label">Contraseña</label>
+              <input type="password" id="password" class="form-control" formControlName="password" />
+            </div>
+
+
+
+            <div class="d-grid">
+              <button class="text-3xl btn btn-primary fw-bold mb-2" type="Loginsubmit">
+                Ingresar
+              </button>
+              <div class="text-center">
+                <a class="text-1xl " href="#">Olvido su contraseña?</a>
+              </div>
+            </div>
+          </form>
+          <div class="pt-4">
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>

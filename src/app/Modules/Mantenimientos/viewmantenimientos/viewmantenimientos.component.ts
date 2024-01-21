@@ -42,8 +42,6 @@ export class ViewmantenimientosComponent implements OnInit {
   @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
   detalleMantenimiento: any;
 
-
-  
   constructor(
     private fb: FormBuilder,
     private storage: Storage,
@@ -65,7 +63,6 @@ export class ViewmantenimientosComponent implements OnInit {
       estado: [true, Validators.required],
     });
     this.formularioEdicion = this.fb.group({
-      // Define aquí los campos del formulario de edición y sus validaciones
       placa: ['', Validators.required],
       chofer: ['', Validators.required],
       descripcion: ['', Validators.required],
@@ -79,31 +76,7 @@ export class ViewmantenimientosComponent implements OnInit {
     });
   }
 
-  redireccionarMantenimientos() {
-    this.router.navigate(['/listmts']);
-  }
-
-  redireccionarUsuarios() {
-    this.router.navigate(['/listusers']);
-  }
-
-  redireccionarUnidades() {
-    this.router.navigate(['/listunis']);
-  }
-  redireccionarRepostaje() {
-    this.router.navigate(['/listreps']);
-  }
-  redireccionarTiposM() {
-    this.router.navigate(['/listtiposmant']);
-  }
-  redireccionarRutas() {
-    this.router.navigate(['/listrutas']);
-  }
-
   ngOnInit(): void {
-
-
-    
     // ========================================================================================== //
     // BARRA LATERAL================================================= //
     // ========================================================================================== //
@@ -171,7 +144,6 @@ export class ViewmantenimientosComponent implements OnInit {
   }
   editarMantenimiento2: any;
   editarMantenimiento(mantenimiento: any) {
-    console.log('tocaste edit', mantenimiento);
     this.editarMantenimiento2 = mantenimiento;
     this.formularioEdicion.patchValue({
       placa: mantenimiento?.placa || '',
@@ -180,10 +152,8 @@ export class ViewmantenimientosComponent implements OnInit {
       proxcambio: mantenimiento?.proxcambio || '',
       fecha: this.formatDate(mantenimiento?.fecha) || '',
       comentario: mantenimiento?.comentario || '',
-      // Asegúrate de tener las propiedades correctas para imagen e imagen2
       imagen: mantenimiento?.imagen || '',
       imagen2: mantenimiento?.imagen2 || '',
-      // Otros campos según sea necesario
     });
   }
 
@@ -202,9 +172,7 @@ export class ViewmantenimientosComponent implements OnInit {
   }
 
   verDetalles(mantenimiento: any) {
-    console.log('tocaste', mantenimiento);
     this.detalleMantenimiento = mantenimiento;
-    // ('#detalleModal').modal('show'); // Abre el modal
   }
 
   // ========================================================================================== //
@@ -290,10 +258,8 @@ export class ViewmantenimientosComponent implements OnInit {
     const storageRef = ref(this.storage, filePath);
     uploadBytes(fileRef2, file2)
       .then((response) => {
-        console.log(`Subido: ${response}`);
         getDownloadURL(storageRef).then((url) => {
           this.downloadURL2 = url;
-          console.log('URL de descarga:2222', this.downloadURL2);
         });
       })
       .catch((error) => console.log(error));
@@ -316,18 +282,14 @@ export class ViewmantenimientosComponent implements OnInit {
                 fechaFormulario instanceof Date
                   ? fechaFormulario
                   : new Date(fechaFormulario);
-  
               const fechaTimestamp = Timestamp.fromDate(fechaFormularioDate);
-  
               const mantenimiento: Mantenimientos = {
                 ...mantenimientoData,
                 fecha: fechaTimestamp,
                 imagen: this.downloadURL,
                 imagen2: this.downloadURL2,
-                chofer: unidad.chofer, // asignar el nombre del chofer
+                chofer: unidad.chofer,
               };
-  
-              console.log('Mantenimiento a enviar:', mantenimiento);
               this.mantenimientosService
                 .addMantenimiento(mantenimiento)
                 .then(() => {
@@ -346,7 +308,6 @@ export class ViewmantenimientosComponent implements OnInit {
                   )
                 );
             } else {
-              // Manejar el caso cuando la unidad no existe
             }
           },
           (error: any) => {
@@ -354,7 +315,6 @@ export class ViewmantenimientosComponent implements OnInit {
           }
         );
       } else {
-        // Manejar el caso cuando 'placa' es nulo o indefinido
       }
     } else {
       this.showIncompleteDataAlert();
@@ -363,7 +323,6 @@ export class ViewmantenimientosComponent implements OnInit {
   
 
   cerrarModal2() {
-    // Cierra el modal usando el botón "Cerrar"
     this.cerrarModalBtn2.nativeElement.click();
   }
 
@@ -382,19 +341,15 @@ export class ViewmantenimientosComponent implements OnInit {
   guardarEdicion() {
     if (this.formularioEdicion.valid) {
       const mantenimientoedData = this.formularioEdicion.value;
-      // Obtén la fecha del formulario y conviértela a un objeto Date
       const fechaFormulario = mantenimientoedData.fecha;
       const fechaFormularioDate =
         fechaFormulario instanceof Date
           ? fechaFormulario
           : new Date(fechaFormulario);
-      // Convierte la fecha del formulario a un objeto Timestamp
       const fecha = Timestamp.fromDate(fechaFormularioDate);
-      // Asigna la URL de la primera imagen solo si se ha subido, de lo contrario, mantiene la original
       const imagen = this.downloadURL
         ? this.downloadURL
         : this.editarMantenimiento2.imagen;
-      // Asigna la URL de la segunda imagen solo si se ha subido, de lo contrario, mantiene la original
       const imagen2 = this.downloadURL2
         ? this.downloadURL2
         : this.editarMantenimiento2.imagen2;
@@ -405,24 +360,20 @@ export class ViewmantenimientosComponent implements OnInit {
         imagen2: imagen2,
         key: this.editarMantenimiento2.key,
       };
-
-      // Llama al servicio para actualizar los datos
       this.mantenimientosService
         .updateMantenimiento(mantenimientoed)
         .then(() => {
           this.handleSuccess('Edición exitosa', 'success', mantenimientoed);
-          this.cerrarModal(); // Cierra el modal después de una edición exitosa
+          this.cerrarModal(); 
         })
         .catch((error) =>
           this.handleError('Error al editar mantenimiento', 'error')
         );
     } else {
-      // Muestra una alerta si el formulario no es válido
       this.showIncompleteDataAlert();
     }
   }
   cerrarModal() {
-    // Cierra el modal usando el botón "Cerrar"
     this.cerrarModalBtn.nativeElement.click();
   }
 

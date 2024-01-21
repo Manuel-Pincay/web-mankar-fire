@@ -43,30 +43,6 @@ export class ViewrutasComponent implements OnInit{
      }
 
   
-
-
-  redireccionarMantenimientos() {
-    this.router.navigate(['/listmts']);
-  }
-  
-  redireccionarUsuarios() {
-    this.router.navigate(['/listusers']);
-  }
-  
-  redireccionarUnidades() {
-    this.router.navigate(['/listunis']);
-  }
-  redireccionarRepostaje() {
-    this.router.navigate(['/listreps']);
-  }
-  redireccionarTiposM() {
-    this.router.navigate(['/listtiposmant']);
-  }
-  redireccionarRutas() {
-    this.router.navigate(['/listrutas']);
-  }
-  
-  
  
   ngOnInit(): void {
     // ========================================================================================== // 
@@ -98,7 +74,6 @@ export class ViewrutasComponent implements OnInit{
   }
 
   verDetalles(verruta: any) {
-    console.log('tocaste', verruta);
     this.detalleruta = verruta;
   }
 
@@ -155,12 +130,11 @@ export class ViewrutasComponent implements OnInit{
     if (this.form.valid) {
       const rutaData = this.form.value;
 
-     
       this.RutasService
       .guardarRuta(rutaData)
         .then(() => {
           this.handleSuccess('Guardado correctamente', 'success', rutaData);
-          this.cerrarModal2(); // Llama a la función para cerrar el modal
+          this.cerrarModal2();
           this.form.reset();
         })
         .catch((error) => this.handleError('Error al eliminar ruta', 'error'));
@@ -178,7 +152,6 @@ export class ViewrutasComponent implements OnInit{
   }
 
   cerrarModal2() {
-    // Cierra el modal usando el botón "Cerrar"
     this.cerrarModalBtn2.nativeElement.click();
   }
 
@@ -204,7 +177,6 @@ export class ViewrutasComponent implements OnInit{
   }
   
   editarRutas(ruta: any) {
-    console.log('tocaste edit', ruta);
     this.editarrutaF = ruta;
     this.formularioEdicion.patchValue({
       nombre: ruta?.nombre || '',
@@ -213,14 +185,11 @@ export class ViewrutasComponent implements OnInit{
       npeajes: ruta?.npeajes || 0,
 
     });
-    
-    console.log("ASKDAJS213123123DJASDK", this.formularioEdicion);
   }
   
   guardarEdicionRuta() {
     if (this.formularioEdicion.valid) {
       const rutaEditadaData = this.formularioEdicion.value;
-      console.log("ggt56", this.editarrutaF.key);
       const rutaEditado: Rutas = {
         ...rutaEditadaData,
         estado: this.editarrutaF.estado,

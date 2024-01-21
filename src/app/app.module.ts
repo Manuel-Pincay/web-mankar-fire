@@ -25,6 +25,8 @@ import { ViewrutasComponent } from './Modules/Rutas/viewrutas/viewrutas.componen
 import { ViewusuariosComponent } from './Modules/Usuarios/viewusuarios/viewusuarios.component';
 import { ViewtiposmantenimientosComponent } from './Modules/TiposM/viewtiposmantenimientos/viewtiposmantenimientos.component';
 import { TablaEstadisticasComponent } from './Modules/tabla-estadisticas/tabla-estadisticas.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { TablaEstadisticasComponent } from './Modules/tabla-estadisticas/tabla-e
     ViewusuariosComponent,
     ViewtiposmantenimientosComponent,
     TablaEstadisticasComponent,
+    SidebarComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,

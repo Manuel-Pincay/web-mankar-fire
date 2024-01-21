@@ -24,37 +24,30 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.userService
       .login(this.formLogin.value)
-      .then((response) => {
-        console.log(response);
-        this.router.navigate(['/main']);
-      })
-      .catch((error) => {
-        console.log(error);
-        const Toast = Swal.mixin({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-          }
-        });
-        Toast.fire({
-          icon: "error",
-          title: "Signed in no successfully"
-        });
-      });
+      .subscribe(
+        (response) => {
+          console.log(response);
+          this.router.navigate(['/main']);
+        },
+        (error) => {
+          console.log(error);
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "error",
+            title: "Iniciar sesión sin éxito"
+          });
+        }
+      );
   }
-
-  onClick() {
-    this.userService
-      .loginWithGoogle()
-      .then((response) => {
-        console.log(response);
-        this.router.navigate(['/main']);
-      })
-      .catch((error) => console.log(error));
-  }
+  
 }

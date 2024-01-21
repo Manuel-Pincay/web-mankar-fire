@@ -22,83 +22,7 @@
 </nav>
 
 <!-- start: Sidebar -->
-<div class="sidebar position-fixed top-0 bottom-0 bg-white border-end">
-  <div class="d-flex align-items-center p-3">
-    <a href="#" class="sidebar-logo text-uppercase fw-bold text-decoration-none text-indigo fs-4"> MANKAR
-    </a>
-    <i class="sidebar-toggle ri-arrow-left-circle-line ms-auto fs-5 d-none d-md-block"></i>
-  </div>
-  <ul class="sidebar-menu p-3 m-0 mb-0">
-    <li class="sidebar-menu-item active">
-      <a href="#">
-        <i class="ri-dashboard-line sidebar-menu-item-icon"></i>
-        Home
-      </a>
-    </li>
-
-    <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">
-      Panel Administrativo
-    </li>
-    <li class="sidebar-menu-item">
-      <a (click)="redireccionarMantenimientos()">
-        <i class="ri-settings-line sidebar-menu-item-icon"></i>
-        Mantenimientos
-      </a>
-    </li>
-    <li class="sidebar-menu-item">
-      <a (click)="redireccionarRepostaje()">
-        <i class="ri-gas-station-line sidebar-menu-item-icon"></i>
-        Repostajes
-      </a>
-    </li>
-    <li class="sidebar-menu-item">
-      <a (click)="redireccionarUnidades()">
-        <i class="ri-truck-line sidebar-menu-item-icon"></i>
-        Unidades
-      </a>
-    </li>
-    <li class="sidebar-menu-item">
-      <a (click)="redireccionarTiposM()">
-        <i class="ri-list-settings-line sidebar-menu-item-icon"></i>Tipos de
-        mantenimientos
-      </a>
-    </li>
-    <li class="sidebar-menu-item">
-      <a (click)="redireccionarRutas()">
-        <i class="ri-road-map-line sidebar-menu-item-icon"></i>
-        Rutas
-      </a>
-    </li>
-    <li class="sidebar-menu-item">
-      <a (click)="redireccionarUsuarios()">
-        <i class="ri-user-3-line sidebar-menu-item-icon"></i>
-        Usuarios
-      </a>
-    </li>
-    <li class="sidebar-menu-item">
-      <a (click)="redireccionarEstadistica()">
-        <i class="ri-user-3-line sidebar-menu-item-icon"></i>
-        Estadistica
-      </a>
-    </li>
-
-    <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">Apps</li>
-
-    <li class="sidebar-menu-item">
-      <a href="#">
-        <i class="ri-mail-line sidebar-menu-item-icon"></i>
-        Email
-      </a>
-    </li>
-    <li class="sidebar-menu-item   ">
-      <a href="#">
-        <i class="ri-logout-box-line sidebar-menu-item-icon"></i>
-        Desconectarse
-      </a>
-    </li>
-
-  </ul>
-</div>
+<app-sidebar></app-sidebar>
 
 <div class="sidebar-overlay"></div>
 <!-- end: Sidebar -->
@@ -171,7 +95,7 @@
                   Nombre
                 </th>
                 <th class="px-4 py-3 title-font tracking-wider font-medium">
-                  Kilómetraje cambio
+                  Duracion en kilometros
                 </th>
                 <th class="px-4 py-3 title-font tracking-wider font-medium">
                   Opciones
@@ -186,20 +110,16 @@
                   {{ tiposMante.nombre }}
                 </td>
                 <td data-bs-toggle="modal" data-bs-target="#detalletiposMModal" (click)="verDetalles(tiposMante)">
-                  {{ tiposMante.prox }}
+                 {{ tiposMante.prox | number: '1.0-0' }}
                 </td>
 
-                 <td>
+                <td>
                   <button (click)="confirmarEliminar(tiposMante)">
                     <i class="fas fa-trash-alt fa-lg text-danger"></i>
                   </button>
-                
-                  <button
-                    (click)="editarTiposM(tiposMante)"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editarTiposMModal"
-                    class="ml-4"  
-                  >
+
+                  <button (click)="editarTiposM(tiposMante)" data-bs-toggle="modal" data-bs-target="#editarTiposMModal"
+                    class="ml-4">
                     <i class="fas fa-edit fa-lg text-info mr-4"></i>
                   </button>
                 </td>
@@ -250,47 +170,47 @@
   <!-- ----------------------MODAL DE EDITAR Tipos MANTENIMIENTOS---------------------------- -->
   <!-- ----------------------------------------------------------------------- -->
 
-<!-- Modal de Editar Tipos de Mantenimientos -->
-<div class="modal fade" id="editarTiposMModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header bg-light">
-        <h5 class="modal-title" id="exampleModalLabel">Editar Tipo de Mantenimiento</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Formulario de edición -->
-        <form [formGroup]="formularioEdicion" (ngSubmit)="guardarEdicionTiposM()">
-          <!-- Nombre del Mantenimiento -->
-          <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre del Mantenimiento:</label>
-            <input type="text" id="nombre" class="form-control" formControlName="nombre"
-              [value]="detalletiposM?.nombre || ''" [placeholder]="
+  <!-- Modal de Editar Tipos de Mantenimientos -->
+  <div class="modal fade" id="editarTiposMModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-light">
+          <h5 class="modal-title" id="exampleModalLabel">Editar Tipo de Mantenimiento</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Formulario de edición -->
+          <form [formGroup]="formularioEdicion" (ngSubmit)="guardarEdicionTiposM()">
+            <!-- Nombre del Mantenimiento -->
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre del Mantenimiento:</label>
+              <input type="text" id="nombre" class="form-control" formControlName="nombre"
+                [value]="detalletiposM?.nombre || ''" [placeholder]="
               detalletiposM?.nombre
                   ? detalletiposM.nombre
                   : 'Ingrese el nombre del mantenimiento'
               " />
-          </div>
+            </div>
 
-          <!-- Kilometraje -->
-          <div class="mb-3">
-            <label for="prox" class="form-label">Kilometraje:</label>
-            <input type="number" id="prox" class="form-control" formControlName="prox"
-              [value]="detalletiposM?.prox || 0" />
-          </div>
+            <!-- Kilometraje -->
+            <div class="mb-3">
+              <label for="prox" class="form-label">Kilometraje:</label>
+              <input type="number" id="prox" class="form-control" formControlName="prox"
+                [value]="detalletiposM?.prox || 0" />
+            </div>
 
-          <!-- Botones para "Guardar" y "Cerrar" -->
-          <div class="modal-footer d-flex justify-content-between">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #cerrarModalBtnMantenimiento>
-              Cerrar
-            </button>
-            <button type="submit" class="btn btn-primary">Guardar</button>
-          </div>
-        </form>
+            <!-- Botones para "Guardar" y "Cerrar" -->
+            <div class="modal-footer d-flex justify-content-between">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #cerrarModalBtnMantenimiento>
+                Cerrar
+              </button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 
   <!-- ----------------------------------------------------------------------- -->

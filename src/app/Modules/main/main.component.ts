@@ -28,17 +28,24 @@ export class MainComponent implements OnInit  {
   redireccionarMantenimientos() {
     this.router.navigate(['/listmts']);
   }
-  
+
   redireccionarUsuarios() {
-    this.router.navigate(['/verusuarios']);
+    this.router.navigate(['/listusers']);
   }
-  
   redireccionarUnidades() {
     this.router.navigate(['/listunis']);
   }
-  redireccionarRepoostaje() {
+  redireccionarRepostaje() {
     this.router.navigate(['/listreps']);
   }
+  redireccionarTiposM() {
+    this.router.navigate(['/listtiposmant']);
+  }
+  redireccionarRutas() {
+    this.router.navigate(['/listrutas']);
+  }
+
+  
   
 
 }

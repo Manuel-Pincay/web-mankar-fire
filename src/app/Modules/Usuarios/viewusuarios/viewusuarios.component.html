@@ -34,81 +34,7 @@
 </nav>
 
 <!-- start: Sidebar -->
-<div class="sidebar position-fixed top-0 bottom-0 bg-white border-end">
-  <div class="d-flex align-items-center p-3">
-    <a
-      href="#"
-      class="sidebar-logo text-uppercase fw-bold text-decoration-none text-indigo fs-4"> MANKAR 
-    </a>
-    <i
-      class="sidebar-toggle ri-arrow-left-circle-line ms-auto fs-5 d-none d-md-block"
-    ></i>
-  </div>
-  <ul class="sidebar-menu p-3 m-0 mb-0">
-    <li class="sidebar-menu-item active">
-      <a href="#">
-        <i class="ri-dashboard-line sidebar-menu-item-icon"></i>
-        Home
-      </a>
-    </li>
-    
-    <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">
-      Panel Administrativo
-    </li>
-    <li class="sidebar-menu-item">
-      <a (click)="redireccionarMantenimientos()">
-        <i class="ri-settings-line sidebar-menu-item-icon"></i>
-        Mantenimientos
-      </a>
-    </li>
-    <li class="sidebar-menu-item">
-      <a (click)="redireccionarRepostaje()">
-        <i class="ri-gas-station-line sidebar-menu-item-icon"></i>
-        Repostajes
-      </a>
-    </li>
-    <li class="sidebar-menu-item">
-      <a (click)="redireccionarUnidades()">
-        <i class="ri-truck-line sidebar-menu-item-icon"></i>
-        Unidades
-      </a>
-    </li>
-    <li class="sidebar-menu-item">
-      <a (click)="redireccionarTiposM()">
-        <i class="ri-list-settings-line sidebar-menu-item-icon"></i>Tipos de
-        mantenimientos
-      </a>
-    </li>
-    <li class="sidebar-menu-item">
-      <a (click)="redireccionarRutas()">
-        <i class="ri-road-map-line sidebar-menu-item-icon"></i>
-        Rutas
-      </a>
-    </li>
-    <li class="sidebar-menu-item">
-      <a (click)="redireccionarUsuarios()">
-        <i class="ri-user-3-line sidebar-menu-item-icon"></i>
-        Usuarios
-      </a>
-    </li>
-
-    <li class="sidebar-menu-divider mt-3 mb-1 text-uppercase">Apps</li>
-     
-    <li class="sidebar-menu-item">
-      <a href="#">
-        <i class="ri-mail-line sidebar-menu-item-icon"></i>
-        Email
-      </a>
-    </li>
-    <li class="sidebar-menu-item   ">
-      <a href="#">
-        <i class="ri-logout-box-line sidebar-menu-item-icon"></i>
-        Desconectarse
-      </a>
-    </li>
- 
-  </ul>
-</div>
+<app-sidebar></app-sidebar>
 
 <div class="sidebar-overlay"></div>
 <!-- end: Sidebar -->
@@ -119,11 +45,6 @@
 <section class="text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto">
 
-
-
-
-
-
     <!-- ----------------------------------------------------------------------- -->
     <!-- --------------------------Tabla LISTA RUTAS--------------------------------- -->
     <!-- ----------------------------------------------------------------------- -->
@@ -132,10 +53,10 @@
       <div class="card">
         <div class="card-body">
           <span class="h2">Lista de Repostajes</span>
-         <!--  <button style="background-color :#2c7bfe;" class="btn btn-success btn-lg float-right" data-bs-toggle="modal"
+          <button style="background-color :#2c7bfe;" class="btn btn-success btn-lg float-right" data-bs-toggle="modal"
             data-bs-target="#agregarNuevoTipoMantenimiento">
             <i class="fas fa-plus"></i> Agregar mantenimiento
-          </button> -->
+          </button>
           <table class="table table-striped mt-4">
 
             <thead>
@@ -147,7 +68,7 @@
                   Correo electronico
                 </th>
                 <th class="px-4 py-3 title-font tracking-wider font-medium">
-                  Rool
+                  Rol
                 </th>
               
               </tr>

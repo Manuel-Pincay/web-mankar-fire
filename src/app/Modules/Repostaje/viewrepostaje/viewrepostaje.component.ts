@@ -62,27 +62,6 @@ export class ViewrepostajeComponent {
     });
   }
 
-  redireccionarMantenimientos() {
-    this.router.navigate(['/listmts']);
-  }
-
-  redireccionarUsuarios() {
-    this.router.navigate(['/listusers']);
-  }
-
-  redireccionarUnidades() {
-    this.router.navigate(['/listunis']);
-  }
-  redireccionarRepostaje() {
-    this.router.navigate(['/listreps']);
-  }
-  redireccionarTiposM() {
-    this.router.navigate(['/listtiposmant']);
-  }
-  redireccionarRutas() {
-    this.router.navigate(['/listrutas']);
-  }
-
   ngOnInit(): void {
     // ========================================================================================== //
     // BARRA LATERAL================================================= //
@@ -220,27 +199,22 @@ export class ViewrepostajeComponent {
   onSubmit() {
     if (this.form.valid) {
       const repostajeData = this.form.value;
-      console.log('Repostaje a enviar:', repostajeData);
-      // Obtén la fecha del formulario y conviértela a un objeto Date
       const fechaFormulario = repostajeData.fecha;
       const fechaFormularioDate =
         fechaFormulario instanceof Date
           ? fechaFormulario
           : new Date(fechaFormulario);
-      // Convierte la fecha del formulario a un objeto Timestamp
       const fechaTimestamp = Timestamp.fromDate(fechaFormularioDate);
-
       const newrepostaje: Repostajes = {
         ...repostajeData,
         fecha: fechaTimestamp,
         imagen: this.downloadURL,
       };
-      console.log('Repostaje a enviar:', newrepostaje);
       this.repostajesService
         .addRepostaje(newrepostaje)
         .then(() => {
           this.handleSuccess('Creado correctamente', 'success', newrepostaje);
-          this.cerrarModal(); // Llama a la función para cerrar el modal
+          this.cerrarModal(); 
           this.form.reset();
         })
         .catch((error) => this.handleError('Error al crear unidad', error));
@@ -282,7 +256,6 @@ export class ViewrepostajeComponent {
   }
 
   editarRepostaje(repostaje: any) {
-    console.log('tocaste edit', repostaje);
     this.editarrepostajeF = repostaje;
     this.formularioEdicion.patchValue({
       cantidad: repostaje?.cantidad || null,
@@ -298,15 +271,12 @@ export class ViewrepostajeComponent {
   guardarEdicion() {
     if (this.formularioEdicion.valid) {
       const EditrepostajeData = this.formularioEdicion.value;
-      // Obtén la fecha del formulario y conviértela a un objeto Date
       const fechaFormulario = EditrepostajeData.fecha;
       const fechaFormularioDate =
         fechaFormulario instanceof Date
           ? fechaFormulario
           : new Date(fechaFormulario);
-      // Convierte la fecha del formulario a un objeto Timestamp
       const fecha = Timestamp.fromDate(fechaFormularioDate);
-      // Asigna la URL de la primera imagen solo si se ha subido, de lo contrario, mantiene la original
       const imagen = this.downloadURL
         ? this.downloadURL
         : this.editarrepostajeF.imagen;
@@ -316,19 +286,16 @@ export class ViewrepostajeComponent {
         imagen: imagen, 
         key: this.editarrepostajeF.key,
       };
-
-      // Llama al servicio para actualizar los datos
       this.repostajesService
         .updateRepostaje(repostajeEditado)
         .then(() => {
           this.handleSuccess('Edición exitosa', 'success', repostajeEditado);
-          this.cerrarModal(); // Cierra el modal después de una edición exitosa
+          this.cerrarModal(); 
         })
         .catch((error) =>
           this.handleError('Error al editar mantenimiento', 'error')
         );
     } else {
-      // Muestra una alerta si el formulario no es válido
       this.showIncompleteDataAlert();
     }
   }

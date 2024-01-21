@@ -14,31 +14,6 @@ export class ViewusuariosComponent implements OnInit{
   constructor(
     private usuariosService: UserService,
     private router: Router){}
-    
-
-
-  redireccionarMantenimientos() {
-    this.router.navigate(['/listmts']);
-  }
-  
-  redireccionarUsuarios() {
-    this.router.navigate(['/listusers']);
-  }
-  
-  redireccionarUnidades() {
-    this.router.navigate(['/listunis']);
-  }
-  redireccionarRepostaje() {
-    this.router.navigate(['/listreps']);
-  }
-  redireccionarTiposM() {
-    this.router.navigate(['/listtiposmant']);
-  }
-  redireccionarRutas() {
-    this.router.navigate(['/listrutas']);
-  }
-  
-  
   
  
   ngOnInit(): void {
