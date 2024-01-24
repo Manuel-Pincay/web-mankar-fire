@@ -11,7 +11,6 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { MainComponent } from './Modules/main/main.component';
 import { LoginComponent } from './Modules/login/login.component';
-import { RegistroComponent } from './Modules/registro/registro.component';
 import { environment } from './Environments/environment.prod';
 import { ViewmantenimientosComponent } from './Modules/Mantenimientos/viewmantenimientos/viewmantenimientos.component';
 
@@ -25,15 +24,16 @@ import { ViewrutasComponent } from './Modules/Rutas/viewrutas/viewrutas.componen
 import { ViewusuariosComponent } from './Modules/Usuarios/viewusuarios/viewusuarios.component';
 import { ViewtiposmantenimientosComponent } from './Modules/TiposM/viewtiposmantenimientos/viewtiposmantenimientos.component';
 import { TablaEstadisticasComponent } from './Modules/tabla-estadisticas/tabla-estadisticas.component';
+import { RecuperacionpassComponent } from './Modules/recuperacionpass/recuperacionpass.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { LogsComponent } from './Modules/logs/logs.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
     LoginComponent,
-    RegistroComponent,
     ViewmantenimientosComponent,
     ViewrepostajeComponent,
     ViewunidadesComponent,
@@ -41,8 +41,10 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     ViewusuariosComponent,
     ViewtiposmantenimientosComponent,
     TablaEstadisticasComponent,
+    RecuperacionpassComponent,
     SidebarComponent,
     PageNotFoundComponent,
+    LogsComponent,
   ],
   imports: [
     BrowserModule,

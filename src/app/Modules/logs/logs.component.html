@@ -1,0 +1,109 @@
+<!-- start: Sidebar -->
+<nav class="nav">
+  <i class="uil uil-bars navOpenBtn"></i>
+  <a href="#" class="logo">APPWEB MANKAR</a>
+  <ul class="nav-links">
+
+  </ul>
+</nav>
+
+<app-sidebar></app-sidebar>
+
+
+
+
+<section class="text-gray-600 body-font">
+  <div class="container px-5 py-24 mx-auto">
+    <!-- ----------------------------------------------------------------------- -->
+    <!-- --------------------------Tabla LISTA RUTAS--------------------------------- -->
+    <!-- ----------------------------------------------------------------------- -->
+
+    <!-- Lista de Logs -->
+    <div class="container mt-4">
+      <div class="card mt-4">
+        <div class="card-body">
+          <span class="h2">Registro de movimientos</span>
+          <table class="table table-striped mt-4">
+            <thead>
+              <tr>
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                  Usuario
+                </th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                  Fecha
+                </th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                  Acción
+                </th>
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                  Detalles
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let log of logs">
+                <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
+                  verDetallesLog(log)">{{ log.user }}</td>
+                <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
+                  verDetallesLog(log)">{{ log.fecha.toDate() | date: 'dd/MM/yyyy' }}</td>
+                <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
+                  verDetallesLog(log)">{{ log.data.action }}</td>
+                <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
+                  verDetallesLog(log)">{{ log.data.details }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- ----------------------------------------------------------------------- -->
+  <!-- --------------------------MODAL DE VER DETALLES--------------------------------- -->
+  <!-- ----------------------------------------------------------------------- -->
+  <!-- MODAL DE VER DETALLES DE LOG -->
+  <div class="modal fade" id="verDetallesLogModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-light">
+          <h5 class="modal-title" id="exampleModalLabel">
+            Detalles del Log
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <strong>Usuario:</strong> {{ detalleLog?.user }}
+            </li>
+            <li class="list-group-item">
+              <strong>Fecha:</strong> {{ detalleLog?.fecha.toDate() | date: 'dd/MM/yyyy, HH:mm' }}
+            </li>
+            <li class="list-group-item">
+              <strong>Acción:</strong> {{ detalleLog?.data.action }}
+            </li>
+            <li class="list-group-item">
+              <strong>Detalles:</strong> {{ detalleLog?.data.details }}
+            </li>
+            <li class="list-group-item">
+              <strong>Registro:</strong>
+              <pre>{{ detalleLog?.data.registro | json }}</pre>
+          </li>
+            <!-- Puedes agregar más detalles según la estructura de tu log -->
+          </ul>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+</section>

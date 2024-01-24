@@ -1,42 +1,40 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
-
-/* import {onRequest} from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
- */
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
-
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+ 
 
  
-import  * as functions  from "firebase-functions/v2/https";
+import  * as functions  from "firebase-functions";
 import * as admin from "firebase-admin";
+import { QueryDocumentSnapshot } from "firebase-admin/firestore";
+/* import { QueryDocumentSnapshot } from "firebase-admin/firestore";
+import { EventContext } from "firebase-functions"; */
 admin.initializeApp();
 
 const db = admin.firestore();
 
-exports.creacionProducto = functions.Firestore
-  .document("productos/{productoId}")
+exports.creacionmantenimientos = functions.firestore
+  .document("mantenimientos/{mantenimientosId}")
   .onCreate((snap: functions.firestore.QueryDocumentSnapshot, context: functions.EventContext) => {
-    const producto = snap.data();
+    const mantenimiento = snap.data();
+
+    return db.collection("logs").add({
+      accion: "Creación", 
+      fecha: new Date().toISOString(),
+      data: mantenimiento,
+    });
+  });
+
+  export const creacionMantenimientos2 = functions.firestore
+  .document("mantenimientos/{mantenimientosId}")
+  .onCreate((snap: QueryDocumentSnapshot, context: functions.EventContext) => {
+    
+    const mantenimiento = snap.data();
 
     return db.collection("logs").add({
       accion: "Creación",
       fecha: new Date().toISOString(),
-      producto: producto,
+      data: mantenimiento,
     });
   });
-
+/* 
 exports.eliminacionProducto = functions.firestore
   .document("productos/{productoId}")
   .onDelete((snap: functions.firestore.QueryDocumentSnapshot, context: functions.EventContext) => {
@@ -61,4 +59,4 @@ exports.actualizacionProducto = functions.firestore
       productoPrevio,
       productoActualizado,
     });
-  });
+  }); */

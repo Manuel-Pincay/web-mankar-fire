@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MainComponent } from './Modules/main/main.component';
-import { RegistroComponent } from './Modules/registro/registro.component';
 import { LoginComponent } from './Modules/login/login.component';
 import {
   AuthGuard,
@@ -16,7 +15,10 @@ import { ViewrutasComponent } from './Modules/Rutas/viewrutas/viewrutas.componen
 import { ViewusuariosComponent } from './Modules/Usuarios/viewusuarios/viewusuarios.component';
 import { ViewtiposmantenimientosComponent } from './Modules/TiposM/viewtiposmantenimientos/viewtiposmantenimientos.component';
 import { TablaEstadisticasComponent } from './Modules/tabla-estadisticas/tabla-estadisticas.component';
+import { RecuperacionpassComponent } from './Modules/recuperacionpass/recuperacionpass.component';
+import { LogsComponent } from './Modules/logs/logs.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/main' },
@@ -25,12 +27,8 @@ const routes: Routes = [
     component: MainComponent,
     ...canActivate(() => redirectUnauthorizedTo(['/login'])),
   },
-  {
-    path: 'registro',
-    component: RegistroComponent,
-    
-  },
   { path: 'login', component: LoginComponent },
+  { path: 'restablecer', component: RecuperacionpassComponent },
   {
     path: 'listmts',
     component: ViewmantenimientosComponent,
@@ -68,7 +66,10 @@ const routes: Routes = [
     component: ViewusuariosComponent,
     canActivate: [AuthGuard],
     data: {
-      authGuardPipe: () => redirectUnauthorizedTo(['/login'])
+      authGuardPipe: () => {
+        const userRole = localStorage.getItem('userRole');
+        return userRole === 'administrativo' ? true : redirectUnauthorizedTo(['/main']);
+      }
     }
   },
   {
@@ -82,6 +83,14 @@ const routes: Routes = [
   {
     path: 'estadistica',
     component: TablaEstadisticasComponent,
+    canActivate: [AuthGuard],
+    data: {
+      authGuardPipe: () => redirectUnauthorizedTo(['/login'])
+    }
+  },
+  {
+    path: 'logs',
+    component: LogsComponent,
     canActivate: [AuthGuard],
     data: {
       authGuardPipe: () => redirectUnauthorizedTo(['/login'])

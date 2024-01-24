@@ -1,53 +1,28 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, signInWithPopup, GoogleAuthProvider } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from '@angular/fire/auth';
 import { Firestore, collection, addDoc, doc, setDoc, updateDoc, collectionData, DocumentData } from '@angular/fire/firestore';
 import { Observable, from, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-
+import { getDocs, query, where } from 'firebase/firestore';
 import Usuarios from 'src/app/Interfaces/users.interfaces';
+import { LogService } from './logs.service';
+import Swal, { SweetAlertIcon } from 'sweetalert2';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor(private auth: Auth, private firestore: Firestore) { }
+  constructor(private auth: Auth, private firestore: Firestore, private logService: LogService) { }
 
   register({ email, password }: any) {
     return createUserWithEmailAndPassword(this.auth, email, password);
   }
 
 
-
-  
-  /* login({ email, password }: any) {
-    return signInWithEmailAndPassword(this.auth, email, password);
-  } */
-
-  /* async login({ email, password }: any): Promise<any> {
-    try {
-      const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
-      const usuario = await this.getUsuarioByEmail(email);
-
-      if (usuario && usuario.role === 'admin') {
-        return usuario;
-      } else {
-        // Si el usuario no es administrador, puedes lanzar un error o devolver null
-        throw new Error('Acceso no autorizado');
-      }
-    } catch (error) {
-      // Manejo de errores, por ejemplo, puedes lanzar un nuevo error o manejarlo de otra manera
-      throw new Error('Error durante el inicio de sesión: ' + error);
-    }
-  }
-
-  private async getUsuarioByEmail(email: string): Promise<any> {
-    const usuarioDocRef = collection(this.firestore, 'users');
-    const data = await collectionData(usuarioDocRef, { idField: 'email' });
-    const usuario = data.find((user) => user.email === email);
-    return usuario;
-  }
-   */
+ 
   login({ email, password }: any): Observable<any> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
       switchMap(() => this.getUsuarioByEmail(email)),
@@ -58,7 +33,9 @@ export class UserService {
     );
   }
 
-  private getUsuarioByEmail(email: string): Observable<any> {
+
+
+  getUsuarioByEmail(email: string): Observable<any> {
     const usuarioDocRef = collection(this.firestore, 'users');
     return collectionData(usuarioDocRef, { idField: 'email' }).pipe(
       switchMap(async (data: DocumentData[]) => {
@@ -66,7 +43,10 @@ export class UserService {
         if (usuario && usuario['rool'] === 'admin') {
           localStorage.setItem('userRole', 'admin');
           return usuario;
-        } else {
+        } else if (usuario && usuario['rool'] === 'administrativo') {
+          localStorage.setItem('userRole', 'administrativo');
+          return usuario;
+        }else {
           this.auth.signOut();
           throw new Error('Acceso no autorizado');
         }
@@ -86,12 +66,43 @@ export class UserService {
     return signOut(this.auth);
   }
 
-  addUsuario(usuario: Usuarios) {
+  async addUsuario(usuario: Usuarios) {
     const usuariosRef = collection(this.firestore, 'users');
-    // Asume que 'estado' es un campo que indica si el usuario está activo o no
-    usuario.estado = true;
+    const correoQuery = query(usuariosRef, where('email', '==', usuario.email));
+    const correoDocs = await getDocs(correoQuery);
+    if (!correoDocs.empty) {
+      console.error('Ya existe un usuario con el mismo correo electrónico');
+      return Promise.reject('correo_existente');
+    }
 
-    return addDoc(usuariosRef, usuario);
+    const unidadQuery = query(usuariosRef, where('unidad', '==', usuario.unidad));
+    const unidadDocs = await getDocs(unidadQuery);
+    if (!unidadDocs.empty) {
+      console.error('Ya existe un usuario con la misma unidad');
+      return Promise.reject('unidad_asignada');
+    }
+
+    const cedulaQuery = query(usuariosRef, where('id', '==', usuario.id));
+    const cedulaDocs = await getDocs(cedulaQuery);
+    if (!cedulaDocs.empty) {
+      console.error('Ya existe un usuario con la misma cédula');
+      return Promise.reject('cedula_existente');
+    }
+
+    usuario.estado = true;
+    const docRef = doc(usuariosRef, usuario.email);
+    const user = {
+      email: usuario.email,
+      password: 'mankar123'
+    };
+    return setDoc(docRef, usuario).then(() => {
+      this.register(user);
+      this.logService.createlog({
+        action: 'Agregado',
+        details: 'Nuevo usuario agregado',
+        registro: usuario,
+      });
+    });
   }
 
   getUsuario(): Observable<any> {
@@ -107,17 +118,66 @@ export class UserService {
     ) as Observable<any>;
   }
 
-  updateUsuario(email: string, newData: any) {
+  async updateUsuario(email: string, newData: any) {
+    const usuariosRef = collection(this.firestore, 'users');
+
+    const unidadQuery = query(usuariosRef, where('unidad', '==', newData.unidad));
+    const unidadDocs = await getDocs(unidadQuery);
+    if (!unidadDocs.empty && unidadDocs.docs[0].id !== email) {
+      console.error('Ya existe un usuario con la misma unidad');
+      return Promise.reject('unidad_asignada');
+    }
+  
+    const cedulaQuery = query(usuariosRef, where('id', '==', newData.id));
+    const cedulaDocs = await getDocs(cedulaQuery);
+    if (!cedulaDocs.empty && cedulaDocs.docs[0].id !== email) {
+      console.error('Ya existe un usuario con la misma cédula');
+      return Promise.reject('cedula_existente');
+    }
+
     const usuarioDocRef = doc(this.firestore, `users/${email}`);
- 
-    return setDoc(usuarioDocRef, newData);
+  
+  // Utiliza setDoc para actualizar el documento
+  return setDoc(usuarioDocRef, newData).then(() => {
+    // Llama a createlog para registrar la transacción con el objeto completo
+    return this.logService.createlog({
+      action: 'Actualizado',
+      details: 'Usuario actualizado',
+      registro: newData,
+    });
+  });
   }
+  async updateUsuario2(email: string, newData: any) {
+    const usuariosRef = collection(this.firestore, 'users');
 
-  deleteUsuario(email: string) {
     const usuarioDocRef = doc(this.firestore, `users/${email}`);
- 
-    return updateDoc(usuarioDocRef, { estado: false });
+  
+  // Utiliza setDoc para actualizar el documento
+  return setDoc(usuarioDocRef, newData).then(() => {
+    // Llama a createlog para registrar la transacción con el objeto completo
+    return this.logService.createlog({
+      action: 'Eliminado',
+      details: 'Usuario eliminado',
+      registro: newData,
+    });
+  });
   }
+  
 
+deleteUsuario(email: string) {
+    const usuarioDocRef = doc(this.firestore, `users/${email}`);
 
+    // Llama a createlog para registrar la transacción con el objeto completo
+    return updateDoc(usuarioDocRef, { estado: false }).then(() => {
+        this.logService.createlog({
+            action: 'Eliminado',
+            details: 'Usuario eliminado',
+            userEmail: email,
+        });
+    });
+}
+
+  async restablecerUsuario(email: string): Promise<void> {
+    return sendPasswordResetEmail(this.auth, email);
+  }
 }

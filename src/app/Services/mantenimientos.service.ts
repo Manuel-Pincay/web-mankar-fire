@@ -14,12 +14,28 @@ import {
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import Mantenimientos from '../Interfaces/mantenimientos.interfaces';
+import { LogService } from './logs.service';
 
 @Injectable({
   providedIn: 'root',
 })
+
 export class MantenimientosService {
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore, 
+    private logService: LogService ) {}
+
+ /*  addMantenimiento(mantenimiento: Mantenimientos) {
+    const mantenimientosRef = collection(this.firestore, 'mantenimientos');
+    mantenimiento.estado = true;
+
+    const docRef = addDoc(mantenimientosRef, mantenimiento);
+
+    return docRef.then((doc) => {
+      mantenimiento.key = doc.id;
+      return setDoc(doc, mantenimiento);
+    });
+    
+  } */
 
   addMantenimiento(mantenimiento: Mantenimientos) {
     const mantenimientosRef = collection(this.firestore, 'mantenimientos');
@@ -29,7 +45,14 @@ export class MantenimientosService {
 
     return docRef.then((doc) => {
       mantenimiento.key = doc.id;
-      return setDoc(doc, mantenimiento);
+      setDoc(doc, mantenimiento);
+
+      // Llama a createlog para registrar la transacción con el objeto completo
+      return this.logService.createlog({
+        action: 'Agregado',
+        details: 'Nuevo mantenimiento agregado',
+        registro: mantenimiento,
+      });
     });
   }
  
@@ -58,7 +81,15 @@ export class MantenimientosService {
       `mantenimientos/${mantenimiento.key}`
     );
     // Utiliza setDoc para actualizar el documento
-    return setDoc(mantenimientoDocRef, mantenimiento);
+    return setDoc(mantenimientoDocRef, mantenimiento).then(() => {
+      // Llama a createlog para registrar la transacción con el objeto completo
+      return this.logService.createlog({
+        action: 'Actualizado',
+        details: 'Mantenimiento actualizado',
+        registro: mantenimiento,
+      });
+    });
+  
   }
 
   deleteMantenimiento(mantenimiento: Mantenimientos) {
@@ -66,7 +97,15 @@ export class MantenimientosService {
       this.firestore,
       `mantenimientos/${mantenimiento.key}`
     );
-    // Utiliza updateDoc para cambiar el estado a true
-    return updateDoc(mantenimientoDocRef, { estado: false });
+
+    // Utiliza updateDoc para cambiar el estado a false
+    return updateDoc(mantenimientoDocRef, { estado: false }).then(() => {
+      // Llama a createlog para registrar la transacción con el objeto completo
+      return this.logService.createlog({
+        action: 'Eliminado',
+        details: 'Mantenimiento eliminado',
+        registro: mantenimiento,
+      });
+    });
   }
 }

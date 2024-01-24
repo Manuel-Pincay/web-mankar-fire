@@ -125,22 +125,22 @@
           <table class="table table-striped mt-4">
             <thead>
               <tr>
-                <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl">
+                <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl text-center">
                   Placa
                 </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium">
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
                   No. Chasis
                 </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium">
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
                   Kilometraje Actual
                 </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium">
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
                   Marca
                 </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium">
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
                   Cod. Unidad
                 </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium">
+                <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
                   Opciones
                 </th>
               </tr>
@@ -148,23 +148,23 @@
 
             <tbody>
               <tr *ngFor="let unidad of unidades">
-                <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad)">
+                <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad)" class="text-center">
                   {{ unidad.placa }}
                 </td>
-                <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad)">
+                <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad)" class="text-center">
                   {{ unidad.matricula }}
                 </td>
-                <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad)">
+                <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad)" class="text-center">
                   {{ unidad.kmac }}
                 </td>
-                <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad)">
+                <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad)" class="text-center">
                   {{ unidad.marca }}
                 </td>
                 <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad)" class="text-center">
                   0{{ unidad.unidad }}
                 </td>
 
-                <td>
+                <td  class="text-center">
                   <button (click)="confirmarEliminar(unidad)">
                     <i class="fas fa-trash-alt fa-lg text-danger"></i>
                   </button>
@@ -369,7 +369,7 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #cerrarModalBtn>
               Cerrar
             </button>
-            <button type="submit" (click)="guardarEdicionUnidad()" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary">
               Guardar
             </button>
           </div>

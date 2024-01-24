@@ -49,5 +49,10 @@ export class LoginComponent implements OnInit {
         }
       );
   }
+
+  redireccionarrestablecer() {
+    this.router.navigate(['/restablecer']);
+  }
+
   
 }

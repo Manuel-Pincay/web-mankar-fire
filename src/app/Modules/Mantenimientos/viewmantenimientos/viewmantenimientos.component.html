@@ -1,17 +1,4 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-  integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
-  </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-  integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous">
-  </script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
-  </script>
 
 <nav class="nav">
   <i class="uil uil-bars navOpenBtn"></i>
@@ -128,25 +115,25 @@
             <!-- class="table table-striped mt-5" -->
             <thead>
               <tr>
-                <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl">
+                <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl" class="text-center">
                   Placa
                 </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium">
+                <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
                   Chofer
                 </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium">
+                <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
                   Kilómetraje Actual
                 </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium">
+                <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
                   Kilómetraje Próximo
                 </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium">
+                <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
                   Tipo mantenimiento
                 </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium">
+                <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
                   Fecha
                 </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium">
+                <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
                   Opciones
                 </th>
               </tr>
@@ -155,37 +142,45 @@
             <tbody>
               <tr *ngFor="let mantenimiento of mantenimientos">
                 <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
-                  data-bs-target="#detalleMantenimientoModal">
+                  data-bs-target="#detalleMantenimientoModal" class="text-center">
                   {{ mantenimiento.placa }}
                 </td>
                 <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
-                  data-bs-target="#detalleMantenimientoModal">
+                  data-bs-target="#detalleMantenimientoModal" class="text-center">
                   {{ mantenimiento.chofer }}
                 </td>
                 <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal" 
-                  data-bs-target="#detalleMantenimientoModal">
+                  data-bs-target="#detalleMantenimientoModal" class="text-center">
                   {{ mantenimiento.kilometraje  | number: '1.0-0' }}
                 </td>
                 <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
-                  data-bs-target="#detalleMantenimientoModal"  >
-                  {{ mantenimiento.proxcambio  | number: '1.0-0' }}
+                  data-bs-target="#detalleMantenimientoModal" class="text-center"  >
+                  {{ mantenimiento.proxcambio < mantenimiento.kilometraje + 100 ? 'Indefinido' : mantenimiento.proxcambio | number: '1.0-0' }}
+
                 </td>
+
+
+                
+
+
+
+
                 <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
-                  data-bs-target="#detalleMantenimientoModal">
+                  data-bs-target="#detalleMantenimientoModal" class="text-center">
                   {{ mantenimiento.descripcion }}
                 </td>
                 <td (click)="verDetalles(mantenimiento)" data-bs-toggle="modal"
-                  data-bs-target="#detalleMantenimientoModal">
+                  data-bs-target="#detalleMantenimientoModal" class="text-center">
                   {{ mantenimiento.fecha | date: 'dd/MM/yyyy' }}
 
                 </td>
-                <td>
-                  <button (click)="confirmarEliminar(mantenimiento)">
+                <td class="text-center">
+                  <button (click)="confirmarEliminar(mantenimiento)" >
                     <i class="fas fa-trash-alt fa-lg text-danger"></i>
                   </button>
 
                   <button (click)="editarMantenimiento(mantenimiento)" data-bs-toggle="modal"
-                    data-bs-target="#editarMantenimientoModal" class="ml-4">
+                    data-bs-target="#editarMantenimientoModal" class="ml-4" >
                     <i class="fas fa-edit fa-lg text-info mr-4"></i>
                   </button>
                 </td>
@@ -224,11 +219,12 @@
               {{ detalleMantenimiento?.kilometraje }}
             </li>
             <li class="list-group-item">
-              <strong>Próximo Cambio:</strong>
-              {{ detalleMantenimiento?.proxcambio }}
+              <strong>Próximo Cambio:</strong> 
+              {{ detalleMantenimiento?.proxcambio < detalleMantenimiento?.kilometraje + 100 ? 'Indefinido' : detalleMantenimiento?.proxcambio | number: '1.0-0' }}
+
             </li>
             <li class="list-group-item">
-              <strong>Fecha:</strong> {{ detalleMantenimiento?.fecha }}
+              <strong>Fecha:</strong> {{ detalleMantenimiento?.fecha | date: 'dd/MM/yyyy' }}
             </li>
             <li class="list-group-item">
               <strong>Comentario:</strong>
@@ -277,7 +273,7 @@
         </div>
         <div class="modal-body">
           <!-- Formulario de edición -->
-          <form [formGroup]="formularioEdicion" (ngSubmit)="guardarEdicion()">
+          <form [formGroup]="formularioEdicion">
             <!-- Placa -->
             <div class="mb-3">
               <label for="placa" class="form-label">Placa:</label>
