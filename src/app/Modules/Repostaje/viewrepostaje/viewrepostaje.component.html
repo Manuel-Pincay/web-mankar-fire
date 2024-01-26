@@ -105,9 +105,9 @@
             data-bs-target="#agregarNuevoRepostaje">
             <i class="fas fa-plus"></i> Agregar repostaje
           </button>
+          <div class="table-container mt-4">
           <table class="table table-striped mt-4">
-
-            <thead>
+            <thead class="thead-fixed">
               <tr>
                 <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl" class="text-center">
                   Placa
@@ -133,10 +133,10 @@
                   {{ repostaje.placa }}
                 </td>
                 <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje)" class="text-center">
-                  {{ repostaje.kilometraje }}
+                  {{ repostaje.kilometraje | number: '1.0-0' }}
                 </td>
                 <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje)" class="text-center">
-                  {{ repostaje.cantidad }}
+                  {{ repostaje.cantidad | number: '1.0-0' }}
                 </td>
                 <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje)" class="text-center">
                   {{ repostaje.ruta }}
@@ -161,6 +161,7 @@
           </table>
         </div>
       </div>
+      </div>
     </div>
   </div>
 
@@ -184,10 +185,10 @@
               <strong>Placa:</strong> {{ detallerepostaje?.placa }}
             </li>
             <li class="list-group-item">
-              <strong>Kilometraje:</strong> {{ detallerepostaje?.kilometraje }}
+              <strong>Kilometraje:</strong> {{ detallerepostaje?.kilometraje  | number: '1.0-0' }}
             </li>
             <li class="list-group-item">
-              <strong>Galonaje:</strong> {{ detallerepostaje?.cantidad }}
+              <strong>Galonaje:</strong> {{ detallerepostaje?.cantidad  | number: '1.0-0' }}
             </li>
             <li class="list-group-item">
               <strong>Ruta:</strong> {{ detallerepostaje?.ruta }}

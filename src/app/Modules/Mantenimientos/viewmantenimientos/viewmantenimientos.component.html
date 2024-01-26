@@ -110,10 +110,11 @@
             data-bs-target="#agregarNuevoMantenimiento">
             <i class="fas fa-plus"></i> Agregar mantenimiento
           </button>
+          <div class="table-container mt-4">
           <table class="table table-striped mt-4">
             <!--     <table class="mt-5 table-auto content-table twhitespace-no-wrap"> -->
             <!-- class="table table-striped mt-5" -->
-            <thead>
+            <thead class="thead-fixed">
               <tr>
                 <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl" class="text-center">
                   Placa
@@ -190,6 +191,7 @@
         </div>
       </div>
     </div>
+    </div>
   </div>
 
   <!-- ----------------------------------------------------------------------- -->
@@ -216,7 +218,7 @@
             </li>
             <li class="list-group-item">
               <strong>Kilometraje:</strong>
-              {{ detalleMantenimiento?.kilometraje }}
+              {{ detalleMantenimiento?.kilometraje  | number: '1.0-0' }}
             </li>
             <li class="list-group-item">
               <strong>Próximo Cambio:</strong> 

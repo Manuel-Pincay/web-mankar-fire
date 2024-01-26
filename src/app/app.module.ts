@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
@@ -28,6 +28,8 @@ import { RecuperacionpassComponent } from './Modules/recuperacionpass/recuperaci
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LogsComponent } from './Modules/logs/logs.component';
+import { Tabla1Component } from './Modules/Estadisticas/tabla-1/tabla-1.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -45,11 +47,14 @@ import { LogsComponent } from './Modules/logs/logs.component';
     SidebarComponent,
     PageNotFoundComponent,
     LogsComponent,
+    Tabla1Component,
   ],
   imports: [
     BrowserModule,
     NgbModule,
     NgbModalModule,
+    CommonModule,
+    FormsModule,  
     AppRoutingModule,
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),

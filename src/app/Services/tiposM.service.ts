@@ -32,7 +32,9 @@ export class TiposMService {
 
     return collectionData(tiposMRef, { idField: 'nombre' }).pipe(
       map((data: any[]) => {
-        return data.map(tipoM => {
+        return data
+        .filter((tipoM) => tipoM.estado === true)
+        .map(tipoM => {
           return {
             ...tipoM,
           };

@@ -11,8 +11,11 @@ import {
   updateDoc,
   query,
   orderBy,
+  where,
+  getDocs,
+  and,
 } from '@angular/fire/firestore';
-import { Observable, map } from 'rxjs';
+import { Observable, from, map } from 'rxjs';
 import Mantenimientos from '../Interfaces/mantenimientos.interfaces';
 import { LogService } from './logs.service';
 
@@ -24,18 +27,6 @@ export class MantenimientosService {
   constructor(private firestore: Firestore, 
     private logService: LogService ) {}
 
- /*  addMantenimiento(mantenimiento: Mantenimientos) {
-    const mantenimientosRef = collection(this.firestore, 'mantenimientos');
-    mantenimiento.estado = true;
-
-    const docRef = addDoc(mantenimientosRef, mantenimiento);
-
-    return docRef.then((doc) => {
-      mantenimiento.key = doc.id;
-      return setDoc(doc, mantenimiento);
-    });
-    
-  } */
 
   addMantenimiento(mantenimiento: Mantenimientos) {
     const mantenimientosRef = collection(this.firestore, 'mantenimientos');
@@ -75,6 +66,96 @@ export class MantenimientosService {
     ) as Observable<Mantenimientos[]>;
   }
 
+
+  getMantenimientosPorUnidadYTipo(unidad: string, tipoMantenimiento: string): Observable<any[]> {
+    const mantenimientosQuery = query(collection(this.firestore, 'mantenimientos'),
+      and(
+        where('placa', '==', unidad),
+        where('descripcion', '==', tipoMantenimiento)
+      )
+    );
+  
+    return from(getDocs(mantenimientosQuery)).pipe(
+      map((querySnapshot) => {
+        const mantenimientos: any[] = [];
+        querySnapshot.forEach((doc) => {
+          mantenimientos.push(doc.data());
+        });
+        return mantenimientos;
+      })
+    );
+  }
+ 
+  
+  
+  
+/* 
+  getMantenimientosPorUnidadYTipo(unidad: string, tipoMantenimiento: string): Observable<any[]> {
+  const mantenimientosQuery = query(collection(this.firestore, 'mantenimientos'),
+    where('placa', '==', unidad)
+  );
+
+  return from(getDocs(mantenimientosQuery)).pipe(
+    map((querySnapshot) => {
+      const mantenimientos: any[] = [];
+      const conteoPorMes: { [mes: number]: number } = {};
+
+      querySnapshot.forEach((doc) => {
+        const mantenimiento = doc.data();
+        if (mantenimiento['descripcion'] === tipoMantenimiento) {
+          const fecha = new Date(mantenimiento['fecha']);
+          const mes = fecha.getMonth() + 1; // Meses en JavaScript van de 0 a 11
+          conteoPorMes[mes] = (conteoPorMes[mes] || 0) + 1;
+        }
+      });
+
+      const mantenimientosPorMes = Object.entries(conteoPorMes).map(([mes, cantidad]) => ({
+        mes: mes,
+        cantidad: cantidad
+      }));
+
+      return mantenimientosPorMes;
+    })
+  );
+} */
+
+/*   getMantenimientosPorUnidadYTipo(unidad: string, tipoMantenimiento: string): Observable<any[]> {
+    const mantenimientosQuery = query(collection(this.firestore, 'mantenimientos'),
+      and(
+        where('placa', '==', unidad),
+        where('descripcion', '==', tipoMantenimiento)
+      )
+    );
+  
+    return from(getDocs(mantenimientosQuery)).pipe(
+      map((querySnapshot) => {
+        const mantenimientos: any[] = [];
+        querySnapshot.forEach((doc) => {
+          mantenimientos.push(doc.data());
+        });
+        return mantenimientos;
+      })
+    );
+  }
+ */
+  getMantenimientosPorUnidad(placa: string):Observable<Mantenimientos[]> {
+
+    const mantenimientosQuery = query(collection(this.firestore, 'mantenimientos'),
+    where('placa', '==', placa)
+  );
+
+  return from(getDocs(mantenimientosQuery)).pipe(
+    map((querySnapshot) => {
+      const mantenimientos: any[] = [];
+      querySnapshot.forEach((doc) => {
+        mantenimientos.push(doc.data());
+      });
+      return mantenimientos;
+    })
+  );
+}
+ 
+  
   updateMantenimiento(mantenimiento: Mantenimientos) {
     const mantenimientoDocRef = doc(
       this.firestore,

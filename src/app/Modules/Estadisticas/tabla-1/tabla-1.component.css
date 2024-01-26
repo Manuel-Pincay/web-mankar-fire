@@ -17,6 +17,11 @@
     font-weight: bold;
   }
   
+  .content-table th,
+  .content-table td {
+    padding: 12px 15px;
+  }
+  
   .table-container {
     max-height: 70vh; 
     overflow-y: auto;
@@ -26,11 +31,6 @@
     top: 0;
     background-color: #fff;
     z-index: 1;
-  }
-
-  .content-table th,
-  .content-table td {
-    padding: 12px 15px;
   }
   
   .content-table tbody tr {
@@ -159,4 +159,4 @@
       right: 20px;
     }
   }
-  
+   

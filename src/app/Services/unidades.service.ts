@@ -45,7 +45,9 @@ export class UnidadesService {
     const orderedQuery = query(unidadesRef, orderBy('unidad', 'asc'));
     return collectionData(orderedQuery, { idField: 'placa' }).pipe(
       map((data: any[]) => {
-        return data.map((unidad) => {
+        return data
+        .filter((unidad) => unidad.estado === true)
+        .map((unidad) => {
           return {
             ...unidad,
           };

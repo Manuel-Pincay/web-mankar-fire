@@ -119,7 +119,7 @@ cambiarEstadoUsuario(usuario: any): void {
   usuario.estado = false;
 
   this.usuariosService
-    .updateUsuario2(usuario.mail, usuario)
+    .updateUsuario2(usuario)
     .then(() =>
       this.handleSuccess('Usuario deshabilitado correctamente', 'success', usuario)
     )

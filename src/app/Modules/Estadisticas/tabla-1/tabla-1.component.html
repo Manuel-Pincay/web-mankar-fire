@@ -1,0 +1,77 @@
+<nav class="nav">
+  <i class="uil uil-bars navOpenBtn"></i>
+  <a href="#" class="logo">APPWEB MANKAR</a>
+  <ul class="nav-links">
+
+  </ul>
+</nav>
+
+<!-- start: Sidebar -->
+<app-sidebar></app-sidebar>
+
+
+<section class="text-gray-600 body-font">
+  <div class="container px-5 py-24 mx-auto">
+
+
+<!-- 
+
+
+    <div>
+      <label for="unidad">Selecciona una unidad:</label>
+      <select id="unidad" [(ngModel)]="selectedUnidad" (change)="actualizarDatos()">
+        <option value="" disabled selected>Selecciona una placa</option>
+        <option *ngFor="let unidad of unidades$ | async" [value]="unidad.placa">{{ unidad.placa }}</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="tipoMantenimiento">Selecciona un tipo de mantenimiento:</label>
+      <select id="tipoMantenimiento" [(ngModel)]="selectedTipoMantenimiento" (change)="actualizarDatos()">
+        <option value="" disabled selected>Selecciona un tipo de mantenimiento</option>
+        <option *ngFor="let tipoMantenimiento of tiposM$ | async" [value]="tipoMantenimiento.nombre">
+          {{ tipoMantenimiento.nombre }}
+        </option>
+      </select>
+    </div>
+
+    <div>
+      <canvas id="miGrafico"></canvas>
+    </div>
+ -->
+ <button (click)="buscar()">Buscar</button>
+
+<div>
+  <label for="unidad">Selecciona una unidad:</label>
+  <select id="unidad" [(ngModel)]="selectedUnidad">
+    <option value="" disabled selected>Selecciona una placa</option>
+    <option *ngFor="let unidad of unidades$ | async" [value]="unidad.placa">{{ unidad.placa }}</option>
+  </select>
+</div>
+
+<div>
+  <label for="tipoMantenimiento">Selecciona un tipo de mantenimiento:</label>
+  <select id="tipoMantenimiento" [(ngModel)]="selectedTipoMantenimiento">
+    <option value="" disabled selected>Selecciona un tipo de mantenimiento</option>
+    <option *ngFor="let tipoMantenimiento of tiposM$ | async" [value]="tipoMantenimiento.nombre">
+      {{ tipoMantenimiento.nombre }}
+    </option>
+  </select>
+</div>
+<div>
+  <label for="year">Selecciona un año:</label>
+  <select id="year" [(ngModel)]="selectedYear"  >
+    <option value="" disabled selected>Selecciona un año</option>
+    <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+  </select>
+</div>
+
+
+<div>
+  <canvas id="miGrafico"></canvas>
+</div>
+
+
+  </div>
+
+</section>

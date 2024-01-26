@@ -117,13 +117,14 @@
     <div class="container mt-4">
       <div class="card">
         <div class="card-body">
-          <span class="h2">Lista de Unidades</span>
+          <span class="h2">Unidades</span>
           <button style="background-color: #2c7bfe" class="btn btn-success btn-lg float-right" data-bs-toggle="modal"
             data-bs-target="#agregarNuevaUnidad">
             <i class="fas fa-plus"></i> Agregar Unidad
           </button>
+          <div class="table-container mt-4">
           <table class="table table-striped mt-4">
-            <thead>
+            <thead class="thead-fixed">
               <tr>
                 <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl text-center">
                   Placa
@@ -155,7 +156,7 @@
                   {{ unidad.matricula }}
                 </td>
                 <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad)" class="text-center">
-                  {{ unidad.kmac }}
+                  {{ unidad.kmac | number: '1.0-0' }}
                 </td>
                 <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad)" class="text-center">
                   {{ unidad.marca }}
@@ -179,6 +180,7 @@
           </table>
         </div>
       </div>
+    </div>
     </div>
   </div>
 
@@ -212,7 +214,7 @@
             </li>
 
             <li class="list-group-item">
-              <strong>Kilometraje:</strong> {{ detalleunidad?.kmac }}
+              <strong>Kilometraje:</strong> {{ detalleunidad?.kmac | number: '1.0-0' }}
             </li>
             <li class="list-group-item">
               <strong>Marca:</strong> {{ detalleunidad?.marca }}

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, getAuth, updateProfile, deleteUser } from '@angular/fire/auth';
 import { Firestore, collection, addDoc, doc, setDoc, updateDoc, collectionData, DocumentData } from '@angular/fire/firestore';
 import { Observable, from, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
@@ -109,7 +109,9 @@ export class UserService {
     const usuarioDocRef = collection(this.firestore, `users`);
     return collectionData(usuarioDocRef, { idField: 'email' }).pipe(
       map((data: any[]) => {
-        return data.map(usuario => {
+        return data
+        .filter((usuario) => usuario.estado === true)
+        .map(usuario => {
           return {
             ...usuario,
           };
@@ -147,36 +149,22 @@ export class UserService {
     });
   });
   }
-  async updateUsuario2(email: string, newData: any) {
-    const usuariosRef = collection(this.firestore, 'users');
-
-    const usuarioDocRef = doc(this.firestore, `users/${email}`);
+  async updateUsuario2(usuario: Usuarios) {
+ 
+    const usuarioDocRef = doc(this.firestore, `users/${usuario.email}`);
   
   // Utiliza setDoc para actualizar el documento
-  return setDoc(usuarioDocRef, newData).then(() => {
+  return setDoc(usuarioDocRef, usuario).then(() => {
     // Llama a createlog para registrar la transacción con el objeto completo
     return this.logService.createlog({
-      action: 'Eliminado',
+      action: 'eliminado',
       details: 'Usuario eliminado',
-      registro: newData,
+      registro: usuario,
     });
   });
   }
+ 
   
-
-deleteUsuario(email: string) {
-    const usuarioDocRef = doc(this.firestore, `users/${email}`);
-
-    // Llama a createlog para registrar la transacción con el objeto completo
-    return updateDoc(usuarioDocRef, { estado: false }).then(() => {
-        this.logService.createlog({
-            action: 'Eliminado',
-            details: 'Usuario eliminado',
-            userEmail: email,
-        });
-    });
-}
-
   async restablecerUsuario(email: string): Promise<void> {
     return sendPasswordResetEmail(this.auth, email);
   }

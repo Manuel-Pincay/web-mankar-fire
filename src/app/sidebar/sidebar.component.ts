@@ -17,7 +17,7 @@ import { UserService } from '../Services/user.service';
       </div>
       <ul class="sidebar-menu p-3 m-0 mb-0">
         <li class="sidebar-menu-item active">
-          <a href="#">
+          <a (click)="redireccionarMain()">
             <i class="ri-dashboard-line sidebar-menu-item-icon"></i>
             Home
           </a>
@@ -79,12 +79,7 @@ import { UserService } from '../Services/user.service';
           </a>
         </li>
 
-        <li class="sidebar-menu-item">
-          <a href="#">
-            <i class="ri-mail-line sidebar-menu-item-icon"></i>
-            Email
-          </a>
-        </li>
+        
         <li class="sidebar-menu-item">
           <a (click)="logoutClick()">
             <i class="ri-logout-box-line sidebar-menu-item-icon" ></i>
@@ -108,6 +103,10 @@ export class SidebarComponent {
   return userRole === 'admin';
   }
 
+
+  redireccionarMain() {
+    this.router.navigate(['/main']);
+  }
   redireccionarMantenimientos() {
     this.router.navigate(['/listmts']);
   }
