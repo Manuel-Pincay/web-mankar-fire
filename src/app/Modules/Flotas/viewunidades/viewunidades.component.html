@@ -40,6 +40,9 @@
           </div>
           <div class="modal-body">
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="alert alert-danger" *ngIf="shouldShowPlacaError()">
+                La placa debe tener tres letras seguidas de entre 3 y 4 dígitos numéricos.
+              </div>
               <!-- Placa -->
               <div class="form-group">
                 <label for="placa">Placa:</label>

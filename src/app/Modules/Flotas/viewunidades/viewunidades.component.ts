@@ -33,7 +33,7 @@ export class ViewunidadesComponent implements OnInit {
   ) {
 
     this.form = this.fb.group({
-      placa: ['', Validators.required],
+      placa: ['',[Validators.required, Validators.pattern('[A-Za-z]{3}\\d{3,4}')]],
       unidad: [null, [Validators.required, Validators.min(1)]],
       year: [null, [Validators.required, Validators.min(1900)]],
       chofer: ['', Validators.required],
@@ -46,7 +46,7 @@ export class ViewunidadesComponent implements OnInit {
       estado: [true, Validators.required],
     });
     this.formularioEdicion = this.fb.group({
-      placa: ['', Validators.required],
+      placa: ['',[Validators.required, Validators.pattern('[A-Za-z]{3}\\d{3,4}')]],
       unidad: [null, [Validators.required, Validators.min(1)]],
       year: ['', Validators.required],
       chofer: ['', Validators.required],
@@ -59,7 +59,11 @@ export class ViewunidadesComponent implements OnInit {
       estado: [true, Validators.required],
     });
   }
-
+  shouldShowPlacaError(): boolean {
+    const placaControl = this.form.get('placa');
+    return !!placaControl && placaControl.hasError('pattern') && placaControl.touched;
+  }
+  
   
   ngOnInit(): void { 
 
@@ -73,6 +77,10 @@ export class ViewunidadesComponent implements OnInit {
     console.log('tocaste', verunidad);
     this.detalleunidad = verunidad;
   }
+
+
+
+
 
   // ========================================================================================== //
   // Función para confirmar la eliminación de un mantenimiento

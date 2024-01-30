@@ -188,7 +188,7 @@ export class Tabla1Component implements OnInit {
   
   
   cargarDatosFirebase() {
-    this.mantenimientosService
+  /*   this.mantenimientosService
       .getMantenimientosPorUnidadTipoYYear(this.selectedUnidad, this.selectedTipoMantenimiento, this.selectedYear)
       .subscribe(
         (data: any[]) => {
@@ -220,7 +220,7 @@ export class Tabla1Component implements OnInit {
         (error: any) => {
           console.error('Error al cargar datos desde Firebase:', error);
         },
-      );
+      ); */
   }
   configurarGrafico(meses: string[], cantidades: number[]) {
     if (this.chart) {
