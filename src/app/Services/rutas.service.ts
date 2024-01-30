@@ -11,6 +11,7 @@ import {
   query,
   orderBy,
   limit,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import Rutas from '../Interfaces/rutas.interfaces';
@@ -40,12 +41,11 @@ export class RutasService {
       llegada: ruta.llegada,
       npeajes: ruta.npeajes,
       nombre,
-      estado: true, // Puedes ajustar esto según tus necesidades o lógica específica
+      estado: true,
     };
   
     const docRef = doc(rutasCollection, nuevoId.toString());
 
-    // Llama a createlog para registrar la transacción con el objeto completo
     return setDoc(docRef, nuevaRuta).then(() => {
       this.logService.createlog({
         action: 'Guardada',
@@ -69,6 +69,20 @@ export class RutasService {
       })
     ) as Observable<Rutas[]>;
   }
+  getRutasDel(): Observable<Rutas[]> {
+    const rutasRef = collection(this.firestore, 'rutas');
+    return collectionData(rutasRef, { idField: 'id' }).pipe(
+      map((data: any[]) => {
+        return data
+          .filter((ruta) => ruta.estado === false)
+          .map((ruta) => {
+            return {
+              ...ruta,
+            };
+          });
+      })
+    ) as Observable<Rutas[]>;
+  }
 
  
   updateRuta(ruta: Rutas) {
@@ -78,8 +92,6 @@ export class RutasService {
       ...ruta,
       nombre: nombre,
     };
-
-    // Llama a createlog para registrar la transacción con el objeto completo
     return setDoc(rutaDocRef, rutaActualizada).then(() => {
       this.logService.createlog({
         action: 'Actualizada',
@@ -91,12 +103,20 @@ export class RutasService {
 
   deleteRuta(ruta: Rutas) {
     const rutaDocRef = doc(this.firestore, `rutas/${ruta.id}`);
-
-    // Llama a createlog para registrar la transacción con el objeto completo
-    return deleteDoc(rutaDocRef).then(() => {
+    return updateDoc(rutaDocRef, { estado: false }).then(() => {
       this.logService.createlog({
         action: 'Eliminada',
         details: 'Ruta eliminada',
+        registro: ruta,
+      });
+    });
+  }
+  resetRuta(ruta: Rutas) {
+    const rutaDocRef = doc(this.firestore, `rutas/${ruta.id}`);
+    return updateDoc(rutaDocRef, { estado: true }).then(() => {
+      this.logService.createlog({
+        action: 'Recuperada',
+        details: 'Ruta recuperada',
         registro: ruta,
       });
     });

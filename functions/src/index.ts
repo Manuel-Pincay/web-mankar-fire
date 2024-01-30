@@ -1,36 +1,54 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-const firebase = require('firebase');
+ 
 
 admin.initializeApp();
-
 const db = admin.firestore();
 
+
 exports.creacionmantenimientos = functions.firestore
-  .document('mantenimientos/{mantenimientosId}')
-  .onCreate(async (snap, context) => {
-    const mantenimiento = snap.data();
-    const email = getEmailFromAuth();
+.document("mantenimientos/{mantenimientosId}")
+.onCreate((snap: functions.firestore.QueryDocumentSnapshot, context: functions.EventContext) => {
+  const mantenimiento = snap.data();
+  const uid = context.auth ? context.auth.uid : null; 
 
-    return db.collection('logs').add({
-      accion: 'Creación',
-      fecha: new Date().toISOString(),
-      data: mantenimiento,
-      email: email,
-    });
+  return db.collection("logs").add({
+    accion: "Creación",
+    fecha: new Date().toISOString(),
+    data: {
+      mantenimiento,
+    },
+    usuario: uid
   });
+});
 
-function getEmailFromAuth() {
-  const auth = firebase.auth();
-  const user = auth.currentUser;
 
-  if (user) {
-    return user.email;
-  } else {
-    return 'Usuario no autenticado';
-  }
-}
+/* export const creacionMantenimientos1 = functions.firestore
+  .document("mantenimientos/{mantenimientosId}")
+  .onCreate((snap: QueryDocumentSnapshot, context: functions.EventContext) => {
+    const mantenimiento = snap.data();
 
+    // Using functions().auth() instead of the outdated way
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      return db.collection("logs").add({
+        accion: "Creación",
+        fecha: new Date().toISOString(),
+        data: mantenimiento,
+        usuario: user.email,
+      });
+    } else {
+      return db.collection("logs").add({
+        accion: "Creación",
+        fecha: new Date().toISOString(),
+        data: mantenimiento,
+        usuario: "Usuario no autenticado",
+      });
+    }
+  });
+ */
 /* 
 exports.creacionmantenimientos = functions.auth.user().onCreate(async (user) => {
   const { uid, email } = user;

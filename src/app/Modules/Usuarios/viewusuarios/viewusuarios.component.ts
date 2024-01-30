@@ -15,6 +15,7 @@ import Unidades from 'src/app/Interfaces/unidades.interfaces';
 export class ViewusuariosComponent implements OnInit{
 
   usuarios: Usuarios[] = [];
+  usuarios2: Usuarios[] = [];
   form: FormGroup;
   formularioEdicion: FormGroup;
   unidades$: Observable<Unidades[]> = of([]);
@@ -74,6 +75,9 @@ export class ViewusuariosComponent implements OnInit{
     this.unidades$ = this.unidadesService.getUnidades();
     this.usuariosService.getUsuario().subscribe((data) => {
       this.usuarios = data;
+    })
+    this.usuariosService.getUsuarioDel().subscribe((data) => {
+      this.usuarios2 = data;
     })
   }
 
@@ -147,6 +151,25 @@ cambiarEstadoUsuario(usuario: any): void {
     )
     .catch((error) =>
       this.handleError('Error al deshabilitar usuario', 'error')
+    );
+}
+
+confirmarRecuperar(usuario: any): void {
+  if (window.confirm('¿Seguro que deseas recuperar este usuario?')) {
+    this.recuperarUsuario(usuario);
+  }
+}
+
+recuperarUsuario(usuario: any): void {
+  usuario.estado = true;
+
+  this.usuariosService
+    .resetUsuario(usuario)
+    .then(() =>
+      this.handleSuccess('Usuario recuperado correctamente', 'success', usuario)
+    )
+    .catch((error) =>
+      this.handleError('Error al recuperar usuario', 'error')
     );
 }
 

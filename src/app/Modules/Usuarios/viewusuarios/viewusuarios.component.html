@@ -149,6 +149,51 @@
           </table>
         </div>
       </div>
+
+      <div class="card-body">
+        <span class="h2">Usuarios eliminados</span>
+        <div class="table-container mt-4">
+        <table class="table table-striped mt-4">
+          <thead class="thead-fixed">
+            <tr>
+              <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl" class="text-center">
+                Nombre
+              </th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
+                Correo electrónico
+              </th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
+                Rol
+              </th>
+            
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let usuario2 of usuarios2">
+              <td (click)="verDetalles(usuario2)" data-bs-toggle="modal" 
+              data-bs-target="#detalleUsuarioModal" class="text-center">
+                {{ usuario2.name }}
+              </td>
+              <td (click)="verDetalles(usuario2)" data-bs-toggle="modal" 
+              data-bs-target="#detalleUsuarioModal" class="text-center">
+                {{ usuario2.email }}
+              </td>
+              <td (click)="verDetalles(usuario2)" data-bs-toggle="modal" 
+              data-bs-target="#detalleUsuarioModal" class="text-center">
+                {{ usuario2.rool }}
+              </td>
+
+              <td>
+                <button (click)="confirmarRecuperar(usuario2)">
+                  <i class="fas ri-device-recover-line fa-lg text-primary"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
       </div>
     </div>
   </div>

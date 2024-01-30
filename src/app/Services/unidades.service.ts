@@ -55,6 +55,21 @@ export class UnidadesService {
       })
     ) as Observable<Unidades[]>;
   }
+  getUnidadesDel(): Observable<Unidades[]> {
+    const unidadesRef = collection(this.firestore, 'flota');
+    const orderedQuery = query(unidadesRef, orderBy('unidad', 'asc'));
+    return collectionData(orderedQuery, { idField: 'placa' }).pipe(
+      map((data: any[]) => {
+        return data
+        .filter((unidad) => unidad.estado === false)
+        .map((unidad) => {
+          return {
+            ...unidad,
+          };
+        });
+      })
+    ) as Observable<Unidades[]>;
+  }
   getUnidad(placa: string): Observable<Unidades> {
     const unidadRef = doc(this.firestore, 'flota', placa);
 
@@ -63,7 +78,6 @@ export class UnidadesService {
         if (snapshot.exists()) {
           return snapshot.data() as Unidades;
         } else {
-          // Puedes manejar el caso cuando la unidad no existe, por ejemplo, lanzar un error o devolver un objeto predeterminado
           throw new Error(`La unidad con placa ${placa} no existe.`);
         }
       })
@@ -72,9 +86,7 @@ export class UnidadesService {
 
   updateUnidad(unidad: Unidades) {
     const unidadDocRef = doc(this.firestore, `flota/${unidad.placa}`);
-    // Utiliza setDoc para actualizar el documento
     return setDoc(unidadDocRef, unidad).then(() => {
-      // Llama a createlog para registrar la transacción con el objeto completo
       this.logService.createlog({
         action: 'Actualizada',
         details: 'Unidad actualizada',
@@ -85,11 +97,20 @@ export class UnidadesService {
 
   deleteUnidad(unidad: Unidades) {
     const unidadDocRef = doc(this.firestore, `flota/${unidad.placa}`);
-    // Llama a createlog para registrar la transacción con el objeto completo
     return updateDoc(unidadDocRef, { estado: false }).then(() => {
       this.logService.createlog({
         action: 'Eliminada',
         details: 'Unidad eliminada',
+        registro: unidad,
+      });
+    });
+  }
+  resetUnidad(unidad: Unidades) {
+    const unidadDocRef = doc(this.firestore, `flota/${unidad.placa}`);
+    return updateDoc(unidadDocRef, { estado: true }).then(() => {
+      this.logService.createlog({
+        action: 'Recuperada',
+        details: 'Unidad recuperada',
         registro: unidad,
       });
     });

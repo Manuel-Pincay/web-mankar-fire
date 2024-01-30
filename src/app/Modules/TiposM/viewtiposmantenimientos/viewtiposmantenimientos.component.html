@@ -116,6 +116,46 @@
           </table>
         </div>
       </div>
+
+      <div class="card-body">
+        <span class="h2">Lista de tipos de mantenimientos eliminados</span>
+        <div class="table-container mt-4">
+        <table class="table table-striped mt-4">
+          <thead class="thead-fixed">
+            <tr>
+              <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl" class="text-center">
+                Nombre
+              </th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
+                Duración en kilómetros
+              </th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
+                Opciones
+              </th>
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let tiposMante2 of tiposMante2">
+              <td data-bs-toggle="modal" data-bs-target="#detalletiposMModal" (click)="verDetalles(tiposMante2)"
+                class="text-center">
+                {{ tiposMante2.nombre }}
+              </td>
+              <td data-bs-toggle="modal" data-bs-target="#detalletiposMModal" (click)="verDetalles(tiposMante2)"
+                class="text-center">
+                {{ tiposMante2.prox < 100 ? 'Indefinido' : tiposMante2.prox | number: '1.0-0' }} </td>
+
+              <td class="text-center">
+                <button (click)="confirmarRecuperar(tiposMante2)">
+                  <i class="fas ri-device-recover-line fa-lg text-primary"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
       </div>
     </div>
   </div>

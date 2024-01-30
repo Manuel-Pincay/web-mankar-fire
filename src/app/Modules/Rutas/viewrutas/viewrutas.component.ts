@@ -13,6 +13,7 @@ import { Observable, of } from 'rxjs';
 })
 export class ViewrutasComponent implements OnInit{
   rutas: Rutas[] = [];
+  rutas2: Rutas[] = [];
   detalleruta: any;
   form: FormGroup;
   formularioEdicion: FormGroup; 
@@ -49,6 +50,9 @@ export class ViewrutasComponent implements OnInit{
     this.RutasService.getRutas().subscribe((data) => {
       this.rutas = data;
     })
+    this.RutasService.getRutasDel().subscribe((data) => {
+      this.rutas2 = data;
+    })
   }
 
   verDetalles(verruta: any) {
@@ -72,6 +76,18 @@ export class ViewrutasComponent implements OnInit{
     this.RutasService.deleteRuta(rutas)
       .then(() => this.handleSuccess('Eliminada correctamente', 'success', rutas))
       .catch(error => this.handleError('Error al eliminar ruta', 'error'));
+  }
+
+  confirmarRecuperar(rutas: any): void {
+    if (window.confirm('¿Seguro que deseas recuperar esta ruta?')) {
+      this.recuperarRutas(rutas);
+    }
+  }
+  recuperarRutas(rutas: any): void {
+    rutas.estado = true;
+    this.RutasService.resetRuta(rutas)
+      .then(() => this.handleSuccess('Recuperar correctamente', 'success', rutas))
+      .catch(error => this.handleError('Error al recuperar ruta', 'error'));
   }
 
   private handleSuccess(title: string, icon: SweetAlertIcon, rutas: any): void {

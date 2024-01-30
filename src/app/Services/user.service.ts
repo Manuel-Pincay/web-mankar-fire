@@ -120,6 +120,21 @@ export class UserService {
     ) as Observable<any>;
   }
 
+  getUsuarioDel(): Observable<any> {
+    const usuarioDocRef = collection(this.firestore, `users`);
+    return collectionData(usuarioDocRef, { idField: 'email' }).pipe(
+      map((data: any[]) => {
+        return data
+        .filter((usuario) => usuario.estado === false)
+        .map(usuario => {
+          return {
+            ...usuario,
+          };
+        });
+      })
+    ) as Observable<any>;
+  }
+
   async updateUsuario(email: string, newData: any) {
     const usuariosRef = collection(this.firestore, 'users');
 
@@ -149,16 +164,30 @@ export class UserService {
     });
   });
   }
+
   async updateUsuario2(usuario: Usuarios) {
  
     const usuarioDocRef = doc(this.firestore, `users/${usuario.email}`);
   
   // Utiliza setDoc para actualizar el documento
-  return setDoc(usuarioDocRef, usuario).then(() => {
+  return updateDoc(usuarioDocRef,  { estado: false }).then(() => {
     // Llama a createlog para registrar la transacción con el objeto completo
     return this.logService.createlog({
-      action: 'eliminado',
+      action: 'Eliminado',
       details: 'Usuario eliminado',
+      registro: usuario,
+    });
+  });
+  }
+
+  async resetUsuario(usuario: Usuarios) {
+  const usuarioDocRef = doc(this.firestore, `users/${usuario.email}`);
+  // Utiliza setDoc para actualizar el documento
+  return updateDoc(usuarioDocRef,  { estado: true }).then(() => {
+    // Llama a createlog para registrar la transacción con el objeto completo
+    return this.logService.createlog({
+      action: 'Recuperado',
+      details: 'Usuario recuperado',
       registro: usuario,
     });
   });

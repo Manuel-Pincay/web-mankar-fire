@@ -25,6 +25,7 @@ import { RutasService } from 'src/app/Services/rutas.service';
 })
 export class ViewrepostajeComponent {
   repostajes: Repostajes[] = [];
+  repostajes2: Repostajes[] = [];
   detallerepostaje: any;
   form: FormGroup;
   unidades$: Observable<Unidades[]> = of([]);
@@ -71,6 +72,9 @@ export class ViewrepostajeComponent {
     this.repostajesService.getRepostajes().subscribe((data) => {
       this.repostajes = data;
     });
+    this.repostajesService.getRepostajesDel().subscribe((data) => {
+      this.repostajes2 = data;
+    });
   }
 
   verDetalles(verrepostaje: any) {
@@ -96,6 +100,24 @@ export class ViewrepostajeComponent {
       )
       .catch((error) =>
         this.handleError('Error al eliminar repostaje', 'error')
+      );
+  }
+
+  confirmarRecuperar(repostaje: any): void {
+    const confirmacion = window.confirm('¿Seguro que desea recuperar este repostaje?');
+    if (confirmacion) {
+      this.recuperarunidad(repostaje);
+    }
+  }
+  recuperarunidad(repostaje: any): void {
+    repostaje.estado = true;
+    this.repostajesService
+      .resetRepostaje(repostaje)
+      .then(() =>
+        this.handleSuccess('Recuperado correctamente', 'success', repostaje)
+      )
+      .catch((error) =>
+        this.handleError('Error al recuperar repostaje', 'error')
       );
   }
   // ========================================================================================== //

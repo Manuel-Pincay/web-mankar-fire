@@ -14,6 +14,7 @@ import { Observable, of } from 'rxjs';
 export class ViewtiposmantenimientosComponent implements OnInit {
 
   tiposMante: ListatiposM[] = [];
+  tiposMante2: ListatiposM[] = [];
   detalletiposM: any;
   form: FormGroup;
   formularioEdicion: FormGroup; 
@@ -44,6 +45,9 @@ export class ViewtiposmantenimientosComponent implements OnInit {
 
     this.tiposmanteService.getTiposM().subscribe((data) => {
       this.tiposMante = data;
+    })
+    this.tiposmanteService.getTiposMDel().subscribe((data) => {
+      this.tiposMante2 = data;
     })
 
   }
@@ -109,6 +113,18 @@ export class ViewtiposmantenimientosComponent implements OnInit {
     this.tiposmanteService.deleteTipoM(tiposM)
       .then(() => this.handleSuccess('Eliminado correctamente', 'success', tiposM))
       .catch(error => this.handleError('Error al eliminar el tipo de mantenimiento', 'error'));
+  }
+
+  confirmarRecuperar(tiposM: any): void {
+    if (window.confirm('¿Seguro que desea recuperar este tipo de mantenimiento?')) {
+      this.RecuperarTiposM(tiposM);
+    }
+  }
+  RecuperarTiposM(tiposM: any): void {
+    tiposM.estado = true;
+    this.tiposmanteService.resetTipoM(tiposM)
+      .then(() => this.handleSuccess('Recuperado correctamente', 'success', tiposM))
+      .catch(error => this.handleError('Error al recuperar el tipo de mantenimiento', 'error'));
   }
 
   private handleSuccess(title: string, icon: SweetAlertIcon, tiposM: any): void {

@@ -16,6 +16,7 @@ import { Observable, of } from 'rxjs';
 })
 export class ViewunidadesComponent implements OnInit {
   unidades: Unidades[] = [];
+  unidades2: Unidades[] = [];
   detalleunidad: any;
   form: FormGroup;
   formularioEdicion: FormGroup; 
@@ -71,6 +72,9 @@ export class ViewunidadesComponent implements OnInit {
     this.unidadesService.getUnidades().subscribe((data) => {
       this.unidades = data;
     });
+    this.unidadesService.getUnidadesDel().subscribe((data) => {
+      this.unidades2 = data;
+    });
 
   }
 
@@ -99,6 +103,21 @@ export class ViewunidadesComponent implements OnInit {
     this.unidadesService.deleteUnidad(unidad)
       .then(() => this.handleSuccess('Eliminada correctamente', 'success', unidad))
       .catch(error => this.handleError('Error al eliminar la unidad', 'error'));
+  }
+
+  confirmarRecuperar(unidad: any): void {
+    const confirmacion = window.confirm(
+      '¿Seguro que desea recuperar esta unidad?'
+    );
+    if (confirmacion) {
+      this.recuperarunidad(unidad);
+    }
+  }
+  recuperarunidad(unidad: any): void {
+    unidad.estado = false;
+    this.unidadesService.resetUnidad(unidad)
+      .then(() => this.handleSuccess('Recuperada correctamente', 'success', unidad))
+      .catch(error => this.handleError('Error al recuperar la unidad', 'error'));
   }
   // ========================================================================================== //
   // Función de alertas

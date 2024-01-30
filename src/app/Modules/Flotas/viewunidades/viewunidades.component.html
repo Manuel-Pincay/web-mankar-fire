@@ -180,6 +180,62 @@
           </table>
         </div>
       </div>
+
+      <div class="card-body">
+        <span class="h2">Unidades registradas</span>
+        <div class="table-container mt-4">
+        <table class="table table-striped mt-4">
+          <thead class="thead-fixed">
+            <tr>
+              <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl text-center">
+                Placa
+              </th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                No. chasis
+              </th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                Kilometraje actual
+              </th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                Marca
+              </th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                Cod. unidad
+              </th>
+              <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                Opciones
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let unidad2 of unidades2">
+              <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad2)" class="text-center">
+                {{ unidad2.placa }}
+              </td>
+              <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad2)" class="text-center">
+                {{ unidad2.matricula }}
+              </td>
+              <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad2)" class="text-center">
+                {{ unidad2.kmac | number: '1.0-0' }}
+              </td>
+              <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad2)" class="text-center">
+                {{ unidad2.marca }}
+              </td>
+              <td data-bs-toggle="modal" data-bs-target="#detalleunidadModal" (click)="verDetalles(unidad2)" class="text-center">
+                0{{ unidad2.unidad }}
+              </td>
+
+              <td  class="text-center">
+                <button (click)="confirmarRecuperar(unidad2)">
+                  <i class="fas ri-device-recover-line fa-lg text-primary"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
     </div>
     </div>
   </div>

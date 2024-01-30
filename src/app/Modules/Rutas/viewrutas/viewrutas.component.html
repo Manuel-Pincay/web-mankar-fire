@@ -133,6 +133,57 @@
           </table>
         </div>
       </div>
+
+
+      <div class="card-body">
+        <span class="h2">Lista de rutas eliminadas</span>
+
+        <div class="table-container mt-4">
+          
+          <table class="table table-striped mt-4">
+            <thead class="thead-fixed">
+              <tr>
+                <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl text-center">
+                  Nombre ruta
+                </th>
+                <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
+                  Salida
+                </th>
+                <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
+                  Llegada
+                </th>
+                <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
+                  Numero de peajes
+                </th>
+                <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
+                  Opciones
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let rutas2 of rutas2">
+              <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas2)" class="text-center">
+                {{ rutas2.nombre }}
+              </td>
+              <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas2)" class="text-center">
+                {{ rutas2.salida }}
+              </td>
+              <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas2)" class="text-center">
+                {{ rutas2.llegada }}
+              </td>
+              <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas2)" class="text-center">
+                {{ rutas2.npeajes }}
+              </td>
+               <td class="text-center">
+                <button (click)="confirmarRecuperar(rutas2)">
+                  <i class="fas ri-device-recover-line fa-lg text-primary"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
     </div>
   </div>
 

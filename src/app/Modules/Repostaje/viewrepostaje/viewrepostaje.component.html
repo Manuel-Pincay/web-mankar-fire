@@ -164,6 +164,62 @@
             </table>
           </div>
         </div>
+
+        <div class="card-body">
+          <span class="h2">Repostajes eliminados</span>
+          
+          <div class="table-container mt-4">
+            <table class="table table-striped mt-4">
+
+              <thead class="thead-fixed">
+                <tr>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl" class="text-center">
+                    Placa
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
+                    Kilometraje
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
+                    Cantidad (GL)
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
+                    Rutas
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
+                    Opciones
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let repostaje2 of repostajes2">
+                  <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje2)"
+                    class="text-center">
+                    {{ repostaje2.placa }}
+                  </td>
+                  <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje2)"
+                    class="text-center">
+                    {{ repostaje2.kilometraje | number: '1.0-0' }}
+                  </td>
+                  <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje2)"
+                    class="text-center">
+                    {{ repostaje2.cantidad | number: '1.0-0' }}
+                  </td>
+                  <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje2)"
+                    class="text-center">
+                    {{ repostaje2.ruta }}
+                  </td>
+
+                  <td class="text-center">
+                    <button (click)="confirmarRecuperar(repostaje2)">
+                      <i class="fas ri-device-recover-line fa-lg text-primary"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -43,6 +43,23 @@ export class TiposMService {
     ) as Observable<ListatiposM[]>;
   }
 
+
+  getTiposMDel(): Observable<ListatiposM[]> {
+    const tiposMRef = collection(this.firestore, 'listatiposM');
+
+    return collectionData(tiposMRef, { idField: 'nombre' }).pipe(
+      map((data: any[]) => {
+        return data
+        .filter((tipoM) => tipoM.estado === false)
+        .map(tipoM => {
+          return {
+            ...tipoM,
+          };
+        });
+      })
+    ) as Observable<ListatiposM[]>;
+  }
+
   
   updateTipoM(tipoM: ListatiposM) {
     const tipoMDocRef = doc(this.firestore, `listatiposM/${tipoM.nombre}`);
@@ -65,6 +82,16 @@ export class TiposMService {
       this.logService.createlog({
         action: 'Eliminado',
         details: 'Tipo de mantenimiento eliminado',
+        registro: tipoM,
+      });
+    });
+  }
+  resetTipoM(tipoM: ListatiposM) {
+    const tipoMDocRef = doc(this.firestore, `listatiposM/${tipoM.nombre}`);
+    return updateDoc(tipoMDocRef, { estado: true }).then(() => {
+      this.logService.createlog({
+        action: 'Recuperado',
+        details: 'Tipo de mantenimiento recuperado',
         registro: tipoM,
       });
     });

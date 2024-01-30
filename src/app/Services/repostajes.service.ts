@@ -47,6 +47,20 @@ export class RepostajesService {
     ) as Observable<Repostaje[]>;
   }
 
+  getRepostajesDel(): Observable<Repostaje[]> {
+    const repostajesRef = collection(this.firestore, 'DBcombustible');
+    return collectionData(repostajesRef, { idField: 'key' }).pipe(
+      map((data: any[]) => {
+        return data .filter(repostaje => repostaje.estado === false).map(repostaje => {
+          return {
+            ...repostaje,
+            fecha: repostaje.fecha ? repostaje.fecha.toDate() : null,
+          };
+        });
+      })
+    ) as Observable<Repostaje[]>;
+  }
+
   updateRepostaje(repostaje: Repostaje) {
     const repostajeDocRef = doc(this.firestore, `DBcombustible/${repostaje.key}`);
     
@@ -70,6 +84,19 @@ export class RepostajesService {
       this.logService.createlog({
         action: 'Eliminado',
         details: 'Repostaje eliminado',
+        registro: repostaje,
+      });
+    });
+  }
+  resetRepostaje(repostaje: Repostaje) {
+    const repostajeDocRef = doc(this.firestore, `DBcombustible/${repostaje.key}`);
+    
+    // Utiliza updateDoc para cambiar el estado a false
+    return updateDoc(repostajeDocRef, { estado: true }).then(() => {
+      // Llama a createlog para registrar la transacción con el objeto completo
+      this.logService.createlog({
+        action: 'Recuperado',
+        details: 'Repostaje recuperado',
         registro: repostaje,
       });
     });
