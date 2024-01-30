@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^17.0.0",
     "@angular/router": "^17.0.0",
     "@babel/generator": "^7.23.6",
+    "@cypress/github-action": "^2.3.6",
     "@ng-bootstrap/ng-bootstrap": "^16.0.0",
     "@ngneat/tailwind": "^7.0.3",
     "@popperjs/core": "^2.11.8",
