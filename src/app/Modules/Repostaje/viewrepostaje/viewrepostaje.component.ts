@@ -33,6 +33,7 @@ export class ViewrepostajeComponent {
   @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
   @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
   editarrepostajeF: any;
+  loadingImagen: boolean = false;
 
   constructor(
     private router: Router,
@@ -78,10 +79,10 @@ export class ViewrepostajeComponent {
   }
 
   // ========================================================================================== //
-  // Función para confirmar la eliminación de un mantenimiento
+  // Función para confirmar la eliminación de un repostaje
   // ========================================================================================== //
   confirmarEliminar(repostaje: any): void {
-    const confirmacion = window.confirm('¿Seguro que deseas eliminar unidad?');
+    const confirmacion = window.confirm('¿Seguro que desea eliminar este repostaje?');
     if (confirmacion) {
       this.eliminarunidad(repostaje);
     }
@@ -94,7 +95,7 @@ export class ViewrepostajeComponent {
         this.handleSuccess('Eliminado correctamente', 'success', repostaje)
       )
       .catch((error) =>
-        this.handleError('Error al eliminar mantenimiento', 'error')
+        this.handleError('Error al eliminar repostaje', 'error')
       );
   }
   // ========================================================================================== //
@@ -116,7 +117,7 @@ export class ViewrepostajeComponent {
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
-      timer: 3000,
+      timer: 2000,
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
@@ -127,26 +128,31 @@ export class ViewrepostajeComponent {
   }
 
   // ========================================================================================== //
-  // Función para GUARDAR TIPOS MANTENIMIENTO
+  // Función para GUARDAR REPOSTAJE
   // ========================================================================================== //
   fileRef: string = '';
   downloadURL = '';
 
   onFileSelected($event: any) {
+    this.loadingImagen = true;
     const file = $event.target.files[0];
     const filePath = `combustiblefiles/${Date.now()}`;
-
     const fileRef = ref(this.storage, filePath);
     const storageRef = ref(this.storage, filePath);
     uploadBytes(fileRef, file)
       .then((response) => {
-        console.log(`Subido: ${response}`);
+        setTimeout(() => {
         getDownloadURL(storageRef).then((url) => {
           this.downloadURL = url;
           console.log('URL de descarga:', this.downloadURL);
+          this.loadingImagen = false;
         });
+      }, 500);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        this.loadingImagen = false;
+      });
   }
   formatDate(date: Date): string {
     if (date) {
@@ -162,6 +168,7 @@ export class ViewrepostajeComponent {
 
   onSubmit() {
     if (this.form.valid) {
+      if(!this.loadingImagen){
       const repostajeData = this.form.value;
       const fechaFormulario = repostajeData.fecha;
       const fechaFormularioDate =
@@ -178,17 +185,28 @@ export class ViewrepostajeComponent {
         .addRepostaje(newrepostaje)
         .then(() => {
           this.handleSuccess('Creado correctamente', 'success', newrepostaje);
-          this.cerrarModal(); 
-          this.form.reset();
+          this.cerrarModal2(); 
         })
-        .catch((error) => this.handleError('Error al crear unidad', error));
+        .catch((error) => this.handleError('Error al crear repostaje', error));
     } else {
+      this.showIncompleteDataAlert2();
+    }
+  } else {
       this.showIncompleteDataAlert();
     }
   }
 
+  private showIncompleteDataAlert2() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Por favor, espere a que se suba la imagen.',
+    });
+    console.log()
+  }
+
   cerrarModal () {
-    this.cerrarModalBtn2.nativeElement.click();
+    this.cerrarModalBtn.nativeElement.click();
   }
   private showIncompleteDataAlert() {
     Swal.fire({
@@ -234,6 +252,7 @@ export class ViewrepostajeComponent {
   
   guardarEdicion() {
     if (this.formularioEdicion.valid) {
+      if(!this.loadingImagen){
       const EditrepostajeData = this.formularioEdicion.value;
       const fechaFormulario = EditrepostajeData.fecha;
       const fechaFormularioDate =
@@ -257,10 +276,20 @@ export class ViewrepostajeComponent {
           this.cerrarModal(); 
         })
         .catch((error) =>
-          this.handleError('Error al editar mantenimiento', 'error')
+          this.handleError('Error al editar repostaje', 'error')
         );
-    } else {
-      this.showIncompleteDataAlert();
+      } else{
+        this.showIncompleteDataAlert2();
+      }
+      } else {
+        console.log('Datos incompletos o inválidos:', this.form.value);
+        this.showIncompleteDataAlert();
+      }
     }
-  }
+    cerrarModal2() {
+      this.cerrarModalBtn2.nativeElement.click();
+      setTimeout(() => {
+        location.reload();
+      }, 2100);
+    }
 }

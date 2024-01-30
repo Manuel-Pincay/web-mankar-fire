@@ -29,24 +29,47 @@ export class ViewusuariosComponent implements OnInit{
     private unidadesService: UnidadesService,
     private router: Router){
       this.form = this.fb.group({
-        email: ['', Validators.required],
+        email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
         name: ['', Validators.required],
-        id: [null, Validators.required],
+        id: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(13), Validators.pattern(/^\d+$/)]],
         estado: [true, Validators.required],
         unidad: ['', Validators.required],
         rool: ['', Validators.required],
       });
       this.formularioEdicion = this.fb.group({
-        email: ['', Validators.required],
+        email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)]],
         name: ['', Validators.required],
-        id: [null, Validators.required],
+        id: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(13), Validators.pattern(/^\d+$/)]],
         estado: [true, Validators.required],
         unidad: ['', Validators.required],
         rool: ['', Validators.required],
       });
     }
   
- 
+    shouldShowIdError(): boolean {
+      const idControl = this.form.get('id');
+      return !!idControl && 
+        (idControl.hasError('required') || idControl.hasError('minlength') || idControl.hasError('maxlength') || idControl.hasError('pattern')) &&
+        idControl.touched;
+    }
+    shouldShowIdError2(): boolean {
+      const idControl = this.formularioEdicion.get('id');
+      return !!idControl &&
+      (idControl.hasError('required') || idControl.hasError('minlength') || idControl.hasError('maxlength') || idControl.hasError('pattern')) &&
+      idControl.touched;
+    }
+
+    shouldShowEmailError(): boolean {
+      const emailControl = this.form.get('email');
+      return !!emailControl && (emailControl.hasError('required') || emailControl.hasError('pattern')) && emailControl.touched;
+    }
+    shouldShowEmailError2(): boolean {
+      const emailControl = this.formularioEdicion.get('email');
+      return !!emailControl && (emailControl.hasError('required') || emailControl.hasError('pattern')) && emailControl.touched;
+    }
+
+        
+
   ngOnInit(): void {
     this.unidades$ = this.unidadesService.getUnidades();
     this.usuariosService.getUsuario().subscribe((data) => {
@@ -55,7 +78,6 @@ export class ViewusuariosComponent implements OnInit{
   }
 
 
-/* EDITAR USUARIO */
 editarUsario2:any;
 
 editarUsuario(usuario: Usuarios) {
@@ -65,7 +87,7 @@ editarUsuario(usuario: Usuarios) {
     email: usuario?.email || '',
     name: usuario?.name || '',
     unidad: usuario?.unidad || '',
-    id: usuario?.id || null,
+    id: usuario?.id || '',
     rool: usuario?.rool || '',
   });
 }
@@ -85,7 +107,7 @@ guardarEdicion() {
         this.cerrarModal();
       })
       .catch((error: any) => {
-        console.error('Error al editar usuario:', error); // Imprime el error en la consola
+        console.error('Error al editar usuario:', error); 
         if (error === 'unidad_asignada') {
           this.handleUnidadExistenteError();
         } else if (error === 'cedula_existente') {
@@ -131,7 +153,7 @@ cambiarEstadoUsuario(usuario: any): void {
 /* FIN EDITAR */
 
 private handleError(title: string, icon: SweetAlertIcon, error?: any): void {
-  console.error(title, error); // Imprime el título y el error
+  console.error(title, error);
   this.showToast(title, icon);
 }
 
@@ -169,7 +191,7 @@ private handleError(title: string, icon: SweetAlertIcon, error?: any): void {
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
-      timer: 3000,
+      timer: 2000,
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
@@ -192,7 +214,7 @@ private handleError(title: string, icon: SweetAlertIcon, error?: any): void {
         .addUsuario(newusuario)
         .then(() => {
           this.handleSuccess('Creado correctamente', 'success', newusuario);
-          this.cerrarModal2(); // Llama a la función para cerrar el modal
+          this.cerrarModal2();
           this.form.reset();
         })
         .catch((error: any) => {

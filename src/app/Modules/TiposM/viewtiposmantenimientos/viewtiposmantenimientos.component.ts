@@ -18,7 +18,7 @@ export class ViewtiposmantenimientosComponent implements OnInit {
   form: FormGroup;
   formularioEdicion: FormGroup; 
   listatiposM$: Observable<ListatiposM[]> = of([]);
-  @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
+  @ViewChild('cerrarModalBtnMantenimiento') cerrarModalBtnMantenimiento!: ElementRef;
   @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
   editarlistatiposMF: any;
 
@@ -69,10 +69,10 @@ export class ViewtiposmantenimientosComponent implements OnInit {
         .addTipoM(newretiposm)
         .then(() => {
           this.handleSuccess('Eliminado correctamente', 'success', newretiposm);
-          this.cerrarModal2(); // Llama a la función para cerrar el modal
+          this.cerrarModal2();
           this.form.reset();
         })
-        .catch((error) => this.handleError('Error al eliminar mantenimiento', 'error'));
+        .catch((error) => this.handleError('Error al eliminar el tipo de mantenimiento', 'error'));
     } else {
       this.showIncompleteDataAlert();
     }
@@ -99,14 +99,14 @@ export class ViewtiposmantenimientosComponent implements OnInit {
   // ========================================================================================== // 
 
   confirmarEliminar(tiposM: any): void {
-    if (window.confirm('¿Seguro que deseas eliminar este tipo de mantenimiento?')) {
+    if (window.confirm('¿Seguro que desea eliminar este tipo de mantenimiento?')) {
       this.cambiarEstadoTiposM(tiposM);
     }
   }
   cambiarEstadoTiposM(tiposM: any): void {
     tiposM.estado = false;
 
-    this.tiposmanteService.updateTipoM(tiposM)
+    this.tiposmanteService.deleteTipoM(tiposM)
       .then(() => this.handleSuccess('Eliminado correctamente', 'success', tiposM))
       .catch(error => this.handleError('Error al eliminar el tipo de mantenimiento', 'error'));
   }
@@ -126,7 +126,7 @@ export class ViewtiposmantenimientosComponent implements OnInit {
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
-      timer: 3000,
+      timer: 2000,
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
@@ -143,7 +143,7 @@ export class ViewtiposmantenimientosComponent implements OnInit {
   
 
   establecerValoresPreseleccionados(): void {
-    const ListatiposMPreseleccionado = 'repostaje 2';
+    const ListatiposMPreseleccionado = 'tiposm 2';
     this.listatiposM$.subscribe((tiposM: ListatiposM[]) => {
       const listatiposMseleccionado = tiposM.find(
         (tiposM) => tiposM.nombre === ListatiposMPreseleccionado
@@ -180,7 +180,7 @@ export class ViewtiposmantenimientosComponent implements OnInit {
           this.cerrarModal(); 
         })
         .catch((error) =>
-          this.handleError('Error al editar unidad', 'error')
+          this.handleError('Error al editar el tipo de mantenimiento', 'error')
         );
     } else {
       this.showIncompleteDataAlert();
@@ -189,7 +189,7 @@ export class ViewtiposmantenimientosComponent implements OnInit {
   
 
   cerrarModal () {
-    this.cerrarModalBtn2.nativeElement.click();
+    this.cerrarModalBtnMantenimiento.nativeElement.click();
   }
   private showIncompleteDataAlertUnidad() {
     Swal.fire({

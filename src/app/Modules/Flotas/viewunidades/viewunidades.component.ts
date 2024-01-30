@@ -24,6 +24,7 @@ export class ViewunidadesComponent implements OnInit {
   @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
   @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
   editarunidadF: any;
+  loadingImagen: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -83,11 +84,11 @@ export class ViewunidadesComponent implements OnInit {
 
 
   // ========================================================================================== //
-  // Función para confirmar la eliminación de un mantenimiento
+  // Función para confirmar la eliminación de una unidad
   // ========================================================================================== //
   confirmarEliminar(unidad: any): void {
     const confirmacion = window.confirm(
-      '¿Seguro que deseas eliminar unidad?'
+      '¿Seguro que desea eliminar esta unidad?'
     );
     if (confirmacion) {
       this.eliminarunidad(unidad);
@@ -96,8 +97,8 @@ export class ViewunidadesComponent implements OnInit {
   eliminarunidad(unidad: any): void {
     unidad.estado = false;
     this.unidadesService.deleteUnidad(unidad)
-      .then(() => this.handleSuccess('Eliminado correctamente', 'success', unidad))
-      .catch(error => this.handleError('Error al eliminar mantenimiento', 'error'));
+      .then(() => this.handleSuccess('Eliminada correctamente', 'success', unidad))
+      .catch(error => this.handleError('Error al eliminar la unidad', 'error'));
   }
   // ========================================================================================== //
   // Función de alertas
@@ -119,7 +120,7 @@ export class ViewunidadesComponent implements OnInit {
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
-      timer: 3000,
+      timer: 2000,
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
@@ -135,6 +136,7 @@ export class ViewunidadesComponent implements OnInit {
   downloadURL = "";
 
   onFileSelected($event: any) {
+    this.loadingImagen = true;
     const file = $event.target.files[0];
     const filePath = `unidades/${Date.now()}`;
 
@@ -144,13 +146,18 @@ export class ViewunidadesComponent implements OnInit {
       .then(response => {
         getDownloadURL(storageRef).then((url) => {
           this.downloadURL = url;
+          this.loadingImagen = false;
         });
       })
-      .catch(error => console.log(error));
+      .catch((error) => {
+        console.log(error); 
+        this.loadingImagen = false;
+      });
   }
 
   onSubmit() {
     if (this.form.valid) {
+      if(!this.loadingImagen){
       const unidadData = this.form.value;
       const newunidad: Unidades = {
         ...unidadData,
@@ -159,15 +166,28 @@ export class ViewunidadesComponent implements OnInit {
       this.unidadesService
         .addUnidad(newunidad)
         .then(() => {
-          this.handleSuccess('Creado correctamente', 'success', newunidad);
+          this.handleSuccess('Creada correctamente', 'success', newunidad);
           this.cerrarModal2(); 
           this.form.reset();
         })
         .catch((error:any) => this.handleError('Error al crear unidad', error));
-    } else {
-      this.showIncompleteDataAlert();
+      } else{
+        this.showIncompleteDataAlert2();
+      }
+      } else {
+        console.log('Datos incompletos o inválidos:', this.form.value);
+        this.showIncompleteDataAlert();
+      }
     }
-  }
+
+    private showIncompleteDataAlert2() {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Por favor, espere a que se suba la imagen.',
+      });
+      console.log()
+    }
 
   cerrarModal2() {
     this.cerrarModalBtn2.nativeElement.click();
@@ -186,7 +206,7 @@ export class ViewunidadesComponent implements OnInit {
 
   
   establecerValoresPreseleccionados(): void {
-    const UnidadPreseleccionado = 'repostaje 2';
+    const UnidadPreseleccionado = 'unidad 2';
     this.unidades$.subscribe((unidades: Unidades[]) => {
       const unidadseleccionado = unidades.find(
         (unidades) => unidades.nombre === UnidadPreseleccionado
@@ -217,6 +237,7 @@ export class ViewunidadesComponent implements OnInit {
   
   guardarEdicionUnidad() {
     if (this.formularioEdicion.valid) {
+      if(!this.loadingImagen){
       const unidadEditadaData = this.formularioEdicion.value;
       const imagen = this.downloadURL
       ? this.downloadURL
@@ -235,14 +256,17 @@ export class ViewunidadesComponent implements OnInit {
         .catch((error) =>
           this.handleError('Error al editar unidad', 'error')
         );
+      } else {
+        this.showIncompleteDataAlert2();
+      }
     } else {
-      this.showIncompleteDataAlert();
+        this.showIncompleteDataAlert();
+      }
     }
-  }
   
 
   cerrarModal () {
-    this.cerrarModalBtn2.nativeElement.click();
+    this.cerrarModalBtn.nativeElement.click();
   }
   private showIncompleteDataAlertUnidad() {
     Swal.fire({

@@ -54,6 +54,7 @@ import { CommonModule } from '@angular/common';
     NgbModule,
     NgbModalModule,
     CommonModule,
+    
     FormsModule,  
     AppRoutingModule,
     ReactiveFormsModule,

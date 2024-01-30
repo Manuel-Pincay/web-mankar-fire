@@ -35,13 +35,16 @@ export class ViewmantenimientosComponent implements OnInit {
   nuevoMantenimiento: any = {};
   nombreChofer: string = '';
   mantenimientos: Mantenimientos[] = [];
+  mantenimientos2: Mantenimientos[] = [];
   unidades$: Observable<Unidades[]> = of([]);
   tiposM$: Observable<ListatiposM[]> = of([]);
   @ViewChild('fileInput') fileInput: ElementRef | undefined;
   @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
   @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
   detalleMantenimiento: any;
-
+  loadingImagen: boolean = false;
+  loadingImagen2: boolean = false;
+  private choferPredefinido: any;
   constructor(
     private fb: FormBuilder,
     private storage: Storage,
@@ -63,6 +66,7 @@ export class ViewmantenimientosComponent implements OnInit {
       estado: [true, Validators.required],
     });
     this.formularioEdicion = this.fb.group({
+      chofer: ['',Validators.required],
       placa: ['', Validators.required],
       descripcion: ['', Validators.required],
       kilometraje: [null, Validators.required],
@@ -85,22 +89,34 @@ export class ViewmantenimientosComponent implements OnInit {
       this.mantenimientos = data;
       this.establecerValoresPreseleccionados();
     });
+    this.mantenimientosService.getMantenimientosDel().subscribe((data) => {
+      this.mantenimientos2 = data;
+      this.establecerValoresPreseleccionados();
+    });
+    if (this.editarMantenimiento2 && this.editarMantenimiento2.placa) {
+      const placaValue = this.editarMantenimiento2.placa;
+
+      this.unidadesService.getUnidad(placaValue).subscribe(
+        (unidad: { chofer: any; }) => {
+          if (unidad) {
+            this.choferPredefinido = unidad.chofer;
+          }
+        },
+        (error: any) => {
+          console.error('Error obteniendo unidad:', error);
+        }
+      );
+    }
   }
   establecerValoresPreseleccionados(): void {
     const tipoMPreseleccionado = 'Mantenimiento 2';
-
-    // Suscribirse al observable para obtener los datos
     this.tiposM$.subscribe((tiposM: ListatiposM[]) => {
-      // Encuentra el objeto correspondiente en tiposM por su nombre
       const tipoMSeleccionado = tiposM.find(
         (tipoM) => tipoM.nombre === tipoMPreseleccionado
       );
-
-      // Si se encuentra, establece el valor preseleccionado en el formulario
       if (tipoMSeleccionado) {
         this.formularioEdicion.patchValue({
           descripcion: tipoMSeleccionado.nombre,
-          // Otros campos...
         });
       }
     });
@@ -115,6 +131,7 @@ export class ViewmantenimientosComponent implements OnInit {
       proxcambio: mantenimiento?.proxcambio || '',
       fecha: this.formatDate(mantenimiento?.fecha) || '',
       comentario: mantenimiento?.comentario || '',
+      chofer: mantenimiento?.chofer || '',
       imagen: mantenimiento?.imagen || '',
       imagen2: mantenimiento?.imagen2 || '',
     });
@@ -127,10 +144,8 @@ export class ViewmantenimientosComponent implements OnInit {
       const day = date.getDate().toString().padStart(2, '0');
       const hours = date.getHours().toString().padStart(2, '0');
       const minutes = date.getMinutes().toString().padStart(2, '0');
-
       return `${year}-${month}-${day}T${hours}:${minutes}`;
     }
-
     return '';
   }
 
@@ -141,16 +156,35 @@ export class ViewmantenimientosComponent implements OnInit {
   // ========================================================================================== //
   // Función para confirmar la eliminación de un mantenimiento
   confirmarEliminar(mantenimiento: any): void {
-    if (window.confirm('¿Seguro que deseas eliminar este mantenimiento?')) {
+    if (window.confirm('¿Seguro que desea eliminar este mantenimiento?')) {
       this.cambiarEstadoMantenimiento(mantenimiento);
     }
+  }
+
+  confirmarRecuperar(mantenimiento: any): void {
+    if (window.confirm('¿Seguro que desea recuperar este mantenimiento?')) {
+      this.recuperarEstadoMantenimiento(mantenimiento);
+    }
+  }
+
+  recuperarEstadoMantenimiento(mantenimiento: any): void {
+    mantenimiento.estado = true;
+
+    this.mantenimientosService
+      .resetMantenimiento(mantenimiento)
+      .then(() =>
+        this.handleSuccess('Recuperado correctamente', 'success', mantenimiento)
+      )
+      .catch((error) =>
+        this.handleError('Error al recuperar mantenimiento', 'error')
+      );
   }
 
   cambiarEstadoMantenimiento(mantenimiento: any): void {
     mantenimiento.estado = false;
 
     this.mantenimientosService
-      .updateMantenimiento(mantenimiento)
+      .deleteMantenimiento(mantenimiento)
       .then(() =>
         this.handleSuccess('Eliminado correctamente', 'success', mantenimiento)
       )
@@ -178,7 +212,7 @@ export class ViewmantenimientosComponent implements OnInit {
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
-      timer: 3000,
+      timer: 2000,
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
@@ -195,43 +229,57 @@ export class ViewmantenimientosComponent implements OnInit {
   downloadURL = '';
 
   onFileSelected($event: any) {
+    this.loadingImagen = true;
     const file = $event.target.files[0];
     const filePath = `mantenimientosfiles/${Date.now()}`;
     const fileRef = ref(this.storage, filePath);
     const storageRef = ref(this.storage, filePath);
     uploadBytes(fileRef, file)
-      .then((response) => {
-        console.log(`Subido: ${response}`);
-        getDownloadURL(storageRef).then((url) => {
-          this.downloadURL = url;
-          console.log('URL:', this.downloadURL);
-        });
+      .then(() => {
+        setTimeout(() => {
+          getDownloadURL(storageRef).then((url) => {
+            this.downloadURL = url;
+            console.log('URL:', this.downloadURL);
+            this.loadingImagen = false;
+          });
+        }, 500);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        this.loadingImagen = false;
+      });
   }
+  
+  
 
   fileRef2: string = '';
   downloadURL2 = '';
 
   onFileSelected2($event: any) {
+    this.loadingImagen2 = true;
     const file2 = $event.target.files[0];
     const filePath = `mantenimientosfiles/${Date.now()}`;
-
     const fileRef2 = ref(this.storage, filePath);
     const storageRef = ref(this.storage, filePath);
+  
     uploadBytes(fileRef2, file2)
-      .then((response) => {
-        getDownloadURL(storageRef).then((url) => {
-          this.downloadURL2 = url;
-        });
+      .then(() => {
+        setTimeout(() => {
+          getDownloadURL(storageRef).then((url) => {
+            this.downloadURL2 = url;
+            this.loadingImagen2 = false; 
+          });
+        }, 500);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {console.log(error); this.loadingImagen2 = false; });
   }
+  
  
   onSubmit() {
     if (this.form.valid) {
+      if(!this.loadingImagen && !this.loadingImagen2){
       const placaControl = this.form.get('placa');
-  
+
       if (placaControl && placaControl.value !== null && placaControl.value !== undefined) {
         const placaValue = placaControl.value;
       
@@ -257,16 +305,15 @@ export class ViewmantenimientosComponent implements OnInit {
                 .addMantenimiento(mantenimiento)
                 .then(() => {
                   this.handleSuccess(
-                    'Eliminado correctamente',
+                    'Agregado correctamente',
                     'success',
                     mantenimiento
                   );
                   this.cerrarModal2();
-                  this.form.reset();
                 })
                 .catch((error) =>
                   this.handleError(
-                    'Error al eliminar mantenimiento',
+                    'Error al agregar mantenimiento',
                     'error'
                   )
                 );
@@ -277,9 +324,14 @@ export class ViewmantenimientosComponent implements OnInit {
             console.error('Error obteniendo unidad:', error);
           }
         );
-      } else {
+      } 
+      else {
       }
+    } else{
+      this.showIncompleteDataAlert2();
+    }
     } else {
+      console.log('Datos incompletos o inválidos:', this.form.value);
       this.showIncompleteDataAlert();
     }
   }
@@ -287,14 +339,26 @@ export class ViewmantenimientosComponent implements OnInit {
 
   cerrarModal2() {
     this.cerrarModalBtn2.nativeElement.click();
+    setTimeout(() => {
+      location.reload();
+    }, 2100);
   }
-
   private showIncompleteDataAlert() {
     Swal.fire({
       icon: 'error',
       title: 'Error',
       text: 'Por favor, complete todos los campos requeridos.',
     });
+    console.log()
+  }
+
+  private showIncompleteDataAlert2() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Por favor, espere a que se suba la imagen.',
+    });
+    console.log()
   }
   
   // ========================================================================================== //
@@ -303,6 +367,7 @@ export class ViewmantenimientosComponent implements OnInit {
 
   guardarEdicion() {
     if (this.formularioEdicion.valid) {
+      if(!this.loadingImagen && !this.loadingImagen2){
       const mantenimientoedData = this.formularioEdicion.value;
       const fechaFormulario = mantenimientoedData.fecha;
       const fechaFormularioDate =
@@ -313,9 +378,24 @@ export class ViewmantenimientosComponent implements OnInit {
       const imagen = this.downloadURL
         ? this.downloadURL
         : this.editarMantenimiento2.imagen;
-        const imagen2 = this.downloadURL2 !== undefined && this.downloadURL2 !== null
-        ? this.downloadURL2
-        : this.editarMantenimiento2.imagen2;
+      const imagen2 =
+        this.downloadURL2 !== undefined && this.downloadURL2 !== null
+          ? this.downloadURL2
+          : this.editarMantenimiento2.imagen2;
+  
+      let chofer;
+      if (
+        this.choferPredefinido !== undefined &&
+        mantenimientoedData.hasOwnProperty('chofer')
+      ) {
+        chofer = this.choferPredefinido;
+      } else {
+        chofer =
+          mantenimientoedData.hasOwnProperty('chofer') &&
+          mantenimientoedData.chofer !== undefined
+            ? mantenimientoedData.chofer
+            : null;
+      }
   
       const mantenimientoed: Mantenimientos = {
         ...mantenimientoedData,
@@ -323,20 +403,30 @@ export class ViewmantenimientosComponent implements OnInit {
         imagen: imagen,
         imagen2: imagen2,
         key: this.editarMantenimiento2.key,
+        chofer: chofer,
       };
+  
       this.mantenimientosService
         .updateMantenimiento(mantenimientoed)
         .then(() => {
           this.handleSuccess('Edición exitosa', 'success', mantenimientoed);
-          this.cerrarModal(); 
+          this.cerrarModal();
         })
         .catch((error) =>
           this.handleError('Error al editar mantenimiento', 'error')
         );
+
+      } else {
+        this.showIncompleteDataAlert2();
+      }
     } else {
-      this.showIncompleteDataAlert();
+        this.showIncompleteDataAlert();
+      }
     }
-  }
+  
+  
+
+
   cerrarModal() {
     this.cerrarModalBtn.nativeElement.click();
   }

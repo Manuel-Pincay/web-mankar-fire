@@ -1,5 +1,3 @@
- 
-
 <nav class="nav">
   <i class="uil uil-bars navOpenBtn"></i>
   <a href="#" class="logo">APPWEB MANKAR</a>
@@ -29,13 +27,13 @@
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Nuevo Repostaje
+              Nuevo repostaje
             </h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
-              
+
               <!-- Placa -->
               <label for="placa">Placa:</label>
               <select id="placa" formControlName="placa" class="form-control">
@@ -75,6 +73,7 @@
                 <label for="imagen">Imagen:</label>
                 <input type="file" id="imagen" class="form-control" (change)="onFileSelected($event)"
                   accept="image/jpeg" />
+                  <div *ngIf="loadingImagen" class="loading-spinner">Cargando...</div>
               </div>
 
               <div class="form-group text-center">
@@ -82,7 +81,7 @@
                   Cerrar
                 </button>
                 <button type="submit" class="btn btn-primary">
-                  Enviar Repostaje
+                  Agregar repostaje
                 </button>
               </div>
             </form>
@@ -92,7 +91,7 @@
     </div>
 
 
- 
+
     <!-- ----------------------------------------------------------------------- -->
     <!-- --------------------------Tabla LISTA Repostajes--------------------------------- -->
     <!-- ----------------------------------------------------------------------- -->
@@ -100,67 +99,71 @@
     <div class="container mt-4">
       <div class="card">
         <button style="background-color :#2c7bfe;" class="btn btn-success btn-lg float-right" data-bs-toggle="modal"
-            data-bs-target="#agregarNuevoRepostaje">
-            <i class="fas fa-plus"></i> Agregar repostaje
+          data-bs-target="#agregarNuevoRepostaje">
+          <i class="fas fa-plus"></i> Agregar repostaje
         </button>
+
+
         <div class="card-body">
-          <span class="h2">Repostaje Combustible</span>
+          <span class="h2">Repostaje combustible</span>
+          
           <div class="table-container mt-4">
-          <table class="table table-striped mt-4">
-            <thead class="thead-fixed">
-              <tr>
-                <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl" class="text-center">
-                  Placa
-                </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
-                  Kilometraje
-                </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
-                  Cantidad (GL)
-                </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
-                  Rutas
-                </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
-                  Opciones
-                </th>
-              </tr>
-            </thead>
+            <table class="table table-striped mt-4">
 
-            <tbody>
-              <tr *ngFor="let repostaje of repostajes">
-                <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje)" class="text-center">
-                  {{ repostaje.placa }}
-                </td>
-                <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje)" class="text-center">
-                  {{ repostaje.kilometraje | number: '1.0-0' }}
-                </td>
-                <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje)" class="text-center">
-                  {{ repostaje.cantidad | number: '1.0-0' }}
-                </td>
-                <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje)" class="text-center">
-                  {{ repostaje.ruta }}
-                </td>
+              <thead class="thead-fixed">
+                <tr>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl" class="text-center">
+                    Placa
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
+                    Kilometraje
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
+                    Cantidad (GL)
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
+                    Rutas
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium" class="text-center">
+                    Opciones
+                  </th>
+                </tr>
+              </thead>
 
-                 <td class="text-center">
-                  <button (click)="confirmarEliminar(repostaje)">
-                    <i class="fas fa-trash-alt fa-lg text-danger"></i>
-                  </button>
-                
-                  <button
-                    (click)="editarRepostaje(repostaje)"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editarRepostajeModal"
-                    class="ml-4"
-                  >
-                    <i class="fas fa-edit fa-lg text-info mr-4"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+              <tbody>
+                <tr *ngFor="let repostaje of repostajes">
+                  <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje)"
+                    class="text-center">
+                    {{ repostaje.placa }}
+                  </td>
+                  <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje)"
+                    class="text-center">
+                    {{ repostaje.kilometraje | number: '1.0-0' }}
+                  </td>
+                  <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje)"
+                    class="text-center">
+                    {{ repostaje.cantidad | number: '1.0-0' }}
+                  </td>
+                  <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje)"
+                    class="text-center">
+                    {{ repostaje.ruta }}
+                  </td>
+
+                  <td class="text-center">
+                    <button (click)="confirmarEliminar(repostaje)">
+                      <i class="fas fa-trash-alt fa-lg text-danger"></i>
+                    </button>
+
+                    <button (click)="editarRepostaje(repostaje)" data-bs-toggle="modal"
+                      data-bs-target="#editarRepostajeModal" class="ml-4">
+                      <i class="fas fa-edit fa-lg text-info mr-4"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
       </div>
     </div>
   </div>
@@ -175,7 +178,7 @@
       <div class="modal-content">
         <div class="modal-header bg-light">
           <h5 class="modal-title" id="exampleModalLabel">
-            Detalles de Ruta
+            Detalles de repostaje
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -185,17 +188,20 @@
               <strong>Placa:</strong> {{ detallerepostaje?.placa }}
             </li>
             <li class="list-group-item">
-              <strong>Kilometraje:</strong> {{ detallerepostaje?.kilometraje  | number: '1.0-0' }}
+              <strong>Kilometraje:</strong> {{ detallerepostaje?.kilometraje | number: '1.0-0' }}
             </li>
             <li class="list-group-item">
-              <strong>Galonaje:</strong> {{ detallerepostaje?.cantidad  | number: '1.0-0' }}
+              <strong>Galonaje:</strong> {{ detallerepostaje?.cantidad | number: '1.0-0' }}
             </li>
             <li class="list-group-item">
               <strong>Ruta:</strong> {{ detallerepostaje?.ruta }}
             </li>
             <li class="list-group-item">
+              <strong>Fecha:</strong> {{ detallerepostaje?.fecha | date: 'dd/MM/yyyy' }}
+            </li>
+            <li class="list-group-item">
               <strong>Imagen:</strong>
-              <img src="{{ detallerepostaje?.imagen }}" alt="Imagen del mantenimiento" style="max-width: 70%" />
+              <img src="{{ detallerepostaje?.imagen }}" alt="Imagen del repostaje" style="max-width: 70%" />
             </li>
 
           </ul>
@@ -213,8 +219,8 @@
   <!-- --------------------------FIN DE VER DETALLES--------------------------------- -->
   <!-- ----------------------------------------------------------------------- -->
 
-    <!-- ----------------------------------------------------------------------- -->
-  <!-- ----------------------MODAL DE EDITAR MANTENIMIENTOS---------------------------- -->
+  <!-- ----------------------------------------------------------------------- -->
+  <!-- ----------------------MODAL DE EDITAR REPOSTAJE---------------------------- -->
   <!-- ----------------------------------------------------------------------- -->
 
   <div class="modal fade" id="editarRepostajeModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -223,37 +229,41 @@
       <div class="modal-content">
         <div class="modal-header bg-light">
           <h5 class="modal-title" id="exampleModalLabel">
-            Editar Reposaje
+            Editar reposaje
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <!-- Formulario de edición -->
-          <form [formGroup]="formularioEdicion" (ngSubmit)="guardarEdicion()">
-
-            <!-- Placa -->
-          <!--   <div class="mb-3">
-              <label for="placa" class="form-label">Placa:</label>
-              <input type="text" id="placa" class="form-control" formControlName="placa"
-                [value]="editarMantenimiento2?.placa || ''" [placeholder]="
-                  editarMantenimiento2?.placa
-                    ? editarMantenimiento2.placa
-                    : 'Ingrese la placa'
-                " readonly />
-            </div> -->
+          <form [formGroup]="formularioEdicion">
 
             <!-- Cantidad -->
-          <div class="mb-3">
-            <label for="cantidad" class="form-label">Cantidad:</label>
-            <input type="number" id="cantidad" class="form-control" formControlName="cantidad" />
-          </div>
+            <div class="mb-3">
+              <label for="cantidad" class="form-label">Cantidad:</label>
+              <input type="number" id="cantidad" class="form-control" formControlName="cantidad" />
+            </div>
 
-          <!-- Kilometraje -->
-          <div class="mb-3">
-            <label for="kilometraje" class="form-label">Kilometraje:</label>
-            <input type="number" id="kilometraje" class="form-control" formControlName="kilometraje" />
-          </div>
-
+            <!-- Kilometraje -->
+            <div class="mb-3">
+              <label for="kilometraje" class="form-label">Kilometraje:</label>
+              <input type="number" id="kilometraje" class="form-control" formControlName="kilometraje" />
+            </div>
+            <!-- Ruta -->
+            <label for="ruta">Ruta:</label>
+            <select id="ruta" formControlName="ruta" class="form-control">
+              <option value="" disabled selected>Selecciona una ruta</option>
+              <option *ngFor="let ruta of rutas$ | async" [value]="ruta.nombre">
+                {{ ruta.nombre }}
+              </option>
+            </select>
+            <!-- Imagen -->
+            <div class="form-group">
+              <label for="imagen">Imagen:</label>
+              <img src="{{ editarrepostajeF?.imagen }}" alt="Imagen del repostaje" style="max-height: 90%" />
+              <input type="file" id="imagen" class="form-control" (change)="onFileSelected($event)"
+                accept="image/jpeg" />
+                <div *ngIf="loadingImagen" class="loading-spinner">Cargando...</div>
+            </div>
 
             <!-- Botones para "Guardar" y "Cerrar" -->
             <div class="modal-footer d-flex justify-content-between">
@@ -271,6 +281,6 @@
   </div>
   <!-- ----------------------------------------------------------------------- -->
   <!-- --------------------------FIN DE EDITAR DETALLES--------------------------------- -->
-  <!-- ----------------------------------------------------------------------- -->  
+  <!-- ----------------------------------------------------------------------- -->
 
 </section>

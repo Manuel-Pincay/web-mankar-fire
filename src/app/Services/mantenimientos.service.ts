@@ -65,6 +65,23 @@ export class MantenimientosService {
       })
     ) as Observable<Mantenimientos[]>;
   }
+  getMantenimientosDel(): Observable<Mantenimientos[]> {
+    const mantenimientosRef = collection(this.firestore, 'mantenimientos');
+    const orderedQuery = query(mantenimientosRef, orderBy('fecha', 'desc'));
+
+    return collectionData(orderedQuery, { idField: 'key' }).pipe(
+      map((data: any[]) => {
+        return data
+          .filter((mantenimiento) => mantenimiento.estado === false)
+          .map((mantenimiento) => {
+            return {
+              ...mantenimiento,
+              fecha: mantenimiento.fecha ? mantenimiento.fecha.toDate() : null,
+            };
+          });
+      })
+    ) as Observable<Mantenimientos[]>;
+  }
 
 
   getMantenimientosPorUnidadYTipo(unidad: string, tipoMantenimiento: string): Observable<any[]> {
@@ -185,6 +202,22 @@ export class MantenimientosService {
       return this.logService.createlog({
         action: 'Eliminado',
         details: 'Mantenimiento eliminado',
+        registro: mantenimiento,
+      });
+    });
+  }
+  resetMantenimiento(mantenimiento: Mantenimientos) {
+    const mantenimientoDocRef = doc(
+      this.firestore,
+      `mantenimientos/${mantenimiento.key}`
+    );
+
+    // Utiliza updateDoc para cambiar el estado a false
+    return updateDoc(mantenimientoDocRef, { estado: true }).then(() => {
+      // Llama a createlog para registrar la transacción con el objeto completo
+      return this.logService.createlog({
+        action: 'Recuperado',
+        details: 'Mantenimiento recuperado',
         registro: mantenimiento,
       });
     });

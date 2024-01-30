@@ -3,6 +3,6 @@ export default interface Usuarios {
     name: string;
     estado: boolean;
     unidad: string;
-    id: number;
+    id: string;
     rool: string;
 }

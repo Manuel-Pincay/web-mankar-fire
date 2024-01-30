@@ -17,7 +17,7 @@ export class ViewrutasComponent implements OnInit{
   form: FormGroup;
   formularioEdicion: FormGroup; 
   rutas$: Observable<Rutas[]> = of([]);
-  @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
+  @ViewChild('cerrarModalBtnRuta') cerrarModalBtnRuta!: ElementRef;
   @ViewChild('cerrarModalBtn2') cerrarModalBtn2!: ElementRef;
   editarrutaF: any;
 
@@ -69,7 +69,7 @@ export class ViewrutasComponent implements OnInit{
   cambiarEstadoRutas(rutas: any): void {
     rutas.estado = false;
 
-    this.RutasService.updateRuta(rutas)
+    this.RutasService.deleteRuta(rutas)
       .then(() => this.handleSuccess('Eliminada correctamente', 'success', rutas))
       .catch(error => this.handleError('Error al eliminar ruta', 'error'));
   }
@@ -89,7 +89,7 @@ export class ViewrutasComponent implements OnInit{
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
-      timer: 3000,
+      timer: 2000,
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.onmouseenter = Swal.stopTimer;
@@ -189,7 +189,7 @@ export class ViewrutasComponent implements OnInit{
   
 
   cerrarModal () {
-    this.cerrarModalBtn2.nativeElement.click();
+    this.cerrarModalBtnRuta.nativeElement.click();
   }
   private showIncompleteDataAlertUnidad() {
     Swal.fire({

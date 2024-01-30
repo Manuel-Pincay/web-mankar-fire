@@ -53,14 +53,14 @@
   .disconnect-btn {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #dc3545; /* Color de fondo rojo */
-    color: #fff; /* Color del texto blanco */
+    background-color: #dc3545;
+    color: #fff;
     border-radius: 5px;
-    transition: background-color 0.3s ease; /* Efecto de transición en el cambio de color de fondo */
+    transition: background-color 0.3s ease; 
   }
   
   .disconnect-btn:hover {
-    background-color: #c82333; /* Cambio de color al pasar el ratón sobre el botón */
+    background-color: #c82333;
   }
   
   .nav {
@@ -74,7 +74,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 1000; /* Ensure a high z-index value */
+    z-index: 1000;
   }
   
   a {
@@ -107,7 +107,7 @@
     display: none;
   }
   
-  /* responsive */
+
   @media screen and (max-width: 1160px) {
     .nav {
       padding: 15px 100px;
