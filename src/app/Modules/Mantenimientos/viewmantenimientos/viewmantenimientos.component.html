@@ -8,16 +8,18 @@
   </ul>
 </nav>
 
-<!-- start: Sidebar -->
-<app-sidebar></app-sidebar>
-
-<div class="sidebar-overlay"></div>
-<!-- end: Sidebar -->
 
 
+    <!-- start: Sidebar -->
+    <app-sidebar></app-sidebar>
+
+    <div class="sidebar-overlay"></div>
+    <!-- end: Sidebar -->
 
 <section class="text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto">
+
+
     
     <!-- Modal ADD-->
     <div class="modal fade" id="agregarNuevoMantenimiento" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -104,13 +106,14 @@
 
     <div class="container mt-4">
       <div class="card">
-        <div class="card-body">
-          <span class="h2">Mantenimientos Realizados</span>
-          <button style="background-color :#2c7bfe;" class="btn btn-success btn-lg float-right" data-bs-toggle="modal"
+        <button style="background-color :#2c7bfe;" class="btn btn-success btn-lg float-right" data-bs-toggle="modal"
             data-bs-target="#agregarNuevoMantenimiento">
             <i class="fas fa-plus"></i> Agregar mantenimiento
           </button>
           <div class="table-container mt-4">
+        <div class="card-body">
+          <span class="h2">Mantenimientos Realizados</span>
+          
           <table class="table table-striped mt-4">
             <!--     <table class="mt-5 table-auto content-table twhitespace-no-wrap"> -->
             <!-- class="table table-striped mt-5" -->
