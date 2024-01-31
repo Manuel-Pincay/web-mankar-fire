@@ -45,6 +45,7 @@ export class ViewmantenimientosComponent implements OnInit {
   loadingImagen: boolean = false;
   loadingImagen2: boolean = false;
   private choferPredefinido: any;
+  tiposM: ListatiposM[] = [];
   constructor(
     private fb: FormBuilder,
     private storage: Storage,
@@ -56,7 +57,6 @@ export class ViewmantenimientosComponent implements OnInit {
     this.form = this.fb.group({
       chofer: ['',],
       kilometraje: [null, Validators.required],
-      proxcambio: [null, Validators.required],
       placa: ['', Validators.required],
       comentario: ['', Validators.required],
       descripcion: ['', Validators.required],
@@ -70,7 +70,6 @@ export class ViewmantenimientosComponent implements OnInit {
       placa: ['', Validators.required],
       descripcion: ['', Validators.required],
       kilometraje: [null, Validators.required],
-      proxcambio: [null, Validators.required],
       fecha: [new Date(), Validators.required],
       comentario: ['', Validators.required],
       imagen: [''],
@@ -107,6 +106,10 @@ export class ViewmantenimientosComponent implements OnInit {
         }
       );
     }
+    this.tiposM$.subscribe((tiposM: ListatiposM[]) => {
+      this.tiposM = tiposM;
+      this.establecerValoresPreseleccionados();
+    });
   }
   establecerValoresPreseleccionados(): void {
     const tipoMPreseleccionado = 'Mantenimiento 2';
@@ -302,10 +305,20 @@ export class ViewmantenimientosComponent implements OnInit {
         const placaValue = placaControl.value;
       
         this.unidadesService.getUnidad(placaValue).subscribe(
-          (unidad: { chofer: any; }) => {
+          (unidad: { chofer: any, kmac: number }) => {
             if (unidad) {
               const mantenimientoData = this.form.value;
-  
+
+              const tipoMSeleccionado = this.tiposM.find(
+                (tipoM) => tipoM.nombre === mantenimientoData.descripcion
+              );
+    
+              const tipoMKilometraje = tipoMSeleccionado ? tipoMSeleccionado.prox : 0;
+              const proximoCambio = mantenimientoData.kilometraje + tipoMKilometraje;
+
+
+
+              
               const fechaFormulario = mantenimientoData.fecha;
               const fechaFormularioDate =
                 fechaFormulario instanceof Date
@@ -318,6 +331,7 @@ export class ViewmantenimientosComponent implements OnInit {
                 imagen: this.downloadURL,
                 imagen2: this.downloadURL2,
                 chofer: unidad.chofer,
+                proxcambio: proximoCambio,
               };
               this.mantenimientosService
                 .addMantenimiento(mantenimiento)
@@ -387,6 +401,14 @@ export class ViewmantenimientosComponent implements OnInit {
     if (this.formularioEdicion.valid) {
       if(!this.loadingImagen && !this.loadingImagen2){
       const mantenimientoedData = this.formularioEdicion.value;
+
+      const tipoMSeleccionado = this.tiposM.find(
+        (tipoM) => tipoM.nombre === mantenimientoedData.descripcion
+      );
+
+      const tipoMKilometraje = tipoMSeleccionado ? tipoMSeleccionado.prox : 0;
+      const proximoCambio = mantenimientoedData.kilometraje + tipoMKilometraje;
+
       const fechaFormulario = mantenimientoedData.fecha;
       const fechaFormularioDate =
         fechaFormulario instanceof Date
@@ -422,6 +444,7 @@ export class ViewmantenimientosComponent implements OnInit {
         imagen2: imagen2,
         key: this.editarMantenimiento2.key,
         chofer: chofer,
+        proxcambio: proximoCambio,
       };
   
       this.mantenimientosService

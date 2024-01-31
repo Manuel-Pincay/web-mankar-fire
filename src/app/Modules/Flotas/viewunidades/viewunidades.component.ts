@@ -293,18 +293,15 @@ export class ViewunidadesComponent implements OnInit {
     if (this.formularioEdicion.valid) {
       if(!this.loadingImagen){
       const unidadEditadaData = this.formularioEdicion.value;
-      const imagen = this.downloadURL
-      ? this.downloadURL
-      : this.editarunidadF.imagen;
+ 
       const unidadEditado: Unidades = {
         ...unidadEditadaData,
-        imagen: imagen, 
-        key: this.editarunidadF.key,
+        imagen: this.downloadURL,
       };
       this.unidadesService
-        .updateUnidad(unidadEditadaData)
+        .updateUnidad(unidadEditado)
         .then(() => {
-          this.handleSuccess('Edición exitosa', 'success', unidadEditadaData);
+          this.handleSuccess('Edición exitosa', 'success', unidadEditado);
           this.cerrarModal(); 
         })
         .catch((error) =>

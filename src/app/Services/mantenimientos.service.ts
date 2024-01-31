@@ -18,12 +18,13 @@ import {
 import { Observable, from, map } from 'rxjs';
 import Mantenimientos from '../Interfaces/mantenimientos.interfaces';
 import { LogService } from './logs.service';
+import { getStorage, ref, deleteObject } from 'firebase/storage';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MantenimientosService {
-  constructor(private firestore: Firestore, private logService: LogService) {}
+  constructor(private firestore: Firestore, private logService: LogService,  ) {}
 
   addMantenimiento(mantenimiento: Mantenimientos) {
     const mantenimientosRef = collection(this.firestore, 'mantenimientos');
@@ -102,55 +103,6 @@ export class MantenimientosService {
     );
   }
 
-  /* 
-  getMantenimientosPorUnidadYTipo(unidad: string, tipoMantenimiento: string): Observable<any[]> {
-  const mantenimientosQuery = query(collection(this.firestore, 'mantenimientos'),
-    where('placa', '==', unidad)
-  );
-
-  return from(getDocs(mantenimientosQuery)).pipe(
-    map((querySnapshot) => {
-      const mantenimientos: any[] = [];
-      const conteoPorMes: { [mes: number]: number } = {};
-
-      querySnapshot.forEach((doc) => {
-        const mantenimiento = doc.data();
-        if (mantenimiento['descripcion'] === tipoMantenimiento) {
-          const fecha = new Date(mantenimiento['fecha']);
-          const mes = fecha.getMonth() + 1; // Meses en JavaScript van de 0 a 11
-          conteoPorMes[mes] = (conteoPorMes[mes] || 0) + 1;
-        }
-      });
-
-      const mantenimientosPorMes = Object.entries(conteoPorMes).map(([mes, cantidad]) => ({
-        mes: mes,
-        cantidad: cantidad
-      }));
-
-      return mantenimientosPorMes;
-    })
-  );
-} */
-
-  /*   getMantenimientosPorUnidadYTipo(unidad: string, tipoMantenimiento: string): Observable<any[]> {
-    const mantenimientosQuery = query(collection(this.firestore, 'mantenimientos'),
-      and(
-        where('placa', '==', unidad),
-        where('descripcion', '==', tipoMantenimiento)
-      )
-    );
-  
-    return from(getDocs(mantenimientosQuery)).pipe(
-      map((querySnapshot) => {
-        const mantenimientos: any[] = [];
-        querySnapshot.forEach((doc) => {
-          mantenimientos.push(doc.data());
-        });
-        return mantenimientos;
-      })
-    );
-  }
- */
   getMantenimientosPorUnidad(placa: string): Observable<Mantenimientos[]> {
     const mantenimientosQuery = query(
       collection(this.firestore, 'mantenimientos'),
@@ -217,6 +169,42 @@ export class MantenimientosService {
       });
     });
   }
+/* 
+  eliminarMantenimiento(mantenimiento: Mantenimientos) {
+    const storage = getStorage();
+    const mantenimientoDocRef = doc(
+      this.firestore,
+      `mantenimientos/${mantenimiento.key}`
+    );
+
+    // Utiliza deleteDoc para eliminar definitivamente el documento
+    return deleteDoc(mantenimientoDocRef)
+      .then(() => {
+        // Extrae el nombre del archivo de la URL de imagen
+        const imagenNombre = mantenimiento.imagen.split('/').pop();
+        // Construye la referencia al archivo en Firebase Storage
+        const storageRef = ref(
+          this.storage,
+          `mantenimientosfiles/${mantenimiento.imagen}`
+        );
+        // Utiliza deleteObject para eliminar la imagen asociada al mantenimiento
+        return deleteObject(storageRef)
+          .then(() => {
+            // Llama a createlog para registrar la transacción con el objeto completo
+            this.logService.createlog({
+              action: 'Eliminado',
+              details: 'Mantenimiento y su imagen eliminados',
+              registro: mantenimiento,
+            });
+          })
+          .catch((error) => {
+            console.error('Error al eliminar la imagen:', error);
+          });
+      })
+      .catch((error) => {
+        console.error('Error al eliminar el mantenimiento:', error);
+      });
+  } */
 
   resetMantenimiento(mantenimiento: Mantenimientos) {
     const mantenimientoDocRef = doc(
