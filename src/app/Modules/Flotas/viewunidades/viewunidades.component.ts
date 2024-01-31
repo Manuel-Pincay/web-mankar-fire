@@ -169,8 +169,8 @@ export class ViewunidadesComponent implements OnInit {
   // ========================================================================================== //
   // Función para GUARDAR TIPOS MANTENIMIENTO
   // ========================================================================================== // 
-  fileRef: string = "";
-  downloadURL = "";
+  fileRef: string = '';
+  downloadURL = '';
 
   onFileSelected($event: any) {
     this.loadingImagen = true;
@@ -178,21 +178,25 @@ export class ViewunidadesComponent implements OnInit {
     const filePath = `unidades/${Date.now()}`;
     const fileRef = ref(this.storage, filePath);
     const storageRef = ref(this.storage, filePath);
+  
     uploadBytes(fileRef, file)
-      .then(() => {
-        setTimeout(() => {
-          getDownloadURL(storageRef).then((url) => {
-            this.downloadURL = url;
-            console.log('URL:', this.downloadURL);
-            this.loadingImagen = false;
-          });
-        }, 500);
-      })
+    .then(() => {
+      setTimeout(() => {
+        getDownloadURL(storageRef).then((url) => {
+          this.downloadURL = url;
+          console.log('URL:', this.downloadURL);
+          this.loadingImagen = false;
+        });
+      }, 500);
+    })
       .catch((error) => {
-        console.log(error);
+        console.error('Error al cargar la imagen:', error);
+      })
+      .finally(() => {
         this.loadingImagen = false;
       });
   }
+  
   
 
   private handlePlacaExistenteError(): void {
@@ -204,9 +208,12 @@ export class ViewunidadesComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('Datos del formulario antes de crear valid:', this.form.value);
     if (this.form.valid) {
+      console.log('Datos del formulario antes de crear unidadData:', this.form.value);
       if(!this.loadingImagen){
       const unidadData = this.form.value;
+      console.log('Datos del formulario antes de crear newunidad:', unidadData);
       const newunidad: Unidades = {
         ...unidadData,
         imagen: this.downloadURL,

@@ -208,6 +208,31 @@ export class ViewrepostajeComponent {
     if (this.form.valid) {
       if(!this.loadingImagen){
       const repostajeData = this.form.value;
+      const placaControl = this.form.get('placa');
+      if (placaControl && placaControl.value !== null && placaControl.value !== undefined) {
+        const placaValue = placaControl.value;
+
+      
+        this.unidadesService.getUnidad(placaValue).subscribe(
+          (unidad: { chofer: any, kmac: number }) => {
+            if (unidad) {
+
+      const proximoKM = repostajeData.kilometraje;
+
+      const unidadKilometraje = unidad.kmac;
+
+
+      if (proximoKM > unidadKilometraje) {
+        this.unidadesService.actualizarKilometrajeUnidad(placaValue, proximoKM).subscribe(
+          () => {
+            console.log('Kilometraje de la unidad actualizado correctamente.');
+          },
+          (error: any) => {
+            console.error('Error actualizando el kilometraje de la unidad:', error);
+          }
+        );
+      }
+
       const fechaFormulario = repostajeData.fecha;
       const fechaFormularioDate =
         fechaFormulario instanceof Date
@@ -226,13 +251,20 @@ export class ViewrepostajeComponent {
           this.cerrarModal2(); 
         })
         .catch((error) => this.handleError('Error al crear repostaje', error));
+    }
+          },
+          (error: any) => {
+            console.error('Error obteniendo unidad:', error);
+          }
+        );
+      }
     } else {
       this.showIncompleteDataAlert2();
     }
   } else {
-      this.showIncompleteDataAlert();
-    }
+    this.showIncompleteDataAlert();
   }
+}
 
   private showIncompleteDataAlert2() {
     Swal.fire({
@@ -290,40 +322,67 @@ export class ViewrepostajeComponent {
   
   guardarEdicion() {
     if (this.formularioEdicion.valid) {
-      if(!this.loadingImagen){
-      const EditrepostajeData = this.formularioEdicion.value;
-      const fechaFormulario = EditrepostajeData.fecha;
-      const fechaFormularioDate =
-        fechaFormulario instanceof Date
-          ? fechaFormulario
-          : new Date(fechaFormulario);
-      const fecha = Timestamp.fromDate(fechaFormularioDate);
-      const imagen = this.downloadURL
-        ? this.downloadURL
-        : this.editarrepostajeF.imagen;
-      const repostajeEditado: Repostajes = {
-        ...EditrepostajeData,
-        fecha: fecha,
-        imagen: imagen, 
-        key: this.editarrepostajeF.key,
-      };
-      this.repostajesService
-        .updateRepostaje(repostajeEditado)
-        .then(() => {
-          this.handleSuccess('Edición exitosa', 'success', repostajeEditado);
-          this.cerrarModal(); 
-        })
-        .catch((error) =>
-          this.handleError('Error al editar repostaje', 'error')
+      if (!this.loadingImagen) {
+        const EditrepostajeData = this.formularioEdicion.value;
+  
+        const fechaFormulario = EditrepostajeData.fecha;
+        const fechaFormularioDate =
+          fechaFormulario instanceof Date
+            ? fechaFormulario
+            : new Date(fechaFormulario);
+        const fecha = Timestamp.fromDate(fechaFormularioDate);
+        const imagen = this.downloadURL
+          ? this.downloadURL
+          : this.editarrepostajeF.imagen;
+        const repostajeEditado: Repostajes = {
+          ...EditrepostajeData,
+          fecha: fecha,
+          imagen: imagen,
+          key: this.editarrepostajeF.key,
+        };
+  
+        // Obtener la unidad y suscribirse
+        this.unidadesService.getUnidad(repostajeEditado.placa).subscribe(
+          (unidad: { chofer: any, kmac: number }) => {
+            if (unidad) {
+              const proximoKM = repostajeEditado.kilometraje;
+              const unidadKilometraje = unidad.kmac;
+  
+              if (proximoKM > unidadKilometraje) {
+                this.unidadesService.actualizarKilometrajeUnidad(repostajeEditado.placa, proximoKM).subscribe(
+                  () => {
+                    console.log('Kilometraje de la unidad actualizado correctamente.');
+                  },
+                  (error: any) => {
+                    console.error('Error actualizando el kilometraje de la unidad:', error);
+                  }
+                );
+              }
+  
+              // Continuar con la actualización del repostaje
+              this.repostajesService.updateRepostaje(repostajeEditado).then(() => {
+                this.handleSuccess('Edición exitosa', 'success', repostajeEditado);
+                this.cerrarModal();
+              }).catch((error) => {
+                this.handleError('Error al editar repostaje', 'error');
+              });
+            }
+          },
+          (error: any) => {
+            console.error('Error obteniendo unidad:', error);
+          }
         );
-      } else{
+      } else {
         this.showIncompleteDataAlert2();
       }
-      } else {
-        console.log('Datos incompletos o inválidos:', this.form.value);
-        this.showIncompleteDataAlert();
-      }
+    } else {
+      console.log('Datos incompletos o inválidos:', this.formularioEdicion.value);
+      this.showIncompleteDataAlert();
     }
+  }
+  
+
+
     cerrarModal2() {
       this.cerrarModalBtn2.nativeElement.click();
       setTimeout(() => {

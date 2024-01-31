@@ -16,7 +16,7 @@ import {
   where,
   getDocs,
 } from '@angular/fire/firestore';
-import { Observable, from, map } from 'rxjs';
+import { Observable, from, map, switchMap, take } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import Unidades from '../Interfaces/unidades.interfaces';
 import { LogService } from './logs.service';
@@ -94,7 +94,7 @@ export class UnidadesService {
 
   updateUnidad(unidad: Unidades) {
     const unidadDocRef = doc(this.firestore, `flota/${unidad.placa}`);
-    return setDoc(unidadDocRef, unidad).then(() => {
+    return setDoc(unidadDocRef, { ...unidad, estado: true }).then(() => {
       this.logService.createlog({
         action: 'Actualizada',
         details: 'Unidad actualizada',
@@ -102,6 +102,17 @@ export class UnidadesService {
       });
     });
   }
+
+  actualizarKilometrajeUnidad(placa: string, nuevoKilometraje: number): Observable<void> {
+    return this.getUnidad(placa).pipe(
+      take(1),
+      switchMap((unidad: Unidades) => {
+        unidad.kmac = nuevoKilometraje;
+        return this.updateUnidad(unidad);
+      })
+    );
+  }
+  
 
   deleteUnidad(unidad: Unidades) {
     const unidadDocRef = doc(this.firestore, `flota/${unidad.placa}`);

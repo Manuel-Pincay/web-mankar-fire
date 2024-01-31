@@ -179,8 +179,6 @@ export class ViewmantenimientosComponent implements OnInit {
       );
     }
   }
- 
-
 
   confirmarRecuperar(mantenimiento: any): void {
     if (window.confirm('¿Seguro que desea recuperar este mantenimiento?')) {
@@ -316,9 +314,21 @@ export class ViewmantenimientosComponent implements OnInit {
               const tipoMKilometraje = tipoMSeleccionado ? tipoMSeleccionado.prox : 0;
               const proximoCambio = mantenimientoData.kilometraje + tipoMKilometraje;
 
+              const unidadKilometraje = unidad.kmac;
 
 
-              
+              if (proximoCambio > unidadKilometraje) {
+                this.unidadesService.actualizarKilometrajeUnidad(placaValue, proximoCambio).subscribe(
+                  () => {
+                    console.log('Kilometraje de la unidad actualizado correctamente.');
+                  },
+                  (error: any) => {
+                    console.error('Error actualizando el kilometraje de la unidad:', error);
+                  }
+                );
+              }
+
+
               const fechaFormulario = mantenimientoData.fecha;
               const fechaFormularioDate =
                 fechaFormulario instanceof Date
@@ -400,7 +410,12 @@ export class ViewmantenimientosComponent implements OnInit {
   guardarEdicion() {
     if (this.formularioEdicion.valid) {
       if(!this.loadingImagen && !this.loadingImagen2){
+
+        
       const mantenimientoedData = this.formularioEdicion.value;
+
+      this.unidadesService.getUnidad(mantenimientoedData.placa).subscribe(
+        (unidad: { chofer: any, kmac: number }) => {
 
       const tipoMSeleccionado = this.tiposM.find(
         (tipoM) => tipoM.nombre === mantenimientoedData.descripcion
@@ -408,6 +423,21 @@ export class ViewmantenimientosComponent implements OnInit {
 
       const tipoMKilometraje = tipoMSeleccionado ? tipoMSeleccionado.prox : 0;
       const proximoCambio = mantenimientoedData.kilometraje + tipoMKilometraje;
+
+
+      const unidadKilometraje = unidad.kmac;
+
+
+      if (proximoCambio > unidadKilometraje) {
+        this.unidadesService.actualizarKilometrajeUnidad(mantenimientoedData.placa, proximoCambio).subscribe(
+          () => {
+            console.log('Kilometraje de la unidad actualizado correctamente.');
+          },
+          (error: any) => {
+            console.error('Error actualizando el kilometraje de la unidad:', error);
+          }
+        );
+      }
 
       const fechaFormulario = mantenimientoedData.fecha;
       const fechaFormularioDate =
@@ -457,18 +487,21 @@ export class ViewmantenimientosComponent implements OnInit {
           this.handleError('Error al editar mantenimiento', 'error')
         );
 
+      },
+      (error: any) => {
+        console.error('Error obteniendo unidad:', error);
+      }
+    );
+
       } else {
         this.showIncompleteDataAlert2();
       }
+      
     } else {
         this.showIncompleteDataAlert();
       }
     }
-  
-  
-
-
-  cerrarModal() {
+    cerrarModal() {
     this.cerrarModalBtn.nativeElement.click();
   }
 
