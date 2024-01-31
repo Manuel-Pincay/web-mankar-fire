@@ -84,6 +84,9 @@ export class ViewtiposmantenimientosComponent implements OnInit {
 
   cerrarModal2() {
     this.cerrarModalBtn2.nativeElement.click();
+    setTimeout(() => {
+      location.reload();
+    }, 2100);
   }
   private showIncompleteDataAlert() {
     Swal.fire({

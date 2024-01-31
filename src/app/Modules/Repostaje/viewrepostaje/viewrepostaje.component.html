@@ -138,7 +138,7 @@
                   </td>
                   <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje)"
                     class="text-center">
-                    {{ repostaje.kilometraje | number: '1.0-0' }}
+                    {{ repostaje.kilometraje < 100 ? 'Indefinido' : repostaje.kilometraje | number: '1.0-0' }}
                   </td>
                   <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje)"
                     class="text-center">
@@ -199,7 +199,7 @@
                   </td>
                   <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje2)"
                     class="text-center">
-                    {{ repostaje2.kilometraje | number: '1.0-0' }}
+                    {{ repostaje2.kilometraje < 100 ? 'Indefinido' : repostaje2.kilometraje | number: '1.0-0' }}
                   </td>
                   <td data-bs-toggle="modal" data-bs-target="#detallerepostajeModal" (click)="verDetalles(repostaje2)"
                     class="text-center">
@@ -251,7 +251,7 @@
               <strong>Placa:</strong> {{ detallerepostaje?.placa }}
             </li>
             <li class="list-group-item">
-              <strong>Kilometraje:</strong> {{ detallerepostaje?.kilometraje | number: '1.0-0' }}
+              <strong>Kilometraje:</strong> {{ detallerepostaje?.kilometraje < 100 ? 'Indefinido' : detallerepostaje?.kilometraje | number: '1.0-0' }}
             </li>
             <li class="list-group-item">
               <strong>Galonaje:</strong> {{ detallerepostaje?.cantidad | number: '1.0-0' }}

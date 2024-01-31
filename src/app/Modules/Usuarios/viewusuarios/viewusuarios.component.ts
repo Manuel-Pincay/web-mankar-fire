@@ -258,7 +258,9 @@ private handleError(title: string, icon: SweetAlertIcon, error?: any): void {
 
   cerrarModal2() {
     this.cerrarModalBtn2.nativeElement.click();
-    this.form.reset();
+    setTimeout(() => {
+      location.reload();
+    }, 2100);
   }
   
   private showIncompleteDataAlert() {

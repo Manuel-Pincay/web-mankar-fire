@@ -208,12 +208,9 @@ export class ViewunidadesComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('Datos del formulario antes de crear valid:', this.form.value);
     if (this.form.valid) {
-      console.log('Datos del formulario antes de crear unidadData:', this.form.value);
       if(!this.loadingImagen){
       const unidadData = this.form.value;
-      console.log('Datos del formulario antes de crear newunidad:', unidadData);
       const newunidad: Unidades = {
         ...unidadData,
         imagen: this.downloadURL,
@@ -252,6 +249,9 @@ export class ViewunidadesComponent implements OnInit {
 
   cerrarModal2() {
     this.cerrarModalBtn2.nativeElement.click();
+    setTimeout(() => {
+      location.reload();
+    }, 2100);
   }
   private showIncompleteDataAlert() {
     Swal.fire({

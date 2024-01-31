@@ -32,14 +32,14 @@ export class ViewrutasComponent implements OnInit{
         nombre: [''],
         salida: ['', Validators.required],
         llegada: ['', Validators.required],
-        npeajes: [null, [Validators.required, Validators.min(0)]],
+        npeajes: [null, [Validators.required, Validators.min(-1)]],
         estado: [true, Validators.required],
       });
       this.formularioEdicion = this.fb.group({
         nombre: [''],
         salida: ['', Validators.required],
         llegada: ['', Validators.required],
-        npeajes: [null, [Validators.required, Validators.min(0)]],
+        npeajes: [null, [Validators.required, Validators.min(-1)]],
       });
      }
 
@@ -162,6 +162,9 @@ export class ViewrutasComponent implements OnInit{
 
   cerrarModal2() {
     this.cerrarModalBtn2.nativeElement.click();
+    setTimeout(() => {
+      location.reload();
+    }, 2100);
   }
 
 
