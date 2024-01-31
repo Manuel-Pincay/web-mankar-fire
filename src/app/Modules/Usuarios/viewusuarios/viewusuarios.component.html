@@ -185,8 +185,9 @@
               </td>
 
               <td>
-                <button (click)="confirmarRecuperar(usuario2)">
-                  <i class="fas ri-device-recover-line fa-lg text-primary"></i>
+                <button (click)="confirmarRecuperar(usuario2)" class="ml-4">
+                  <i class="fa-solid fa-arrows-rotate fa-lg text-info mr-4"></i>
+
                 </button>
               </td>
             </tr>
@@ -277,7 +278,7 @@
       <div class="modal-body">
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
-            <strong>Email:</strong> {{ detalleUsuario?.email }}
+            <strong>Correo:</strong> {{ detalleUsuario?.email }}
           </li>
           <li class="list-group-item">
             <strong>Nombre:</strong> {{ detalleUsuario?.name }}

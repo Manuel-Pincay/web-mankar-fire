@@ -1,6 +1,6 @@
 // repostajes.service.ts
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, collectionData, doc, deleteDoc, setDoc, updateDoc, orderBy, query } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import Repostaje from '../Interfaces/repostajes.interfaces';
@@ -35,7 +35,8 @@ export class RepostajesService {
 
   getRepostajes(): Observable<Repostaje[]> {
     const repostajesRef = collection(this.firestore, 'DBcombustible');
-    return collectionData(repostajesRef, { idField: 'key' }).pipe(
+    const orderedQuery = query(repostajesRef, orderBy('fecha', 'desc'));
+    return collectionData(orderedQuery, { idField: 'key' }).pipe(
       map((data: any[]) => {
         return data .filter(repostaje => repostaje.estado === true).map(repostaje => {
           return {
@@ -75,7 +76,8 @@ export class RepostajesService {
     });
   }
 
-  deleteRepostaje(repostaje: Repostaje) {
+  
+deleteRepostaje(repostaje: Repostaje) {
     const repostajeDocRef = doc(this.firestore, `DBcombustible/${repostaje.key}`);
     
     // Utiliza updateDoc para cambiar el estado a false
@@ -88,6 +90,24 @@ export class RepostajesService {
       });
     });
   }
+ 
+
+
+  eliminarRepostaje(repostaje: Repostaje) {
+    const repostajeDocRef = doc(this.firestore, `DBcombustible/${repostaje.key}`);
+    
+    // Utiliza deleteDoc para eliminar definitivamente el documento
+    return deleteDoc(repostajeDocRef).then(() => {
+      // Llama a createlog para registrar la transacción con el objeto completo
+      this.logService.createlog({
+        action: 'Eliminado',
+        details: 'Repostaje eliminado total',
+        registro: repostaje,
+      });
+    });
+  }
+
+
   resetRepostaje(repostaje: Repostaje) {
     const repostajeDocRef = doc(this.firestore, `DBcombustible/${repostaje.key}`);
     

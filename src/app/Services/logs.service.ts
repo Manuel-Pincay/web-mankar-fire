@@ -49,4 +49,10 @@ export class LogService {
 
     return collectionData(orderedQuery, { idField: 'logId' }) as Observable<any[]>;
   }
+  getLogsMovil(): Observable<any[]> {
+    const logsRef = collection(this.firestore, 'logs');
+    const orderedQuery = query(logsRef, orderBy('fecha', 'desc'));
+
+    return collectionData(orderedQuery, { idField: 'logId' }) as Observable<any[]>;
+  }
 }

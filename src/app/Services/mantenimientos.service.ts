@@ -22,11 +22,8 @@ import { LogService } from './logs.service';
 @Injectable({
   providedIn: 'root',
 })
-
 export class MantenimientosService {
-  constructor(private firestore: Firestore, 
-    private logService: LogService ) {}
-
+  constructor(private firestore: Firestore, private logService: LogService) {}
 
   addMantenimiento(mantenimiento: Mantenimientos) {
     const mantenimientosRef = collection(this.firestore, 'mantenimientos');
@@ -46,7 +43,6 @@ export class MantenimientosService {
       });
     });
   }
- 
 
   getMantenimientos(): Observable<Mantenimientos[]> {
     const mantenimientosRef = collection(this.firestore, 'mantenimientos');
@@ -83,15 +79,18 @@ export class MantenimientosService {
     ) as Observable<Mantenimientos[]>;
   }
 
-
-  getMantenimientosPorUnidadYTipo(unidad: string, tipoMantenimiento: string): Observable<any[]> {
-    const mantenimientosQuery = query(collection(this.firestore, 'mantenimientos'),
+  getMantenimientosPorUnidadYTipo(
+    unidad: string,
+    tipoMantenimiento: string
+  ): Observable<any[]> {
+    const mantenimientosQuery = query(
+      collection(this.firestore, 'mantenimientos'),
       and(
         where('placa', '==', unidad),
         where('descripcion', '==', tipoMantenimiento)
       )
     );
-  
+
     return from(getDocs(mantenimientosQuery)).pipe(
       map((querySnapshot) => {
         const mantenimientos: any[] = [];
@@ -102,11 +101,8 @@ export class MantenimientosService {
       })
     );
   }
- 
-  
-  
-  
-/* 
+
+  /* 
   getMantenimientosPorUnidadYTipo(unidad: string, tipoMantenimiento: string): Observable<any[]> {
   const mantenimientosQuery = query(collection(this.firestore, 'mantenimientos'),
     where('placa', '==', unidad)
@@ -136,7 +132,7 @@ export class MantenimientosService {
   );
 } */
 
-/*   getMantenimientosPorUnidadYTipo(unidad: string, tipoMantenimiento: string): Observable<any[]> {
+  /*   getMantenimientosPorUnidadYTipo(unidad: string, tipoMantenimiento: string): Observable<any[]> {
     const mantenimientosQuery = query(collection(this.firestore, 'mantenimientos'),
       and(
         where('placa', '==', unidad),
@@ -155,24 +151,23 @@ export class MantenimientosService {
     );
   }
  */
-  getMantenimientosPorUnidad(placa: string):Observable<Mantenimientos[]> {
+  getMantenimientosPorUnidad(placa: string): Observable<Mantenimientos[]> {
+    const mantenimientosQuery = query(
+      collection(this.firestore, 'mantenimientos'),
+      where('placa', '==', placa)
+    );
 
-    const mantenimientosQuery = query(collection(this.firestore, 'mantenimientos'),
-    where('placa', '==', placa)
-  );
+    return from(getDocs(mantenimientosQuery)).pipe(
+      map((querySnapshot) => {
+        const mantenimientos: any[] = [];
+        querySnapshot.forEach((doc) => {
+          mantenimientos.push(doc.data());
+        });
+        return mantenimientos;
+      })
+    );
+  }
 
-  return from(getDocs(mantenimientosQuery)).pipe(
-    map((querySnapshot) => {
-      const mantenimientos: any[] = [];
-      querySnapshot.forEach((doc) => {
-        mantenimientos.push(doc.data());
-      });
-      return mantenimientos;
-    })
-  );
-}
- 
-  
   updateMantenimiento(mantenimiento: Mantenimientos) {
     const mantenimientoDocRef = doc(
       this.firestore,
@@ -187,7 +182,6 @@ export class MantenimientosService {
         registro: mantenimiento,
       });
     });
-  
   }
 
   deleteMantenimiento(mantenimiento: Mantenimientos) {
@@ -206,6 +200,24 @@ export class MantenimientosService {
       });
     });
   }
+
+  eliminarMantenimiento(mantenimiento: Mantenimientos) {
+    const mantenimientoDocRef = doc(
+      this.firestore,
+      `mantenimientos/${mantenimiento.key}`
+    );
+
+    // Utiliza deleteDoc para eliminar definitivamente el documento
+    return deleteDoc(mantenimientoDocRef).then(() => {
+      // Llama a createlog para registrar la transacción con el objeto completo
+      this.logService.createlog({
+        action: 'Eliminado',
+        details: 'Mantenimiento eliminado total',
+        registro: mantenimiento,
+      });
+    });
+  }
+
   resetMantenimiento(mantenimiento: Mantenimientos) {
     const mantenimientoDocRef = doc(
       this.firestore,

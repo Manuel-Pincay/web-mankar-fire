@@ -88,10 +88,10 @@ export class ViewrepostajeComponent {
   confirmarEliminar(repostaje: any): void {
     const confirmacion = window.confirm('¿Seguro que desea eliminar este repostaje?');
     if (confirmacion) {
-      this.eliminarunidad(repostaje);
+      this.eliminarrepostaje(repostaje);
     }
   }
-  eliminarunidad(repostaje: any): void {
+  eliminarrepostaje(repostaje: any): void {
     repostaje.estado = false;
     this.repostajesService
       .deleteRepostaje(repostaje)
@@ -102,6 +102,22 @@ export class ViewrepostajeComponent {
         this.handleError('Error al eliminar repostaje', 'error')
       );
   }
+
+
+  confirmarEliminar2(repostaje: any): void {
+    const confirmacion = window.confirm('¿Seguro que desea eliminar definitivamente este repostaje?');
+    if (confirmacion) {
+      this.repostajesService
+      .eliminarRepostaje(repostaje)
+      .then(() =>
+        this.handleSuccess('Eliminado correctamente', 'success', repostaje)
+      )
+      .catch((error) =>
+        this.handleError('Error al eliminar repostaje', 'error')
+      );
+    }
+  }
+ 
 
   confirmarRecuperar(repostaje: any): void {
     const confirmacion = window.confirm('¿Seguro que desea recuperar este repostaje?');

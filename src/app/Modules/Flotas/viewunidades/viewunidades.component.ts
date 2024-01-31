@@ -98,6 +98,24 @@ export class ViewunidadesComponent implements OnInit {
       this.eliminarunidad(unidad);
     }
   }
+
+
+  
+  confirmarEliminar2(unidad: any): void {
+    const confirmacion = window.confirm('¿Seguro que desea eliminar definitivamente este repostaje?');
+    if (confirmacion) {
+      this.unidadesService
+      .eliminarTotal(unidad)
+      .then(() =>
+        this.handleSuccess('Eliminado correctamente', 'success', unidad)
+      )
+      .catch((error) =>
+        this.handleError('Error al eliminar repostaje', 'error')
+      );
+    }
+  }
+ 
+
   eliminarunidad(unidad: any): void {
     unidad.estado = false;
     this.unidadesService.deleteUnidad(unidad)
@@ -134,7 +152,7 @@ export class ViewunidadesComponent implements OnInit {
     this.showToast(title, icon);
   }
 
-  private showToast(title: string, icon: SweetAlertIcon): void {
+  private showToast(title: string, icon: SweetAlertIcon,  message?: string): void {
     const Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
@@ -146,7 +164,7 @@ export class ViewunidadesComponent implements OnInit {
         toast.onmouseleave = Swal.resumeTimer;
       }
     });
-    Toast.fire({ icon, title });
+    Toast.fire({ icon, title, text: message });
   }
   // ========================================================================================== //
   // Función para GUARDAR TIPOS MANTENIMIENTO
@@ -158,20 +176,31 @@ export class ViewunidadesComponent implements OnInit {
     this.loadingImagen = true;
     const file = $event.target.files[0];
     const filePath = `unidades/${Date.now()}`;
-
     const fileRef = ref(this.storage, filePath);
     const storageRef = ref(this.storage, filePath);
     uploadBytes(fileRef, file)
-      .then(response => {
-        getDownloadURL(storageRef).then((url) => {
-          this.downloadURL = url;
-          this.loadingImagen = false;
-        });
+      .then(() => {
+        setTimeout(() => {
+          getDownloadURL(storageRef).then((url) => {
+            this.downloadURL = url;
+            console.log('URL:', this.downloadURL);
+            this.loadingImagen = false;
+          });
+        }, 500);
       })
       .catch((error) => {
-        console.log(error); 
+        console.log(error);
         this.loadingImagen = false;
       });
+  }
+  
+
+  private handlePlacaExistenteError(): void {
+    const title = 'Error al agregar una unidad';
+    const icon = 'error';
+    const message = 'Ya existe una unidad con la misma placa';
+    console.error(title);
+    this.showToast(title, icon, message);
   }
 
   onSubmit() {
@@ -189,7 +218,13 @@ export class ViewunidadesComponent implements OnInit {
           this.cerrarModal2(); 
           this.form.reset();
         })
-        .catch((error:any) => this.handleError('Error al crear unidad', error));
+        .catch((error:any) => {
+          if (error === 'placa_existente') {
+            this.handlePlacaExistenteError();
+          }else {
+            this.handleError('Error al crear unidad', error)
+          }
+        });
       } else{
         this.showIncompleteDataAlert2();
       }

@@ -1,6 +1,6 @@
 // tiposM.service.ts
 import { Injectable } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData, doc, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, collectionData, doc, setDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import ListatiposM from '../Interfaces/tiposmant.interfaces';
@@ -86,6 +86,18 @@ export class TiposMService {
       });
     });
   }
+
+  eliminarTotal(tipoM: ListatiposM)  {
+    const tipoMDocRef = doc(this.firestore, `listatiposM/${tipoM.nombre}`);
+    return deleteDoc(tipoMDocRef).then(() => { 
+      this.logService.createlog({
+        action: 'Eliminado',
+        details:  'Tipo de mantenimiento eliminado total',
+        registro: tipoM,
+      });
+    });
+  }
+
   resetTipoM(tipoM: ListatiposM) {
     const tipoMDocRef = doc(this.firestore, `listatiposM/${tipoM.nombre}`);
     return updateDoc(tipoMDocRef, { estado: true }).then(() => {

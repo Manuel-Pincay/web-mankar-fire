@@ -24,41 +24,82 @@
         <div class="card-body">
           <span class="h2">Registro de movimientos de usuarios</span>
           <div class="table-container mt-4">
-          <table class="table table-striped mt-4">
-            <thead class="thead-fixed">
-              <tr>
-                <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
-                  Usuario
-                </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
-                  Fecha
-                </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
-                  Acción
-                </th>
-                <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
-                  Detalles
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let log of logs">
-                <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
+            <table class="table table-striped mt-4">
+              <thead class="thead-fixed">
+                <tr>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                    Usuario
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                    Fecha
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                    Acción
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                    Detalles
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let log of logs">
+                  <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
                   verDetallesLog(log)">{{ log.user }}</td>
-                <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
+                  <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
                   verDetallesLog(log)">{{ log.fecha.toDate() | date: 'dd/MM/yyyy' }}</td>
-                <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
+                  <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
                   verDetallesLog(log)">{{ log.data.action }}</td>
-                <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
+                  <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
                   verDetallesLog(log)">{{ log.data.details }}</td>
-              </tr>
-            </tbody>
-          </table>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+
+        
+
+        <div class="card-body">
+          <span class="h2">Registro de movimientos App Movil</span>
+          <div class="table-container mt-4">
+            <table class="table table-striped mt-4">
+              <thead class="thead-fixed">
+                <tr>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                    Usuario
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                    Fecha
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                    Acción
+                  </th>
+                  <th class="px-4 py-3 title-font tracking-wider font-medium text-center">
+                    Detalles
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let logs of logs2">
+                  <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
+                verDetallesLog(logs)">{{ logs.user }}</td>
+                  <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
+                verDetallesLog(logs)">{{ logs.fecha.toDate() | date: 'dd/MM/yyyy' }}</td>
+                  <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
+                verDetallesLog(logs)">{{ logs.data.action }}</td>
+                  <td class="text-center" data-bs-toggle="modal" data-bs-target="#verDetallesLogModal" (click)="
+                verDetallesLog(logs)">{{ logs.data.details }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
       </div>
     </div>
-    </div>
   </div>
+
+
 
 
 
@@ -92,7 +133,7 @@
             <li class="list-group-item">
               <strong>Registro:</strong>
               <pre>{{ detalleLog?.data.registro | json }}</pre>
-          </li>
+            </li>
           </ul>
         </div>
         <div class="modal-footer d-flex justify-content-between">
@@ -103,4 +144,9 @@
       </div>
     </div>
   </div>
+
+
+
+
+
 </section>

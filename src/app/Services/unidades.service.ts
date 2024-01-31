@@ -13,6 +13,8 @@ import {
   query,
   DocumentSnapshot,
   getDoc,
+  where,
+  getDocs,
 } from '@angular/fire/firestore';
 import { Observable, from, map } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
@@ -25,12 +27,18 @@ import { LogService } from './logs.service';
 export class UnidadesService {
   constructor(private firestore: Firestore, private logService: LogService) {}
 
-  addUnidad(unidad: Unidades) {
+  async addUnidad(unidad: Unidades) {
     const unidadesRef = collection(this.firestore, 'flota');
     unidad.estado = true;
     const docRef = doc(unidadesRef, unidad.placa);
 
-    // Llama a createlog para registrar la transacción con el objeto completo
+    const placaQuery = query(unidadesRef, where('placa', '==', unidad.placa));
+    const placaDocs = await getDocs(placaQuery);
+
+    if (!placaDocs.empty) {
+      console.error('Ya existe una unidad con la misma placa');
+      return Promise.reject('placa_existente');
+    } 
     return setDoc(docRef, unidad).then(() => {
       this.logService.createlog({
         action: 'Agregada',
@@ -105,6 +113,18 @@ export class UnidadesService {
       });
     });
   }
+
+  eliminarTotal(unidad: Unidades)  {
+    const unidadDocRef = doc(this.firestore, `flota/${unidad.placa}`);
+    return deleteDoc(unidadDocRef).then(() => { 
+      this.logService.createlog({
+        action: 'Eliminado',
+        details: 'Unidad eliminada total',
+        registro: unidad,
+      });
+    });
+  }
+
   resetUnidad(unidad: Unidades) {
     const unidadDocRef = doc(this.firestore, `flota/${unidad.placa}`);
     return updateDoc(unidadDocRef, { estado: true }).then(() => {

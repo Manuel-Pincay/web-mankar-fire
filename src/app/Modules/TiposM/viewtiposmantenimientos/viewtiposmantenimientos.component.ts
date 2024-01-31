@@ -107,6 +107,22 @@ export class ViewtiposmantenimientosComponent implements OnInit {
       this.cambiarEstadoTiposM(tiposM);
     }
   }
+
+  
+  confirmarEliminar2(tiposM: any): void {
+    const confirmacion = window.confirm('¿Seguro que desea eliminar definitivamente este repostaje?');
+    if (confirmacion) {
+      this.tiposmanteService
+      .eliminarTotal(tiposM)
+      .then(() =>
+        this.handleSuccess('Eliminado correctamente', 'success', tiposM)
+      )
+      .catch((error) =>
+        this.handleError('Error al eliminar repostaje', 'error')
+      );
+    }
+  }
+ 
   cambiarEstadoTiposM(tiposM: any): void {
     tiposM.estado = false;
 

@@ -227,9 +227,15 @@
               </td>
 
               <td  class="text-center">
-                <button (click)="confirmarRecuperar(unidad2)">
-                  <i class="fas ri-device-recover-line fa-lg text-primary"></i>
+                <button (click)="confirmarEliminar2(unidad2)">
+                  <i class="fas fa-trash-alt fa-lg text-danger"></i>
                 </button>
+
+                <button (click)="confirmarRecuperar(unidad2)" class="ml-4">
+                  <i class="fa-solid fa-arrows-rotate fa-lg text-info mr-4"></i>
+
+                </button>
+ 
               </td>
             </tr>
           </tbody>

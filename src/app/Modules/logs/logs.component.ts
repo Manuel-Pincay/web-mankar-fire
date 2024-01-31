@@ -11,18 +11,27 @@ export class LogsComponent implements OnInit {
   @ViewChild('cerrarModalBtn') cerrarModalBtn!: ElementRef;
 
   logs: any[] = [];
+  logs2: any[] = [];
   detalleLog: any; 
   constructor(private firestore: Firestore, 
     private logService: LogService ) {}
 
     ngOnInit(): void {
       this.loadLogs();
+      this.loadLogsmovil();
     }
     loadLogs() {
       this.logService.getLogs().subscribe((logs) => {
         this.logs = logs;
       });
     }
+
+    loadLogsmovil() {
+      this.logService.getLogsMovil().subscribe((logs) => {
+        this.logs2 = logs;
+      });
+    }
+
 
     verDetallesLog(log: any) {
       // Asignar los detalles del log para mostrar en el modal

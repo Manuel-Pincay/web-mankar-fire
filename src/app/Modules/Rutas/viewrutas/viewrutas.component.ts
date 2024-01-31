@@ -70,6 +70,21 @@ export class ViewrutasComponent implements OnInit{
       this.cambiarEstadoRutas(rutas);
     }
   }
+
+  
+  confirmarEliminar2(rutas: any): void {
+    const confirmacion = window.confirm('¿Seguro que desea eliminar definitivamente este repostaje?');
+    if (confirmacion) {
+      this.RutasService
+      .eliminarTotal(rutas)
+      .then(() =>
+        this.handleSuccess('Eliminado correctamente', 'success', rutas)
+      )
+      .catch((error) =>
+        this.handleError('Error al eliminar repostaje', 'error')
+      );
+    }
+  }
   cambiarEstadoRutas(rutas: any): void {
     rutas.estado = false;
 

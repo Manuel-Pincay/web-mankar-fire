@@ -155,11 +155,29 @@ export class ViewmantenimientosComponent implements OnInit {
 
   // ========================================================================================== //
   // Función para confirmar la eliminación de un mantenimiento
+
+  
   confirmarEliminar(mantenimiento: any): void {
     if (window.confirm('¿Seguro que desea eliminar este mantenimiento?')) {
       this.cambiarEstadoMantenimiento(mantenimiento);
     }
   }
+
+  confirmarEliminar2(mantenimiento: any): void {
+    const confirmacion = window.confirm('¿Seguro que desea eliminar definitivamente este repostaje?');
+    if (confirmacion) {
+      this.mantenimientosService
+      .eliminarMantenimiento(mantenimiento)
+      .then(() =>
+        this.handleSuccess('Eliminado correctamente', 'success', mantenimiento)
+      )
+      .catch((error) =>
+        this.handleError('Error al eliminar repostaje', 'error')
+      );
+    }
+  }
+ 
+
 
   confirmarRecuperar(mantenimiento: any): void {
     if (window.confirm('¿Seguro que desea recuperar este mantenimiento?')) {

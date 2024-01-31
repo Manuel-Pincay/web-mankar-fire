@@ -1,4 +1,3 @@
- 
 <nav class="nav">
   <i class="uil uil-bars navOpenBtn"></i>
   <a href="#" class="logo">APPWEB MANKAR</a>
@@ -70,19 +69,20 @@
     <div class="container mt-4">
       <div class="card">
         <button style="background-color :#2c7bfe;" class="btn btn-success btn-lg float-right" data-bs-toggle="modal"
-            data-bs-target="#agregarNuevoTipoRuta">
-            <i class="fas fa-plus"></i> Agregar ruta
+          data-bs-target="#agregarNuevoTipoRuta">
+          <i class="fas fa-plus"></i> Agregar ruta
         </button>
 
         <div class="card-body">
           <span class="h2">Lista de rutas</span>
 
           <div class="table-container mt-4">
-            
+
             <table class="table table-striped mt-4">
               <thead class="thead-fixed">
                 <tr>
-                  <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl text-center">
+                  <th
+                    class="sticky-top px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl text-center">
                     Nombre ruta
                   </th>
                   <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
@@ -92,7 +92,7 @@
                     Llegada
                   </th>
                   <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
-                    Numero de peajes
+                    Número de peajes
                   </th>
                   <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
                     Opciones
@@ -100,202 +100,214 @@
                 </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let rutas of rutas">
-                <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas)" class="text-center">
-                  {{ rutas.nombre }}
-                </td>
-                <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas)" class="text-center">
-                  {{ rutas.salida }}
-                </td>
-                <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas)" class="text-center">
-                  {{ rutas.llegada }}
-                </td>
-                <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas)" class="text-center">
-                  {{ rutas.npeajes }}
-                </td>
+                <tr *ngFor="let rutas of rutas">
+                  <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas)"
+                    class="text-center">
+                    {{ rutas.nombre }}
+                  </td>
+                  <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas)"
+                    class="text-center">
+                    {{ rutas.salida }}
+                  </td>
+                  <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas)"
+                    class="text-center">
+                    {{ rutas.llegada }}
+                  </td>
+                  <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas)"
+                    class="text-center">
+                    {{ rutas.npeajes }}
+                  </td>
 
-                 <td class="text-center">
-                  <button (click)="confirmarEliminar(rutas)">
-                    <i class="fas fa-trash-alt fa-lg text-danger"></i>
-                  </button>
-                
-                  <button
-                    (click)="editarRutas(rutas)"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editarRutaModal"
-                    class="ml-4"  
-                  >
-                    <i class="fas fa-edit fa-lg text-info mr-4"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <td class="text-center">
+                    <button (click)="confirmarEliminar(rutas)">
+                      <i class="fas fa-trash-alt fa-lg text-danger"></i>
+                    </button>
+
+                    <button (click)="editarRutas(rutas)" data-bs-toggle="modal" data-bs-target="#editarRutaModal"
+                      class="ml-4">
+                      <i class="fas fa-edit fa-lg text-info mr-4"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
 
-      <div class="card-body">
-        <span class="h2">Lista de rutas eliminadas</span>
+        <div class="card-body">
+          <span class="h2">Lista de rutas eliminadas</span>
 
-        <div class="table-container mt-4">
-          
-          <table class="table table-striped mt-4">
-            <thead class="thead-fixed">
-              <tr>
-                <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl text-center">
-                  Nombre ruta
-                </th>
-                <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
-                  Salida
-                </th>
-                <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
-                  Llegada
-                </th>
-                <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
-                  Numero de peajes
-                </th>
-                <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
-                  Opciones
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let rutas2 of rutas2">
-              <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas2)" class="text-center">
-                {{ rutas2.nombre }}
-              </td>
-              <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas2)" class="text-center">
-                {{ rutas2.salida }}
-              </td>
-              <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas2)" class="text-center">
-                {{ rutas2.llegada }}
-              </td>
-              <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas2)" class="text-center">
-                {{ rutas2.npeajes }}
-              </td>
-               <td class="text-center">
-                <button (click)="confirmarRecuperar(rutas2)">
-                  <i class="fas ri-device-recover-line fa-lg text-primary"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    </div>
-  </div>
+          <div class="table-container mt-4">
 
+            <table class="table table-striped mt-4">
+              <thead class="thead-fixed">
+                <tr>
+                  <th
+                    class="sticky-top px-4 py-3 title-font tracking-wider font-medium rounded-tl rounded-bl text-center">
+                    Nombre ruta
+                  </th>
+                  <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
+                    Salida
+                  </th>
+                  <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
+                    Llegada
+                  </th>
+                  <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
+                    Número de peajes
+                  </th>
+                  <th class="sticky-top px-4 py-3 title-font tracking-wider font-medium text-center">
+                    Opciones
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let rutas2 of rutas2">
+                  <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas2)"
+                    class="text-center">
+                    {{ rutas2.nombre }}
+                  </td>
+                  <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas2)"
+                    class="text-center">
+                    {{ rutas2.salida }}
+                  </td>
+                  <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas2)"
+                    class="text-center">
+                    {{ rutas2.llegada }}
+                  </td>
+                  <td data-bs-toggle="modal" data-bs-target="#detallerutaModal" (click)="verDetalles(rutas2)"
+                    class="text-center">
+                    {{ rutas2.npeajes }}
+                  </td>
+                  <td class="text-center">
 
-  <!-- ----------------------------------------------------------------------- -->
-  <!-- --------------------------MODAL DE VER DETALLES--------------------------------- -->
-  <!-- ----------------------------------------------------------------------- -->
-  <div class="modal fade" id="detallerutaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header bg-light">
-          <h5 class="modal-title" id="exampleModalLabel">
-            Detalles de ruta
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              <strong>ID:</strong> {{ detalleruta?.id }}
-            </li>
-            <li class="list-group-item">
-              <strong>Nombre:</strong> {{ detalleruta?.nombre }}
-            </li>
-            <li class="list-group-item">
-              <strong>Punto de salida:</strong> {{ detalleruta?.salida }}
-            </li>
-            <li class="list-group-item">
-              <strong>Punto de llegada:</strong> {{ detalleruta?.llegada }}
-            </li>
-            <li class="list-group-item">
-              <strong>Numero de peajes:</strong> {{ detalleruta?.npeajes }}
-            </li>
-          </ul>
-        </div>
-        <div class="modal-footer d-flex justify-content-between">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            Cerrar
-          </button>
+                    <button (click)="confirmarEliminar2(rutas2)">
+                      <i class="fas fa-trash-alt fa-lg text-danger"></i>
+                    </button>
+
+                    <button (click)="confirmarRecuperar(rutas2)" class="ml-4">
+                      <i class="fa-solid fa-arrows-rotate fa-lg text-info mr-4"></i>
+
+                    </button>
+
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- ----------------------------------------------------------------------- -->
-  <!-- --------------------------FIN DE VER DETALLES--------------------------------- -->
-  <!-- ----------------------------------------------------------------------- -->
 
-<!-- Modal de Editar Rutas -->
-<div class="modal fade" id="editarRutaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header bg-light">
-        <h5 class="modal-title" id="exampleModalLabel">Editar ruta</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- ----------------------------------------------------------------------- -->
+    <!-- --------------------------MODAL DE VER DETALLES--------------------------------- -->
+    <!-- ----------------------------------------------------------------------- -->
+    <div class="modal fade" id="detallerutaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Detalles de ruta
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <strong>ID:</strong> {{ detalleruta?.id }}
+              </li>
+              <li class="list-group-item">
+                <strong>Nombre:</strong> {{ detalleruta?.nombre }}
+              </li>
+              <li class="list-group-item">
+                <strong>Punto de salida:</strong> {{ detalleruta?.salida }}
+              </li>
+              <li class="list-group-item">
+                <strong>Punto de llegada:</strong> {{ detalleruta?.llegada }}
+              </li>
+              <li class="list-group-item">
+                <strong>Número de peajes:</strong> {{ detalleruta?.npeajes }}
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer d-flex justify-content-between">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cerrar
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="modal-body">
-        <!-- Formulario de edición -->
-        <form [formGroup]="formularioEdicion" (ngSubmit)="guardarEdicionRuta()">
-          <!-- Nombre de la Ruta -->
-          <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre de la ruta:</label>
-            <input type="text" id="nombre" class="form-control" formControlName="nombre"
-              [value]="detalleruta?.nombre || ''" [placeholder]="
+    </div>
+
+    <!-- ----------------------------------------------------------------------- -->
+    <!-- --------------------------FIN DE VER DETALLES--------------------------------- -->
+    <!-- ----------------------------------------------------------------------- -->
+
+    <!-- Modal de Editar Rutas -->
+    <div class="modal fade" id="editarRutaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title" id="exampleModalLabel">Editar ruta</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Formulario de edición -->
+            <form [formGroup]="formularioEdicion" (ngSubmit)="guardarEdicionRuta()">
+              <!-- Nombre de la Ruta -->
+              <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre de la ruta:</label>
+                <input type="text" id="nombre" class="form-control" formControlName="nombre"
+                  [value]="detalleruta?.nombre || ''" [placeholder]="
                 detalleruta?.nombre
                   ? detalleruta.nombre
                   : 'Ingrese el nombre de la ruta'
               " />
-          </div>
+              </div>
 
-          <!-- Salida -->
-          <div class="mb-3">
-            <label for="salida" class="form-label">Punto de salida:</label>
-            <input type="text" id="salida" class="form-control" formControlName="salida"
-              [value]="detalleruta?.salida || ''" [placeholder]="
+              <!-- Salida -->
+              <div class="mb-3">
+                <label for="salida" class="form-label">Punto de salida:</label>
+                <input type="text" id="salida" class="form-control" formControlName="salida"
+                  [value]="detalleruta?.salida || ''" [placeholder]="
                 detalleruta?.salida
                   ? detalleruta.salida
                   : 'Ingrese el punto de salida'
               " />
-          </div>
+              </div>
 
-          <!-- Llegada -->
-          <div class="mb-3">
-            <label for="llegada" class="form-label">Punto de llegada:</label>
-            <input type="text" id="llegada" class="form-control" formControlName="llegada"
-              [value]="detalleruta?.llegada || ''" [placeholder]="
+              <!-- Llegada -->
+              <div class="mb-3">
+                <label for="llegada" class="form-label">Punto de llegada:</label>
+                <input type="text" id="llegada" class="form-control" formControlName="llegada"
+                  [value]="detalleruta?.llegada || ''" [placeholder]="
                 detalleruta?.llegada
                   ? detalleruta.llegada
                   : 'Ingrese el punto de llegada'
               " />
-          </div>
+              </div>
 
-          <!-- Número de Peajes -->
-          <div class="mb-3">
-            <label for="npeajes" class="form-label">Número de peajes:</label>
-            <input type="number" id="npeajes" class="form-control" formControlName="npeajes"
-              [value]="detalleruta?.npeajes || 0" />
-          </div>
+              <!-- Número de Peajes -->
+              <div class="mb-3">
+                <label for="npeajes" class="form-label">Número de peajes:</label>
+                <input type="number" id="npeajes" class="form-control" formControlName="npeajes"
+                  [value]="detalleruta?.npeajes || 0" />
+              </div>
 
-          <!-- Botones para "Guardar" y "Cerrar" -->
-          <div class="modal-footer d-flex justify-content-between">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #cerrarModalBtnRuta>
-              Cerrar
-            </button>
-            <button type="submit" class="btn btn-primary">Guardar</button>
+              <!-- Botones para "Guardar" y "Cerrar" -->
+              <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" #cerrarModalBtnRuta>
+                  Cerrar
+                </button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
-</div>
 
 
 

@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions';
+/* import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
  
 
@@ -10,18 +10,17 @@ exports.creacionmantenimientos = functions.firestore
 .document("mantenimientos/{mantenimientosId}")
 .onCreate((snap: functions.firestore.QueryDocumentSnapshot, context: functions.EventContext) => {
   const mantenimiento = snap.data();
-  const uid = context.auth ? context.auth.uid : null; 
-
+  const uid = mantenimiento.usuarioId;
   return db.collection("logs").add({
     accion: "Creación",
-    fecha: new Date().toISOString(),
+    fecha: new Date(),
     data: {
       mantenimiento,
     },
-    usuario: uid
+    usuario: uid  
   });
 });
-
+ */
 
 /* export const creacionMantenimientos1 = functions.firestore
   .document("mantenimientos/{mantenimientosId}")

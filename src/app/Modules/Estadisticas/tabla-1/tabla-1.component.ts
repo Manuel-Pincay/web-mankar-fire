@@ -230,7 +230,7 @@ export class Tabla1Component implements OnInit {
     Chart.register(...registerables);
     const ctx = document.getElementById('miGrafico') as HTMLCanvasElement;
     this.chart = new Chart(ctx, {
-      type: 'bar', // Puedes cambiar el tipo de gráfico según tus preferencias
+      type: 'bar',
       data: {
         labels: meses,
         datasets: [

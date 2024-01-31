@@ -111,6 +111,21 @@ export class RutasService {
       });
     });
   }
+
+  eliminarTotal(ruta: Rutas) {
+    const rutaDocRef = doc(this.firestore, `rutas/${ruta.id}`);
+
+    // Utiliza deleteDoc para eliminar definitivamente el documento
+    return deleteDoc(rutaDocRef).then(() => {
+      // Llama a createlog para registrar la transacción con el objeto completo
+      this.logService.createlog({
+        action: 'Eliminado',
+        details: 'Ruta eliminada total',
+        registro: ruta,
+      });
+    });
+  }
+
   resetRuta(ruta: Rutas) {
     const rutaDocRef = doc(this.firestore, `rutas/${ruta.id}`);
     return updateDoc(rutaDocRef, { estado: true }).then(() => {
